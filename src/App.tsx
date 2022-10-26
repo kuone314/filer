@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
+import React from 'react';
 
 
 type Entry = {
@@ -11,6 +12,20 @@ type Entry = {
 
 type Entries = Array<Entry>;
 
+class FileListItem extends React.Component {
+  render() {
+    return (
+      <div className="file-list-item">
+        <h1>Shopping List for {this.props.name}</h1>
+        <ul>
+          <li>Instagram</li>
+          <li>WhatsApp</li>
+          <li>Oculus</li>
+        </ul>
+      </div>
+    );
+  }
+}
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
