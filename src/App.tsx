@@ -36,6 +36,7 @@ const App = () => {
     })();
   }, [dir]);
 
+  // entry_list 部分の、html の生成、かな。
   const entry_list = entries ? <ul>
     {entries.map(entry => {
       if (entry.type === "dir") {
