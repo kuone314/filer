@@ -45,7 +45,7 @@ const data: Data[] = [
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
-  const [entries, setEntries] = useState<Data[] | null>(null);
+  const [entries, setEntries] = useState<Data[]>(new Array<Data>);
 
   useEffect(() => {
     (async () => {
