@@ -14,7 +14,7 @@ type Entries = Array<Entry>;
 
 const App = () => {
   const [src, setSrc] = useState<string>(null);
-  const [dir, setDir] = useState<string | null>(null);
+  const [dir, setDir] = useState<string>("");
   const [entries, setEntries] = useState<Entries | null>(null);
 
   useEffect(() => {
