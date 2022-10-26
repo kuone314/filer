@@ -25,16 +25,19 @@ const columns: Column<Data>[] = [
 ];
 
 type Data = {
+  type: 'dir' | 'file';
   name: string;
   age: number;
 }
 
 const data: Data[] = [
   {
+    type: 'dir',
     name: 'John',
     age: 23
   },
   {
+    type: 'dir',
     name: 'Jane',
     age: 26
   }
@@ -74,7 +77,7 @@ const App = () => {
 
   // entry_list 部分の、html の生成、かな。
   const entry_list = entries ? <ul>
-    {entries.map(entry =>{ return FileListItem(entry)})}
+    {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
 
@@ -117,7 +120,8 @@ const App = () => {
         </tbody>
       </table>
     </>
-  );}
+  );
+}
 
 
 export default App;
