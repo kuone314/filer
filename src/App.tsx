@@ -24,7 +24,7 @@ const columns: Column<Data>[] = [
   }
 ];
 
-interface Data {
+type Data = {
   name: string;
   age: number;
 }
