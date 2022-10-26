@@ -87,7 +87,7 @@ const App = () => {
     headerGroups,
     rows,
     prepareRow
-  } = useTable<Data>({ columns, data });
+  } = useTable<Data>({ columns, entries });
 
   return (
     <>
