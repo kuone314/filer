@@ -12,20 +12,30 @@ type Entries = Array<Entry>;
 
 
 const App = () => {
-  // [変数名,setter] で宣言、sette(foo) と呼び出すと、変数に foo が入る、かな？
-  // 変数は <> の所で、{} で括ると参照出来るっぽい。
-  const [name, setName] = useState('anonymous');
+  const [src, setSrc] = useState<string | null>(null);
+  const [dir, setDir] = useState<string | null>(null);
+  const [player, setPlayer] = useState<JSX.Element | null>(null);
+  const [entries, setEntries] = useState<Entries | null>(null);
 
-  const [hello, setHello] = useState<string>('');
   useEffect(() => {
     (async () => {
-      const res = await invoke<string>("greet", { name: "Rust" });
-      setHello(res);
+      const home = await homeDir();
+      setDir(home);
     })();
   }, []);
 
-  const [dir, setDir] = useState<string | null>(null);
-  const [entries, setEntries] = useState<Entries | null>(null);
+  useEffect(() => {
+    (async () => {
+      if (!src) {
+        return;
+      }
+
+      const url = convertFileSrc(src);
+      const player = <ReactPlayer url={url} controls={true} />;
+      setPlayer(player);
+    })();
+  }, [src]);
+
   useEffect(() => {
     (async () => {
       const entries = await invoke<Entries>("get_entries", { path: dir })
@@ -38,15 +48,29 @@ const App = () => {
     })();
   }, [dir]);
 
+  const entry_list = entries ? <ul>
+    {entries.map(entry => {
+      if (entry.type === "dir") {
+        return <li key={entry.path} onClick={() => setDir(entry.path)}>{entry.name}</li>;
+      } else {
+        return <li key={entry.path} onClick={() => setSrc(entry.path)}>{entry.name}</li>;
+      }
+    })}
+  </ul> : null;
 
   return (
     <>
-      <div>Hello, {name}</div>
-      <input type="text" value={name} onChange={e => setName(e.target.value)} />
+      <h1>React Player</h1>
+      {player}
       <br />
-      {hello}
+      src: {src ?? '(not selected)'}
+      <br />
+      dir: {dir ?? ''}
+      <br />
+      {entry_list}
     </>
   );
 }
+
 
 export default App;
