@@ -63,13 +63,13 @@ const App = () => {
   </ul> : null;
 
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow
-  } = useTable<Entry>({ columns, data });
+  // const {
+  //   getTableProps,
+  //   getTableBodyProps,
+  //   headerGroups,
+  //   rows,
+  //   prepareRow
+  // } = useTable<Entry>({ columns, entries });
 
   return (
     <>
@@ -78,7 +78,7 @@ const App = () => {
       <br />
       {entry_list}
       <br />
-      <table {...getTableProps()}>
+      {/* <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -100,7 +100,7 @@ const App = () => {
             );
           })}
         </tbody>
-      </table>
+      </table> */}
     </>
   );}
 
