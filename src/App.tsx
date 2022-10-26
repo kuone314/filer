@@ -24,6 +24,18 @@ const columns: Column<Entry>[] = [
   }
 ];
 
+const dmy: Entry[] = [
+  {
+    type: 'dir',
+    name: 'John',
+    path: "23"
+  },
+  {
+    type: 'dir',
+    name: 'Jane',
+    path: "26"
+  }
+];
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
@@ -69,7 +81,7 @@ const App = () => {
     headerGroups,
     rows,
     prepareRow
-  } = useTable<Entry>({ columns, entries });
+  } = useTable<Entry>({ columns, dmy });
 
   return (
     <>
