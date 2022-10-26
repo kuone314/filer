@@ -5,13 +5,13 @@ import React from 'react';
 
 import { useTable, Column } from 'react-table';
 
-type Entry = {
-  type: 'dir' | 'file';
-  name: string;
-  path: string;
-};
+// type Entry = {
+//   type: 'dir' | 'file';
+//   name: string;
+//   path: string;
+// };
 
-type Entries = Array<Entry>;
+// type Entries = Array<Entry>;
 
 const columns: Column<Data>[] = [
   {
@@ -45,7 +45,7 @@ const data: Data[] = [
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
-  const [entries, setEntries] = useState<Entries | null>(null);
+  const [entries, setEntries] = useState<Data[] | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -56,7 +56,7 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      const entries = await invoke<Entries>("get_entries", { path: dir })
+      const entries = await invoke<Data[]>("get_entries", { path: dir })
         .catch(err => {
           console.error(err);
           return null;
