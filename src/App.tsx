@@ -13,7 +13,7 @@ type Entries = Array<Entry>;
 
 
 const App = () => {
-  const [src, setSrc] = useState<string | null>(null);
+  const [src, setSrc] = useState<string>(null);
   const [dir, setDir] = useState<string | null>(null);
   const [entries, setEntries] = useState<Entries | null>(null);
 
@@ -50,9 +50,7 @@ const App = () => {
   return (
     <>
       <br />
-      src: {src ?? '(not selected)'}
-      <br />
-      dir: {dir ?? ''}
+      <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
       {entry_list}
     </>
