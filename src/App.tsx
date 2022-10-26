@@ -12,21 +12,6 @@ type Entry = {
 
 type Entries = Array<Entry>;
 
-class FileListItem extends React.Component {
-  render() {
-    return (
-      <div className="file-list-item">
-        <h1>Shopping List for {this.props.name}</h1>
-        <ul>
-          <li>Instagram</li>
-          <li>WhatsApp</li>
-          <li>Oculus</li>
-        </ul>
-      </div>
-    );
-  }
-}
-
 const App = () => {
   const [dir, setDir] = useState<string>("");
   const [entries, setEntries] = useState<Entries | null>(null);
@@ -50,15 +35,18 @@ const App = () => {
     })();
   }, [dir]);
 
+
+  const FileListItem = (entry: Entry) => {
+    if (entry.type === "dir") {
+      return <li key={entry.path} onClick={() => setDir(entry.path)}>{entry.name}</li>;
+    } else {
+      return <li key={entry.path}>{entry.name}</li>;
+    }
+  }
+
   // entry_list 部分の、html の生成、かな。
   const entry_list = entries ? <ul>
-    {entries.map(entry => {
-      if (entry.type === "dir") {
-        return <li key={entry.path} onClick={() => setDir(entry.path)}>{entry.name}</li>;
-      } else {
-        return <li key={entry.path}>{entry.name}</li>;
-      }
-    })}
+    {entries.map(entry =>{ return FileListItem(entry)})}
   </ul> : null;
 
   return (
