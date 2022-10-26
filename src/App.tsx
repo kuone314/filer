@@ -24,6 +24,21 @@ const App = () => {
     })();
   }, []);
 
+  const [dir, setDir] = useState<string | null>(null);
+  const [entries, setEntries] = useState<Entries | null>(null);
+  useEffect(() => {
+    (async () => {
+      const entries = await invoke<Entries>("get_entries", { path: dir })
+        .catch(err => {
+          console.error(err);
+          return null;
+        });
+
+      setEntries(entries);
+    })();
+  }, [dir]);
+
+
   return (
     <>
       <div>Hello, {name}</div>
