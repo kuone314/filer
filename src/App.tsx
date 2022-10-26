@@ -63,13 +63,13 @@ const App = () => {
   </ul> : null;
 
 
-  // const {
-  //   getTableProps,
-  //   getTableBodyProps,
-  //   headerGroups,
-  //   rows,
-  //   prepareRow
-  // } = useTable<Entry>({ columns, entries });
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow
+  } = useTable<Entry>({ columns, entries });
 
   return (
     <>
