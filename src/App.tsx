@@ -13,7 +13,6 @@ type Entries = Array<Entry>;
 
 
 const App = () => {
-  const [src, setSrc] = useState<string>(null);
   const [dir, setDir] = useState<string>("");
   const [entries, setEntries] = useState<Entries | null>(null);
 
@@ -42,7 +41,7 @@ const App = () => {
       if (entry.type === "dir") {
         return <li key={entry.path} onClick={() => setDir(entry.path)}>{entry.name}</li>;
       } else {
-        return <li key={entry.path} onClick={() => setSrc(entry.path)}>{entry.name}</li>;
+        return <li key={entry.path}>{entry.name}</li>;
       }
     })}
   </ul> : null;
