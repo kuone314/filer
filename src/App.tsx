@@ -48,7 +48,6 @@ const App = () => {
   const entry_list = entries ? <ul>
     {entries.map(entry =>{ return FileListItem(entry)})}
   </ul> : null;
-
   return (
     <>
       <br />
