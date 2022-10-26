@@ -15,7 +15,6 @@ type Entries = Array<Entry>;
 const App = () => {
   const [src, setSrc] = useState<string | null>(null);
   const [dir, setDir] = useState<string | null>(null);
-  // const [player, setPlayer] = useState<JSX.Element | null>(null);
   const [entries, setEntries] = useState<Entries | null>(null);
 
   useEffect(() => {
@@ -24,18 +23,6 @@ const App = () => {
       setDir(home);
     })();
   }, []);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (!src) {
-  //       return;
-  //     }
-
-  //     const url = convertFileSrc(src);
-  //     const player = <ReactPlayer url={url} controls={true} />;
-  //     setPlayer(player);
-  //   })();
-  // }, [src]);
 
   useEffect(() => {
     (async () => {
