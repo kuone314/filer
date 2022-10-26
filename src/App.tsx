@@ -13,32 +13,17 @@ type Entry = {
 
 type Entries = Array<Entry>;
 
-const columns: Column<Data>[] = [
+const columns: Column<Entry>[] = [
   {
     Header: '名前',
     accessor: 'name'
   },
   {
-    Header: '年齢',
-    accessor: 'age'
+    Header: 'パス',
+    accessor: 'path'
   }
 ];
 
-interface Data {
-  name: string;
-  age: number;
-}
-
-const data: Data[] = [
-  {
-    name: 'John',
-    age: 23
-  },
-  {
-    name: 'Jane',
-    age: 26
-  }
-];
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
@@ -84,7 +69,7 @@ const App = () => {
     headerGroups,
     rows,
     prepareRow
-  } = useTable<Data>({ columns, data });
+  } = useTable<Entry>({ columns, data });
 
   return (
     <>
