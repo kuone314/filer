@@ -19,18 +19,18 @@ type Entry = {
 type Entries = Array<Entry>;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-const books: Entry[] = [
-  {
-    type: 'dir',
-    name: 'ハリー・ポッターと賢者の石',
-    path: 'J.K.ローリング',
-  },
-  {
-    type: 'dir',
-    name: 'こころ',
-    path: '夏目漱石',
-  },
-];
+// const books: Entry[] = [
+//   {
+//     type: 'dir',
+//     name: 'ハリー・ポッターと賢者の石',
+//     path: 'J.K.ローリング',
+//   },
+//   {
+//     type: 'dir',
+//     name: 'こころ',
+//     path: '夏目漱石',
+//   },
+// ];
 
 const columns: ColumnDef<Entry, any>[] = [
   {
@@ -43,39 +43,6 @@ const columns: ColumnDef<Entry, any>[] = [
   },
 ];
 
-export const BasicTable: React.FC = () => {
-  const table = useReactTable<Entry>({
-    data: books,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-  return (
-    <div>
-      <table>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,6 +78,40 @@ const App = () => {
     }
   }
 
+  const BasicTable: React.FC = () => {
+    const table = useReactTable<Entry>({
+      data: entries,
+      columns,
+      getCoreRowModel: getCoreRowModel(),
+    });
+    return (
+      <div>
+        <table>
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   // entry_list 部分の、html の生成、かな。
   const entry_list = entries ? <ul>
     {entries.map(entry => { return FileListItem(entry) })}
@@ -121,7 +122,7 @@ const App = () => {
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      {BasicTable(books)}
+      {BasicTable(entries)}
       <br />
     </>
   );
