@@ -13,7 +13,7 @@ type Entry = {
 
 type Entries = Array<Entry>;
 
-const columns: Column<Data>[] = [
+const columns: Column<Entry>[] = [
   {
     Header: '名前',
     accessor: 'name'
@@ -24,17 +24,14 @@ const columns: Column<Data>[] = [
   }
 ];
 
-interface Data {
-  name: string;
-  path: string;
-}
-
-const data: Data[] = [
+const data: Entry[] = [
   {
+    type: 'dir',
     name: 'John',
     path: '23'
   },
   {
+    type: 'dir',
     name: 'Jane',
     path: '26'
   }
@@ -74,7 +71,7 @@ const App = () => {
 
   // entry_list 部分の、html の生成、かな。
   const entry_list = entries ? <ul>
-    {entries.map(entry =>{ return FileListItem(entry)})}
+    {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
 
@@ -84,7 +81,7 @@ const App = () => {
     headerGroups,
     rows,
     prepareRow
-  } = useTable<Data>({ columns, data });
+  } = useTable<Entry>({ columns, data });
 
   return (
     <>
@@ -116,7 +113,8 @@ const App = () => {
         </tbody>
       </table>
     </>
-  );}
+  );
+}
 
 
 export default App;
