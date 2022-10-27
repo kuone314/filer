@@ -39,7 +39,7 @@ const data: Entry[] = [
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
-  const [entries, setEntries] = useState<Entries | null>(null);
+  const [entries, setEntries] = useState<Entries>([]);
 
   useEffect(() => {
     (async () => {
@@ -56,7 +56,7 @@ const App = () => {
           return null;
         });
 
-      setEntries(entries);
+      setEntries(entries ? entries : []);
     })();
   }, [dir]);
 
