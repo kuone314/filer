@@ -10,6 +10,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.3.6",
     "@tanstack/react-table": "^8.5.17",
     "@tauri-apps/api": "^1.1.0",
     "react": "^18.2.0",
