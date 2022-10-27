@@ -19,23 +19,20 @@ type Entry = {
 type Entries = Array<Entry>;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-type Book = {
-  name: string;
-  path: string;
-};
-
-const books: Book[] = [
+const books: Entry[] = [
   {
+    type: 'dir',
     name: 'ハリー・ポッターと賢者の石',
     path: 'J.K.ローリング',
   },
   {
+    type: 'dir',
     name: 'こころ',
     path: '夏目漱石',
   },
 ];
 
-const columns: ColumnDef<Book, any>[] = [
+const columns: ColumnDef<Entry, any>[] = [
   {
     accessorKey: 'name',
     header: 'タイトル',
@@ -47,7 +44,7 @@ const columns: ColumnDef<Book, any>[] = [
 ];
 
 export const BasicTable: React.FC = () => {
-  const table = useReactTable<Book>({
+  const table = useReactTable<Entry>({
     data: books,
     columns,
     getCoreRowModel: getCoreRowModel(),
