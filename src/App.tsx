@@ -26,17 +26,17 @@ const columns: Column<Data>[] = [
 
 interface Data {
   name: string;
-  age: number;
+  age: string;
 }
 
 const data: Data[] = [
   {
     name: 'John',
-    age: 23
+    age: '23'
   },
   {
     name: 'Jane',
-    age: 26
+    age: '26'
   }
 ];
 
