@@ -20,23 +20,23 @@ const columns: Column<Data>[] = [
   },
   {
     Header: '年齢',
-    accessor: 'age'
+    accessor: 'path'
   }
 ];
 
 interface Data {
   name: string;
-  age: string;
+  path: string;
 }
 
 const data: Data[] = [
   {
     name: 'John',
-    age: '23'
+    path: '23'
   },
   {
     name: 'Jane',
-    age: '26'
+    path: '26'
   }
 ];
 
