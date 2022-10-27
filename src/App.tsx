@@ -6,29 +6,42 @@ import React from 'react';
 import { useTable, Column } from 'react-table';
 
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+type Entry = {
+  type: 'dir' | 'file';
+  name: string;
+  path: string;
+};
+
+type Entries = Array<Entry>;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 type Book = {
-  title: string;
-  author: string;
+  name: string;
+  path: string;
 };
 
 const books: Book[] = [
   {
-    title: 'ハリー・ポッターと賢者の石',
-    author: 'J.K.ローリング',
+    name: 'ハリー・ポッターと賢者の石',
+    path: 'J.K.ローリング',
   },
   {
-    title: 'こころ',
-    author: '夏目漱石',
+    name: 'こころ',
+    path: '夏目漱石',
   },
 ];
 
 const columns: ColumnDef<Book, any>[] = [
   {
-    accessorKey: 'title',
+    accessorKey: 'name',
     header: 'タイトル',
   },
   {
-    accessorKey: 'author',
+    accessorKey: 'path',
     header: '著者',
   },
 ];
@@ -68,15 +81,6 @@ export const BasicTable: React.FC = () => {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-type Entry = {
-  type: 'dir' | 'file';
-  name: string;
-  path: string;
-};
-
-type Entries = Array<Entry>;
-
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
