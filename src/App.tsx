@@ -91,7 +91,6 @@ const App = () => {
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      {entry_list}
       <br />
       <table {...getTableProps()}>
         <thead>
