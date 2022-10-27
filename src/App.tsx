@@ -19,27 +19,27 @@ const columns: Column<Data>[] = [
     accessor: 'name'
   },
   {
-    Header: '年齢',
-    accessor: 'age'
+    Header: 'パス',
+    accessor: 'path'
   }
 ];
 
 type Data = {
   type: 'dir' | 'file';
   name: string;
-  age: number;
+  path: string;
 }
 
 const data: Data[] = [
   {
     type: 'dir',
     name: 'John',
-    age: 23
+    path: 'aaa'
   },
   {
     type: 'dir',
     name: 'Jane',
-    age: 26
+    path: 'bbb'
   }
 ];
 
@@ -67,7 +67,7 @@ const App = () => {
   }, [dir]);
 
 
-  const FileListItem = (entry: Entry) => {
+  const FileListItem = (entry: Data) => {
     if (entry.type === "dir") {
       return <li key={entry.path} onClick={() => setDir(entry.path)}>{entry.name}</li>;
     } else {
