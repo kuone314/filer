@@ -5,6 +5,70 @@ import React from 'react';
 
 import { useTable, Column } from 'react-table';
 
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+type Book = {
+  title: string;
+  author: string;
+};
+
+const books: Book[] = [
+  {
+    title: 'ハリー・ポッターと賢者の石',
+    author: 'J.K.ローリング',
+  },
+  {
+    title: 'こころ',
+    author: '夏目漱石',
+  },
+];
+
+const columns: ColumnDef<Book, any>[] = [
+  {
+    accessorKey: 'title',
+    header: 'タイトル',
+  },
+  {
+    accessorKey: 'author',
+    header: '著者',
+  },
+];
+
+export const BasicTable: React.FC = () => {
+  const table = useReactTable<Book>({
+    data: books,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+  return (
+    <div>
+      <table>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id}>
+                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 type Entry = {
   type: 'dir' | 'file';
   name: string;
@@ -13,29 +77,6 @@ type Entry = {
 
 type Entries = Array<Entry>;
 
-const columns: Column<Entry>[] = [
-  {
-    Header: '名前',
-    accessor: 'name'
-  },
-  {
-    Header: '年齢',
-    accessor: 'path'
-  }
-];
-
-const data: Entry[] = [
-  {
-    type: 'dir',
-    name: 'John',
-    path: '23'
-  },
-  {
-    type: 'dir',
-    name: 'Jane',
-    path: '26'
-  }
-];
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
@@ -74,44 +115,13 @@ const App = () => {
     {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
-
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow
-  } = useTable<Entry>({ columns, data });
-
   return (
     <>
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
+      {BasicTable(books)}
       <br />
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
     </>
   );
 }
