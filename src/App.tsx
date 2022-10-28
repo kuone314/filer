@@ -72,16 +72,20 @@ const App = () => {
     {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
+  const dt =
+    [
+      ['John', 'john@example.com'],
+      ['Mike', 'mike@gmail.com']
+    ];
+
+
   return (
     <>
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
       <Grid
-        data={[
-          ['John', 'john@example.com'],
-          ['Mike', 'mike@gmail.com']
-        ]}
+        data={dt}
         columns={['Name', 'Email']}
         search={true}
         pagination={{
