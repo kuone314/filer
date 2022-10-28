@@ -3,6 +3,8 @@ import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
+import { Grid } from "gridjs";
+import "gridjs/dist/theme/mermaid.css";
 
 type Entry = {
   type: 'dir' | 'file';
@@ -46,8 +48,24 @@ const App = () => {
 
   // entry_list 部分の、html の生成、かな。
   const entry_list = entries ? <ul>
-    {entries.map(entry =>{ return FileListItem(entry)})}
+    {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
+
+
+
+  const wrapperRef = useRef(null);
+
+  const grid = new Grid({
+    columns: ['Name', 'Email', 'Phone Number'],
+    data: [
+      ['John', 'john@example.com', '(353) 01 222 3333'],
+      ['Mark', 'mark@gmail.com', '(01) 22 888 4444']
+    ]
+  });
+
+  useEffect(() => {
+    grid.render(wrapperRef.current);
+  });
 
   return (
     <>
