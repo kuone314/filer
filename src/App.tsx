@@ -1,10 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
-import { Grid } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
+// import { Grid } from "gridjs";
+// import "gridjs/dist/theme/mermaid.css";
+
+// function helloWorld() {
+//   const wrapperRef = useRef(null);
+
+//   const grid = new Grid({
+//     columns: ['Name', 'Email', 'Phone Number'],
+//     data: [
+//       ['John', 'john@example.com', '(353) 01 222 3333'],
+//       ['Mark', 'mark@gmail.com', '(01) 22 888 4444']
+//     ]
+//   });
+
+//   useEffect(() => {
+//     grid.render(wrapperRef.current);
+//   });
+
+//   return <div ref={wrapperRef} />;
+// }
+
+import { Grid } from 'gridjs-react';
+
 
 type Entry = {
   type: 'dir' | 'file';
@@ -51,28 +72,23 @@ const App = () => {
     {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
-
-
-  const wrapperRef = useRef(null);
-
-  const grid = new Grid({
-    columns: ['Name', 'Email', 'Phone Number'],
-    data: [
-      ['John', 'john@example.com', '(353) 01 222 3333'],
-      ['Mark', 'mark@gmail.com', '(01) 22 888 4444']
-    ]
-  });
-
-  useEffect(() => {
-    grid.render(wrapperRef.current);
-  });
-
   return (
     <>
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      {entry_list}
+      <Grid
+        data={[
+          ['John', 'john@example.com'],
+          ['Mike', 'mike@gmail.com']
+        ]}
+        columns={['Name', 'Email']}
+        search={true}
+        pagination={{
+          enabled: true,
+          limit: 1,
+        }}
+      />
     </>
   );
 }
