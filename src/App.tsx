@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
+import DataGrid from "react-data-grid";
 import React from 'react';
 
 // import { Grid } from "gridjs";
@@ -63,16 +64,23 @@ const App = () => {
     return entries.map(entry => [entry.name,entry.path]);
   }
 
+  const columns = [
+    { key: "id", name: "ID" },
+    { key: "title", name: "Title" }
+  ];
+  const rows = [
+    { id: 0, title: "Example" },
+    { id: 1, title: "Demo" }
+  ];
 
   return (
     <>
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      <Grid
-        data={convert(entries)}
-        columns={['Name', 'Email']}
-        width="30"
+      <DataGrid
+        columns={columns}
+        rows={rows}
       />
     </>
   );

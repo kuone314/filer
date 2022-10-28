@@ -14,6 +14,7 @@
     "gridjs": "^5.1.0",
     "gridjs-react": "^5.1.0",
     "react": "^18.2.0",
+    "react-data-grid": "^7.0.0-beta.19",
     "react-dom": "^18.2.0",
     "react-table": "^7.8.0"
   },
