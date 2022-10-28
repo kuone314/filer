@@ -72,7 +72,7 @@ const App = () => {
 
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'name', width: 150 },
-    { field: 'path', headerName: 'path', width: 150 },
+    { field: 'path', headerName: 'path', width: 400 },
   ];
 
   return (
