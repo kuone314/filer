@@ -88,7 +88,7 @@ const App = () => {
         <DataGrid
           rows={rows}
           columns={columns}
-          onRowClick={(params: GridRowParams) => { setDir(params.row.col2) }}
+          onRowDoubleClick={(params: GridRowParams) => { setDir(params.row.col2) }}
         />
       </div>
     </>
