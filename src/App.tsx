@@ -4,7 +4,7 @@ import { homeDir } from '@tauri-apps/api/path';
 // import DataGrid from "react-data-grid";
 import React from 'react';
 
-import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridRowsProp, GridColDef, GridRowParams } from '@mui/x-data-grid';
 
 
 
@@ -85,7 +85,11 @@ const App = () => {
       <br />
 
       <div style={{ height: 300, width: '100%' }}>
-        <DataGrid rows={rows} columns={columns} />
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          onRowClick={(params: GridRowParams) => { setDir(params.row.col2) }}
+        />
       </div>
     </>
   );
