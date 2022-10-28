@@ -66,18 +66,13 @@ const App = () => {
 
   function convert(entries: Entries): GridRowsProp {
     return entries.map(
-      (entry, idx) => { return { id: idx, col1: entry.name, col2: entry.path } }
+      (entry, idx) => { return { id: idx, name: entry.name, path: entry.path } }
     );
   }
 
   const columns: GridColDef[] = [
-    { field: 'col1', headerName: 'Column 1', width: 150 },
-    { field: 'col2', headerName: 'Column 2', width: 150 },
-  ];
-  const rows: GridRowsProp = [
-    { id: 1, col1: 'Hello', col2: 'World' },
-    { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
-    { id: 3, col1: 'MUI', col2: 'is Amazing' },
+    { field: 'name', headerName: 'name', width: 150 },
+    { field: 'path', headerName: 'path', width: 150 },
   ];
 
   return (
@@ -90,7 +85,7 @@ const App = () => {
         <DataGrid
           rows={convert(entries)}
           columns={columns}
-          onRowDoubleClick={(params: GridRowParams) => { setDir(params.row.col2) }}
+          onRowDoubleClick={(params: GridRowParams) => { setDir(params.row.path) }}
         />
       </div>
     </>
