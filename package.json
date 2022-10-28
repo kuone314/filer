@@ -10,6 +10,10 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.11",
+    "@mui/x-data-grid": "^5.17.8",
     "@tauri-apps/api": "^1.1.0",
     "gridjs": "^5.1.0",
     "gridjs-react": "^5.1.0",
