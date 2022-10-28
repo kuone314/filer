@@ -14,7 +14,7 @@ type Entries = Array<Entry>;
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
-  const [entries, setEntries] = useState<Entries | null>(null);
+  const [entries, setEntries] = useState<Entries>([]);
 
   useEffect(() => {
     (async () => {
@@ -31,6 +31,8 @@ const App = () => {
           return null;
         });
 
+      if (!entries) { return; }
+
       setEntries(entries);
     })();
   }, [dir]);
@@ -46,7 +48,7 @@ const App = () => {
 
   // entry_list 部分の、html の生成、かな。
   const entry_list = entries ? <ul>
-    {entries.map(entry =>{ return FileListItem(entry)})}
+    {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
   return (
