@@ -37,7 +37,7 @@ type Entries = Array<Entry>;
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
-  const [entries, setEntries] = useState<Entries | null>(null);
+  const [entries, setEntries] = useState<Entries>([]);
 
   useEffect(() => {
     (async () => {
@@ -54,7 +54,7 @@ const App = () => {
           return null;
         });
 
-      setEntries(entries);
+      setEntries(entries ? entries : []);
     })();
   }, [dir]);
 
@@ -72,11 +72,13 @@ const App = () => {
     {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
-  const dt =
-    [
+
+  function convert(entries: Entries): string[][] {
+    return [
       ['John', 'john@example.com'],
       ['Mike', 'mike@gmail.com']
     ];
+  }
 
 
   return (
@@ -85,7 +87,7 @@ const App = () => {
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
       <Grid
-        data={dt}
+        data={convert(entries)}
         columns={['Name', 'Email']}
       />
     </>
