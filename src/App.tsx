@@ -74,10 +74,7 @@ const App = () => {
 
 
   function convert(entries: Entries): string[][] {
-    return [
-      ['John', 'john@example.com'],
-      ['Mike', 'mike@gmail.com']
-    ];
+    return entries.map(entry => [entry.name,entry.path]);
   }
 
 
