@@ -64,8 +64,10 @@ const App = () => {
   }, [dir]);
 
 
-  function convert(entries: Entries): string[][] {
-    return entries.map(entry => [entry.name, entry.path]);
+  function convert(entries: Entries): GridRowsProp {
+    return entries.map(
+      (entry, idx) => { return { id: idx, col1: entry.name, col2: entry.path } }
+    );
   }
 
   const columns: GridColDef[] = [
@@ -86,7 +88,7 @@ const App = () => {
 
       <div style={{ height: 300, width: '100%' }}>
         <DataGrid
-          rows={rows}
+          rows={convert(entries)}
           columns={columns}
           onRowDoubleClick={(params: GridRowParams) => { setDir(params.row.col2) }}
         />
