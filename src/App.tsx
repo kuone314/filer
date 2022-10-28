@@ -87,11 +87,6 @@ const App = () => {
       <Grid
         data={dt}
         columns={['Name', 'Email']}
-        search={true}
-        pagination={{
-          enabled: true,
-          limit: 1,
-        }}
       />
     </>
   );
