@@ -60,20 +60,21 @@ const App = () => {
 
 
   function convert(entries: Entries): string[][] {
-    return entries.map(entry => [entry.name,entry.path]);
+    return entries.map(entry => [entry.name, entry.path]);
   }
 
+  const grid = new Grid({
+    data: convert(entries),
+    columns: ['Name', 'Email'],
+    width: "30"
+  });
 
   return (
     <>
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      <Grid
-        data={convert(entries)}
-        columns={['Name', 'Email']}
-        width="30"
-      />
+      {grid}
     </>
   );
 }
