@@ -72,6 +72,7 @@ const App = () => {
       <Grid
         data={convert(entries)}
         columns={['Name', 'Email']}
+        width="30"
       />
     </>
   );
