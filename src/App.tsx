@@ -64,17 +64,30 @@ const App = () => {
   }
 
   const grid = new Grid({
+    columns: ['Name', 'Email', 'Phone Number'],
+    sort: true,
+    search: true,
+    data: [
+      ['John', 'john@example.com', '(353) 01 222 3333'],
+      ['Mark', 'mark@gmail.com',   '(01) 22 888 4444'],
+      ['Eoin', 'eo3n@yahoo.com',   '(05) 10 878 5554'],
+      ['Nisen', 'nis900@gmail.com',   '313 333 1923']
+    ]
+  });
+
+  const tst_grid = new Grid({
     data: convert(entries),
     columns: ['Name', 'Email'],
     width: "30"
   });
+  // tst_grid.on();
 
   return (
     <>
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      {grid}
+      {tst_grid}
     </>
   );
 }
