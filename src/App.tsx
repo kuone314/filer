@@ -47,7 +47,7 @@ const App = () => {
 
   // entry_list 部分の、html の生成、かな。
   const entry_list = entries ? <ul>
-    {entries.map(entry =>{ return FileListItem(entry)})}
+    {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
   return (
@@ -55,7 +55,22 @@ const App = () => {
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      {entry_list}
+      <JqxGrid
+        width={'100%'}
+        height={'100%'}
+        columnsresize={true}
+        source={[
+          ['John', 'john@example.com'],
+          ['Mike', 'mike@gmail.com']
+        ]}
+        columns={[
+          { text: 'Company Name', datafield: 'CompanyName', width: '20%' },
+          { text: 'Contact Name', datafield: 'ContactName', width: '20%' },
+          { text: 'Contact Title', datafield: 'ContactTitle', width: '20%' },
+          { text: 'City', datafield: 'City', width: '20%' },
+          { text: 'Country', datafield: 'Country' }
+        ]}
+      />
     </>
   );
 }
