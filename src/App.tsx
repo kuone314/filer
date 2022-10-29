@@ -3,7 +3,7 @@ import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
-import JqxGrid, { IGridProps, jqx } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
+import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 type Entry = {
   type: 'dir' | 'file';
@@ -68,7 +68,8 @@ const App = () => {
 
   let dataAdapter = new jqx.dataAdapter(source);
 
-  let columns =
+  const data: IGridSource[] = [];
+  const columns: IGridColumn[] =
     [
       { text: 'Product Name', columngroup: 'ProductDetails', datafield: 'ProductName', width: 250 },
       { text: 'Quantity per Unit', columngroup: 'ProductDetails', datafield: 'QuantityPerUnit', cellsalign: 'right', align: 'right', width: 200 },
@@ -81,8 +82,8 @@ const App = () => {
     <JqxGrid
       width={500}
       height={500}
-      source={dataAdapter}
-      // columns={columns}
+      source={data}
+      columns={columns}
     />
   );
 }
