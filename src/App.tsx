@@ -1,35 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
-// import DataGrid from "react-data-grid";
-import React from 'react';
 
 import { DataGrid, GridRowsProp, GridColDef, GridRowParams } from '@mui/x-data-grid';
-
-
-
-// import { Grid } from "gridjs";
-// import "gridjs/dist/theme/mermaid.css";
-
-// function helloWorld() {
-//   const wrapperRef = useRef(null);
-
-//   const grid = new Grid({
-//     columns: ['Name', 'Email', 'Phone Number'],
-//     data: [
-//       ['John', 'john@example.com', '(353) 01 222 3333'],
-//       ['Mark', 'mark@gmail.com', '(01) 22 888 4444']
-//     ]
-//   });
-
-//   useEffect(() => {
-//     grid.render(wrapperRef.current);
-//   });
-
-//   return <div ref={wrapperRef} />;
-// }
-
-import { Grid } from 'gridjs-react';
 
 
 type Entry = {
