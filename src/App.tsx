@@ -5,6 +5,49 @@ import React from 'react';
 
 import JqxGrid, { IGridProps } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
+
+class GridTrial extends React.PureComponent<{}, IGridProps> {
+  private myGrid = React.createRef<JqxGrid>();
+
+  constructor(props: {}) {
+    super(props);
+
+    const source = {
+      localdata: [
+        ['Maria Anders', 'Sales Representative', 'Berlin', 'Germany'],
+        ['Ana Trujillo', 'Owner', 'Mxico D.F.', 'Mexico'],
+        ['Antonio Moreno', 'Owner', 'Mxico D.F.', 'Mexico']
+      ],
+      datafields: [
+        { name: 'ContactName', type: 'string', map: '0' },
+        { name: 'Title', type: 'string', map: '1' },
+        { name: 'City', type: 'string', map: '2' },
+        { name: 'Country', type: 'string', map: '3' }
+      ],
+      datatype: 'array'
+    };
+
+    this.state = {
+      source: new jqx.dataAdapter(source),
+      columns: [
+        { text: 'Contact Name', datafield: 'ContactName' },
+        { text: 'Contact Title', datafield: 'Title' },
+        { text: 'City', datafield: 'City' },
+        { text: 'Country', datafield: 'Country' }
+      ]
+    }
+  }
+
+  public render() {
+    return (
+      <JqxGrid ref={this.myGrid}
+        width={850} source={this.state.source} columns={this.state.columns} autoheight={true}
+      />
+    );
+  }
+}
+
+
 type Entry = {
   type: 'dir' | 'file';
   name: string;
@@ -50,6 +93,21 @@ const App = () => {
     {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
+  const source = {
+    localdata: [
+      ['Maria Anders', 'Sales Representative', 'Berlin', 'Germany'],
+      ['Ana Trujillo', 'Owner', 'Mxico D.F.', 'Mexico'],
+      ['Antonio Moreno', 'Owner', 'Mxico D.F.', 'Mexico']
+    ],
+    datafields: [
+      { name: 'ContactName', type: 'string', map: '0' },
+      { name: 'Title', type: 'string', map: '1' },
+      { name: 'City', type: 'string', map: '2' },
+      { name: 'Country', type: 'string', map: '3' }
+    ],
+    datatype: 'array'
+  };
+
   return (
     <>
       <br />
@@ -60,8 +118,9 @@ const App = () => {
         height={'100%'}
         columnsresize={true}
         source={[
-          ['John', 'john@example.com'],
-          ['Mike', 'mike@gmail.com']
+          ['Maria Anders', 'Sales Representative', 'Berlin', 'Germany'],
+          ['Ana Trujillo', 'Owner', 'Mxico D.F.', 'Mexico'],
+          ['Antonio Moreno', 'Owner', 'Mxico D.F.', 'Mexico']
         ]}
         columns={[
           { text: 'Company Name', datafield: 'CompanyName', width: '20%' },
