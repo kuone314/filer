@@ -59,10 +59,11 @@ const App = () => {
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
 
-      <div style={{ height: 600, width: '100%' }}>
+      <div style={{ width: '100%' }}>
         <DataGrid
           rows={convert(entries)}
           columns={columns}
+          autoHeight
           onRowDoubleClick={onRowDoubleClick}
         />
       </div>
