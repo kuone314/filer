@@ -50,23 +50,6 @@ const App = () => {
     {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
-  let source =
-  {
-    datatype: "xml",
-    datafields: [
-      { name: 'ProductName', type: 'string' },
-      { name: 'QuantityPerUnit', type: 'int' },
-      { name: 'UnitPrice', type: 'float' },
-      { name: 'UnitsInStock', type: 'float' },
-      { name: 'Discontinued', type: 'bool' }
-    ],
-    root: "Products",
-    record: "Product",
-    id: 'ProductID',
-    url: "sampledata/products.xml"
-  };
-
-  let dataAdapter = new jqx.dataAdapter(source);
 
   const data: IGridSource[] = [];
   const columns: IGridColumn[] =
@@ -83,12 +66,12 @@ const App = () => {
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      <JqxGrid
+      {/* <JqxGrid
         width={500}
         height={500}
         source={data}
         columns={columns}
-      />
+      /> */}
     </>
   );
 }
