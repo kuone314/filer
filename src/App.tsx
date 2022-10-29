@@ -65,6 +65,7 @@ const App = () => {
           columns={columns}
           autoHeight
           onRowDoubleClick={onRowDoubleClick}
+          rowsPerPageOptions={[100]}
         />
       </div>
     </>
