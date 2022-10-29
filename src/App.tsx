@@ -66,18 +66,17 @@ const App = () => {
 
   function convert(entries: Entries): GridRowsProp {
     return entries.map(
-      (entry, idx) => { return { id: idx, name: entry.name, path: entry.path } }
+      (entry, idx) => { return { id: idx, name: entry.name } }
     );
   }
 
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'name', width: 150 },
-    { field: 'path', headerName: 'path', width: 400 },
   ];
   const onRowDoubleClick = (params: GridRowParams) => {
     const entry = entries[params.row.id];
     if (entry.type === "dir") {
-      setDir(params.row.path)
+      setDir(entry.path)
     }
   }
 
