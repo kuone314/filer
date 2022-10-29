@@ -67,6 +67,7 @@ const App = () => {
           onRowDoubleClick={onRowDoubleClick}
           rowsPerPageOptions={[100]}
           hideFooterPagination
+          density='compact'
         />
       </div>
     </>
