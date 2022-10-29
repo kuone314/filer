@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
+import JqxGrid, { IGridProps } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 type Entry = {
   type: 'dir' | 'file';
