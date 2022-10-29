@@ -3,7 +3,7 @@ import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
-import JqxGrid, { IGridProps } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
+import JqxGrid, { IGridProps, jqx } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 type Entry = {
   type: 'dir' | 'file';
@@ -50,10 +50,39 @@ const App = () => {
     {entries.map(entry => { return FileListItem(entry) })}
   </ul> : null;
 
+  let source =
+  {
+    datatype: "xml",
+    datafields: [
+      { name: 'ProductName', type: 'string' },
+      { name: 'QuantityPerUnit', type: 'int' },
+      { name: 'UnitPrice', type: 'float' },
+      { name: 'UnitsInStock', type: 'float' },
+      { name: 'Discontinued', type: 'bool' }
+    ],
+    root: "Products",
+    record: "Product",
+    id: 'ProductID',
+    url: "sampledata/products.xml"
+  };
+
+  let dataAdapter = new jqx.dataAdapter(source);
+
+  let columns =
+    [
+      { text: 'Product Name', columngroup: 'ProductDetails', datafield: 'ProductName', width: 250 },
+      { text: 'Quantity per Unit', columngroup: 'ProductDetails', datafield: 'QuantityPerUnit', cellsalign: 'right', align: 'right', width: 200 },
+      { text: 'Unit Price', columngroup: 'ProductDetails', datafield: 'UnitPrice', align: 'right', cellsalign: 'right', cellsformat: 'c2', width: 200 },
+      // { text: 'Units In Stock', datafield: 'UnitsInStock', cellsalign: 'right', cellsrenderer: cellsrenderer, width: 100 },
+      { text: 'Discontinued', columntype: 'checkbox', datafield: 'Discontinued' }
+    ];
+
   return (
     <JqxGrid
-      width={500} height={500}
-      source={dataAdapter} columns={columns}
+      width={500}
+      height={500}
+      source={dataAdapter}
+      // columns={columns}
     />
   );
 }
