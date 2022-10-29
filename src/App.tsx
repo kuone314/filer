@@ -68,6 +68,10 @@ const App = () => {
           rowsPerPageOptions={[100]}
           hideFooterPagination
           density='compact'
+          disableColumnFilter={false}
+          disableColumnMenu={false}
+          editMode='row'
+          disableMultipleSelection={true}
         />
       </div>
     </>
