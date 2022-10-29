@@ -51,27 +51,10 @@ const App = () => {
   </ul> : null;
 
   return (
-    <>
-      <br />
-      <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
-      <br />
-      <JqxGrid
-        width={'100%'}
-        height={'100%'}
-        columnsresize={true}
-        source={[
-          ['John', 'john@example.com'],
-          ['Mike', 'mike@gmail.com']
-        ]}
-        columns={[
-          { text: 'Company Name', datafield: 'CompanyName', width: '20%' },
-          { text: 'Contact Name', datafield: 'ContactName', width: '20%' },
-          { text: 'Contact Title', datafield: 'ContactTitle', width: '20%' },
-          { text: 'City', datafield: 'City', width: '20%' },
-          { text: 'Country', datafield: 'Country' }
-        ]}
-      />
-    </>
+    <JqxGrid
+      width={500} height={500}
+      source={dataAdapter} columns={columns}
+    />
   );
 }
 
