@@ -75,8 +75,11 @@ const App = () => {
     { field: 'path', headerName: 'path', width: 400 },
   ];
   const onRowDoubleClick = (params: GridRowParams) => {
-     setDir(params.row.path) 
+    const entry = entries[params.row.id];
+    if (entry.type === "dir") {
+      setDir(params.row.path)
     }
+  }
 
   return (
     <>
