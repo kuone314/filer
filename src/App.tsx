@@ -3,7 +3,7 @@ import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
-import JqxGrid, { IGridProps } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
+import JqxGrid, { IGridProps, jqx } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 
 class GridTrial extends React.PureComponent<{}, IGridProps> {
@@ -113,23 +113,7 @@ const App = () => {
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      <JqxGrid
-        width={'100%'}
-        height={'100%'}
-        columnsresize={true}
-        source={[
-          ['Maria Anders', 'Sales Representative', 'Berlin', 'Germany'],
-          ['Ana Trujillo', 'Owner', 'Mxico D.F.', 'Mexico'],
-          ['Antonio Moreno', 'Owner', 'Mxico D.F.', 'Mexico']
-        ]}
-        columns={[
-          { text: 'Company Name', datafield: 'CompanyName', width: '20%' },
-          { text: 'Contact Name', datafield: 'ContactName', width: '20%' },
-          { text: 'Contact Title', datafield: 'ContactTitle', width: '20%' },
-          { text: 'City', datafield: 'City', width: '20%' },
-          { text: 'Country', datafield: 'Country' }
-        ]}
-      />
+      {GridTrial}
     </>
   );
 }
