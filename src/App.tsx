@@ -66,6 +66,7 @@ const App = () => {
           autoHeight
           onRowDoubleClick={onRowDoubleClick}
           rowsPerPageOptions={[100]}
+          hideFooterPagination
         />
       </div>
     </>
