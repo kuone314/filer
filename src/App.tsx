@@ -74,6 +74,9 @@ const App = () => {
     { field: 'name', headerName: 'name', width: 150 },
     { field: 'path', headerName: 'path', width: 400 },
   ];
+  const onRowDoubleClick = (params: GridRowParams) => {
+     setDir(params.row.path) 
+    }
 
   return (
     <>
@@ -81,11 +84,11 @@ const App = () => {
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
 
-      <div style={{ height: 300, width: '100%' }}>
+      <div style={{ height: 600, width: '100%' }}>
         <DataGrid
           rows={convert(entries)}
           columns={columns}
-          onRowDoubleClick={(params: GridRowParams) => { setDir(params.row.path) }}
+          onRowDoubleClick={onRowDoubleClick}
         />
       </div>
     </>
