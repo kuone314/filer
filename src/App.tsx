@@ -66,12 +66,12 @@ const App = () => {
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      {/* <JqxGrid
+      <JqxGrid
         width={500}
         height={500}
         source={data}
         columns={columns}
-      /> */}
+      />
     </>
   );
 }
