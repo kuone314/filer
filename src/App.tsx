@@ -51,41 +51,54 @@ const App = () => {
   </ul> : null;
 
 
-  const data: IGridSource[] = [
-    {
-      url: "aaa", // ?: string;
-      data: "aaa", // ?: any;
-      localdata: ["aaa","bb","cc"], // ?: any;
-      datatype:"array", // ?: 'xml' | 'json' | 'jsonp' | 'tsv' | 'csv' | 'local' | 'array' | 'observablearray';
-      // type:"aaa", // ?: 'GET' | 'POST';
-      id: "aaa", // ?: string;
-      root: "aaa", // ?: string;
-      record: "aaa", // ?: string;
-      // datafields:"aaa", // ?: IGridSourceDataFields[];
-      // pagenum:"aaa", // ?: number;
-      // pagesize:"aaa", // ?: number;
-      // pager:"aaa", // ?: (pagenum?: number, pagesize?: number, oldpagenum?: number) => any;
-      sortcolumn: "aaa", // ?: string;
-      // sortdirection:"aaa", // ?: 'asc' | 'desc';
-      // sort:"aaa", // ?: (column?: any, direction?: any) => void;
-      // filter:"aaa", // ?: (filters?: any, recordsArray?: any) => void;
-      // addrow:"aaa", // ?: (rowid?: any, rowdata?: any, position?: any, commit?: boolean) => void;
-      // deleterow:"aaa", // ?: (rowid?: any, commit?: boolean) => void;
-      // updaterow:"aaa", // ?: (rowid?: any, newdata?: any, commit?: any) => void;
-      // processdata:"aaa", // ?: (data: any) => void;
-      // formatdata:"aaa", // ?: (data: any) => any;
-      // async:"aaa", // ?: boolean;
-      // totalrecords:"aaa", // ?: number;
-      // unboundmode:"aaa", // ?: boolean;
-    }
-  ];
-  const columns: IGridColumn[] =
+  const data: IGridProps['source'] = {
+    localdata:
+      [
+        ['Maria Anders', 'Sales Representative', 'Berlin', 'Germany'],
+        ['Ana Trujillo', 'Owner', 'Mxico D.F.', 'Mexico'],
+        ['Antonio Moreno', 'Owner', 'Mxico D.F.', 'Mexico'],
+        ['Thomas Hardy', 'Sales Representative', 'London', 'UK'],
+        ['Christina Berglund', 'Order Administrator', 'Lule', 'Sweden'],
+        ['Hanna Moos', 'Sales Representative', 'Mannheim', 'Germany'],
+        ['Frdrique Citeaux', 'Marketing Manager', 'Strasbourg', 'France'],
+        ['Martn Sommer', 'Owner', 'Madrid', 'Spain'],
+        ['Owner', 'Marseille', 'France'],
+        ['Elizabeth Lincoln', 'Accounting Manager', 'Tsawassen', 'Canada'],
+        ['Victoria Ashworth', 'Sales Representative', 'London', 'UK'],
+        ['Patricio Simpson', 'Sales Agent', 'Buenos Aires', 'Argentina'],
+        ['Francisco Chang', 'Marketing Manager', 'Mxico D.F.', 'Mexico'],
+        ['Yang Wang', 'Owner', 'Bern', 'Switzerland'],
+        ['Pedro Afonso', 'Sales Associate', 'Sao Paulo', 'Brazil'],
+        ['Elizabeth Brown', 'Sales Representative', 'London', 'UK'],
+        ['Sven Ottlieb', 'Order Administrator', 'Aachen', 'Germany'],
+        ['Janine Labrune', 'Owner', 'Nantes', 'France'],
+        ['Ann Devon', 'Sales Agent', 'London', 'UK'],
+        ['Roland Mendel', 'Sales Manager', 'Graz', 'Austria']
+      ],
+    datafields:
+      [
+        { name: 'ContactName', type: 'string', map: '0' },
+        { name: 'Title', type: 'string', map: '1' },
+        { name: 'City', type: 'string', map: '2' },
+        { name: 'Country', type: 'string', map: '3' }
+      ],
+    datatype: 'array'
+  };
+
+  // const columns: IGridColumn[] =
+  //   [
+  //     { text: 'Product Name', columngroup: 'ProductDetails', datafield: 'ProductName', width: 250 },
+  //     { text: 'Quantity per Unit', columngroup: 'ProductDetails', datafield: 'QuantityPerUnit', cellsalign: 'right', align: 'right', width: 200 },
+  //     { text: 'Unit Price', columngroup: 'ProductDetails', datafield: 'UnitPrice', align: 'right', cellsalign: 'right', cellsformat: 'c2', width: 200 },
+  //     // { text: 'Units In Stock', datafield: 'UnitsInStock', cellsalign: 'right', cellsrenderer: cellsrenderer, width: 100 },
+  //     { text: 'Discontinued', columntype: 'checkbox', datafield: 'Discontinued' }
+  //   ];
+  const columns: IGridProps['columns'] =
     [
-      { text: 'Product Name', columngroup: 'ProductDetails', datafield: 'ProductName', width: 250 },
-      { text: 'Quantity per Unit', columngroup: 'ProductDetails', datafield: 'QuantityPerUnit', cellsalign: 'right', align: 'right', width: 200 },
-      { text: 'Unit Price', columngroup: 'ProductDetails', datafield: 'UnitPrice', align: 'right', cellsalign: 'right', cellsformat: 'c2', width: 200 },
-      // { text: 'Units In Stock', datafield: 'UnitsInStock', cellsalign: 'right', cellsrenderer: cellsrenderer, width: 100 },
-      { text: 'Discontinued', columntype: 'checkbox', datafield: 'Discontinued' }
+      { text: 'Contact Name', datafield: 'ContactName', width: 240 },
+      { text: 'Contact Title', datafield: 'Title', width: 240 },
+      { text: 'City', datafield: 'City', width: 150 },
+      { text: 'Country', datafield: 'Country' }
     ];
 
   return (
