@@ -54,32 +54,15 @@ const App = () => {
   const data: IGridProps['source'] = {
     localdata:
       [
-        ['Maria Anders', 'Sales Representative', 'Berlin', 'Germany'],
-        ['Ana Trujillo', 'Owner', 'Mxico D.F.', 'Mexico'],
-        ['Antonio Moreno', 'Owner', 'Mxico D.F.', 'Mexico'],
-        ['Thomas Hardy', 'Sales Representative', 'London', 'UK'],
-        ['Christina Berglund', 'Order Administrator', 'Lule', 'Sweden'],
-        ['Hanna Moos', 'Sales Representative', 'Mannheim', 'Germany'],
-        ['Frdrique Citeaux', 'Marketing Manager', 'Strasbourg', 'France'],
-        ['Martn Sommer', 'Owner', 'Madrid', 'Spain'],
-        ['Owner', 'Marseille', 'France'],
-        ['Elizabeth Lincoln', 'Accounting Manager', 'Tsawassen', 'Canada'],
-        ['Victoria Ashworth', 'Sales Representative', 'London', 'UK'],
-        ['Patricio Simpson', 'Sales Agent', 'Buenos Aires', 'Argentina'],
-        ['Francisco Chang', 'Marketing Manager', 'Mxico D.F.', 'Mexico'],
-        ['Yang Wang', 'Owner', 'Bern', 'Switzerland'],
-        ['Pedro Afonso', 'Sales Associate', 'Sao Paulo', 'Brazil'],
-        ['Elizabeth Brown', 'Sales Representative', 'London', 'UK'],
-        ['Sven Ottlieb', 'Order Administrator', 'Aachen', 'Germany'],
-        ['Janine Labrune', 'Owner', 'Nantes', 'France'],
-        ['Ann Devon', 'Sales Agent', 'London', 'UK'],
-        ['Roland Mendel', 'Sales Manager', 'Graz', 'Austria']
+        ['AAA', '000', 'GGG', 'k'],
+        ['BBB', '111', 'HHH', 'l'],
+        ['CCC', '222', 'III', 'm'],
       ],
     datafields:
       [
         { name: 'ContactName', type: 'string', map: '0' },
-        { name: 'Title', type: 'string', map: '1' },
-        { name: 'City', type: 'string', map: '2' },
+        { name: 'Title', type: 'string', map: '0' },
+        { name: 'City', type: 'string', map: '3' },
         { name: 'Country', type: 'string', map: '3' }
       ],
     datatype: 'array'
@@ -107,10 +90,16 @@ const App = () => {
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
       <JqxGrid
-        width={500}
-        height={500}
+        width={800}
+        // height={500}
         source={data}
         columns={columns}
+        pageable={false}
+        editable={false}
+        autoheight={true} 
+        sortable={true} theme={'material-purple'}
+        altrows={true} enabletooltips={true} 
+        selectionmode={'multiplerows'}
       />
     </>
   );
