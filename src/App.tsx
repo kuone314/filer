@@ -51,7 +51,34 @@ const App = () => {
   </ul> : null;
 
 
-  const data: IGridSource[] = [];
+  const data: IGridSource[] = [
+    {
+      url: "aaa", // ?: string;
+      data: "aaa", // ?: any;
+      localdata: ["aaa","bb","cc"], // ?: any;
+      datatype:"array", // ?: 'xml' | 'json' | 'jsonp' | 'tsv' | 'csv' | 'local' | 'array' | 'observablearray';
+      // type:"aaa", // ?: 'GET' | 'POST';
+      id: "aaa", // ?: string;
+      root: "aaa", // ?: string;
+      record: "aaa", // ?: string;
+      // datafields:"aaa", // ?: IGridSourceDataFields[];
+      // pagenum:"aaa", // ?: number;
+      // pagesize:"aaa", // ?: number;
+      // pager:"aaa", // ?: (pagenum?: number, pagesize?: number, oldpagenum?: number) => any;
+      sortcolumn: "aaa", // ?: string;
+      // sortdirection:"aaa", // ?: 'asc' | 'desc';
+      // sort:"aaa", // ?: (column?: any, direction?: any) => void;
+      // filter:"aaa", // ?: (filters?: any, recordsArray?: any) => void;
+      // addrow:"aaa", // ?: (rowid?: any, rowdata?: any, position?: any, commit?: boolean) => void;
+      // deleterow:"aaa", // ?: (rowid?: any, commit?: boolean) => void;
+      // updaterow:"aaa", // ?: (rowid?: any, newdata?: any, commit?: any) => void;
+      // processdata:"aaa", // ?: (data: any) => void;
+      // formatdata:"aaa", // ?: (data: any) => any;
+      // async:"aaa", // ?: boolean;
+      // totalrecords:"aaa", // ?: number;
+      // unboundmode:"aaa", // ?: boolean;
+    }
+  ];
   const columns: IGridColumn[] =
     [
       { text: 'Product Name', columngroup: 'ProductDetails', datafield: 'ProductName', width: 250 },
