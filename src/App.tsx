@@ -18,7 +18,7 @@ type Entries = Array<Entry>;
 
 const App = () => {
   const [dir, setDir] = useState<string>("");
-  const [entries, setEntries] = useState<Entries | null>(null);
+  const [entries, setEntries] = useState<Entries>([]);
 
   useEffect(() => {
     (async () => {
@@ -34,6 +34,7 @@ const App = () => {
           console.error(err);
           return null;
         });
+      if (!entries) { return; }
 
       setEntries(entries);
     })();
