@@ -37,35 +37,30 @@ const App = () => {
       if (!entries) { return; }
 
       setEntries(entries);
+      convert(entries);
     })();
   }, [dir]);
 
   const data: IGridProps['source'] = {
-    localdata:
-      [
-        ['AAA', '000', 'GGG', 'k'],
-        ['BBB', '111', 'HHH', 'l'],
-        ['CCC', '222', 'III', 'm'],
-      ],
+    localdata: [],
     datafields:
       [
-        { name: 'ContactName', type: 'string', map: '0' },
-        { name: 'Title', type: 'string', map: '0' },
-        { name: 'City', type: 'string', map: '3' },
-        { name: 'Country', type: 'string', map: '3' }
+        { name: 'name', type: 'string', map: '0' },
+        { name: 'path', type: 'string', map: '1' },
       ],
     datatype: 'array'
   };
   const convert = (entries: Entries) => {
-
+    data.localdata = entries.map(
+      (entry: Entry) => { return [entry.name, entry.path]; }
+    );
   }
+  convert(entries);
 
   const columns: IGridProps['columns'] =
     [
-      { text: 'Contact Name', datafield: 'ContactName', width: 240 },
-      { text: 'Contact Title', datafield: 'Title', width: 240 },
-      { text: 'City', datafield: 'City', width: 150 },
-      { text: 'Country', datafield: 'Country' }
+      { text: 'FIleName', datafield: 'name', width: 240 },
+      { text: 'FullPath', datafield: 'path', width: 240 },
     ];
   const src = new jqx.dataAdapter(data)
 
