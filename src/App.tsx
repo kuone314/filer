@@ -71,14 +71,6 @@ const App = () => {
     datatype: 'array'
   };
 
-  // const columns: IGridColumn[] =
-  //   [
-  //     { text: 'Product Name', columngroup: 'ProductDetails', datafield: 'ProductName', width: 250 },
-  //     { text: 'Quantity per Unit', columngroup: 'ProductDetails', datafield: 'QuantityPerUnit', cellsalign: 'right', align: 'right', width: 200 },
-  //     { text: 'Unit Price', columngroup: 'ProductDetails', datafield: 'UnitPrice', align: 'right', cellsalign: 'right', cellsformat: 'c2', width: 200 },
-  //     // { text: 'Units In Stock', datafield: 'UnitsInStock', cellsalign: 'right', cellsrenderer: cellsrenderer, width: 100 },
-  //     { text: 'Discontinued', columntype: 'checkbox', datafield: 'Discontinued' }
-  //   ];
   const columns: IGridProps['columns'] =
     [
       { text: 'Contact Name', datafield: 'ContactName', width: 240 },
@@ -98,17 +90,7 @@ const App = () => {
       args: RowIndex
     }
     const event_ = event as any as Args;
-    // const event_ = event as any ;
-    alert(event_['args'].rowindex);
     alert(event_.args.rowindex);
-
-    // for (const item in event) {
-    //   // alert(item);
-    // }
-    // e.args;
-
-    // alert('do something...');
-    // const a = 0;
   };
 
   return (
