@@ -83,11 +83,8 @@ const App = () => {
   const onRowdoubleclick = (event?: Event) => {
     if (!event) { return; }
 
-    interface RowIndex {
-      rowindex: number;
-    }
     interface Args {
-      args: RowIndex
+      args: { rowindex: number; }
     }
     const event_ = event as any as Args;
     alert(event_.args.rowindex);
