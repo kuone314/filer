@@ -103,7 +103,7 @@ const App = () => {
         autoheight={true}
         sortable={true} theme={'material-purple'}
         altrows={true} enabletooltips={true}
-        selectionmode={'multiplerows'}
+        selectionmode={'multiplerowsextended'}
       />
     </>
   );
