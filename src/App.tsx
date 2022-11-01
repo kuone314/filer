@@ -55,6 +55,9 @@ const App = () => {
       ],
     datatype: 'array'
   };
+  const convert = (entries: Entries) => {
+
+  }
 
   const columns: IGridProps['columns'] =
     [
