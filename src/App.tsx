@@ -3,6 +3,9 @@ import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
+
+import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
+import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
 import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 type Entry = {
@@ -83,6 +86,7 @@ const App = () => {
       { text: 'City', datafield: 'City', width: 150 },
       { text: 'Country', datafield: 'Country' }
     ];
+  const src = new jqx.dataAdapter(data)
 
   return (
     <>
@@ -92,13 +96,13 @@ const App = () => {
       <JqxGrid
         width={800}
         // height={500}
-        source={data}
+        source={src}
         columns={columns}
         pageable={false}
         editable={false}
-        autoheight={true} 
+        autoheight={true}
         sortable={true} theme={'material-purple'}
-        altrows={true} enabletooltips={true} 
+        altrows={true} enabletooltips={true}
         selectionmode={'multiplerows'}
       />
     </>
