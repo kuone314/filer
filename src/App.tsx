@@ -88,6 +88,29 @@ const App = () => {
     ];
   const src = new jqx.dataAdapter(data)
 
+  const onRowdoubleclick = (event?: Event) => {
+    if (!event) { return; }
+
+    interface RowIndex {
+      rowindex: number;
+    }
+    interface Args {
+      args: RowIndex
+    }
+    const event_ = event as any as Args;
+    // const event_ = event as any ;
+    alert(event_['args'].rowindex);
+    alert(event_.args.rowindex);
+
+    // for (const item in event) {
+    //   // alert(item);
+    // }
+    // e.args;
+
+    // alert('do something...');
+    // const a = 0;
+  };
+
   return (
     <>
       <br />
@@ -104,6 +127,7 @@ const App = () => {
         sortable={true} theme={'material-purple'}
         altrows={true} enabletooltips={true}
         selectionmode={'multiplerowsextended'}
+        onRowdoubleclick={onRowdoubleclick}
       />
     </>
   );
