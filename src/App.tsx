@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
+import { Box } from '@mui/material';
 
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
@@ -17,6 +18,51 @@ type Entry = {
 type Entries = Array<Entry>;
 
 const App = () => {
+
+  return (
+    <div style={
+      {
+        color: '#ff0201',
+        flex: 1,
+        width: '95%',
+        height: '90vh',
+        // flexDirection: 'row',
+      }
+    }>
+      <Box
+        sx={
+          {
+            display: 'flex',
+            height: '50%',
+            width: '100%',
+            m: 1,
+            p: 1,
+            bgcolor: '#fff201',
+            overflow: 'scroll'
+          }
+        }
+      >
+        {<MainPanel/>}
+      </Box>
+      <Box
+        sx={
+          {
+            display: 'inline-flex',
+            m: 1,
+            p: 1,
+            height: '50%',
+            width: '100%',
+            bgcolor: '#00f201',
+            overflow: 'scroll'
+          }
+        }
+      >
+        {<MainPanel/>}
+      </Box>
+    </div>
+  );
+}
+const MainPanel = () => {
   const [dir, setDir] = useState<string>("");
   const [entries, setEntries] = useState<Entries>([]);
 
@@ -101,12 +147,28 @@ const App = () => {
   const myGrid = React.createRef<JqxGrid>();
 
   return (
-    <>
+    <div style={
+      {
+        color: '#ff0201',
+        flex: 1,
+        width: '95%',
+        height: '90vh',
+      }
+    }>
       <br />
-      <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
+      <input
+        type="text"
+        value={dir}
+        onChange={e => setDir(e.target.value)}
+        style={
+          {
+            width: '96%',
+          }
+        }
+      />
       <br />
       <JqxGrid
-        width={800}
+        width={'100%'}
         source={src}
         columns={columns}
         pageable={false}
@@ -119,7 +181,7 @@ const App = () => {
         handlekeyboardnavigation={handlekeyboardnavigation}
         ref={myGrid}
       />
-    </>
+    </div>
   );
 }
 
