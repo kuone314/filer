@@ -4,6 +4,10 @@ import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
 
+import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
+import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
+import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
+
 type Entry = {
   type: 'dir' | 'file';
   name: string;
@@ -34,29 +38,87 @@ const App = () => {
       if (!entries) { return; }
 
       setEntries(entries);
+      convert(entries);
     })();
   }, [dir]);
 
+  const data: IGridProps['source'] = {
+    localdata: [],
+    datafields:
+      [
+        { name: 'name', type: 'string', map: '0' },
+        { name: 'path', type: 'string', map: '1' },
+      ],
+    datatype: 'array'
+  };
+  const convert = (entries: Entries) => {
+    data.localdata = entries.map(
+      (entry: Entry) => { return [entry.name, entry.path]; }
+    );
+  }
+  convert(entries);
 
-  const FileListItem = (entry: Entry) => {
+  const columns: IGridProps['columns'] =
+    [
+      { text: 'FIleName', datafield: 'name', width: 240 },
+      { text: 'FullPath', datafield: 'path', width: 240 },
+    ];
+  const src = new jqx.dataAdapter(data)
+
+  const onRowdoubleclick = (event?: Event) => {
+    if (!event) { return; }
+
+    interface Args {
+      args: { rowindex: number; }
+    }
+    const event_ = event as any as Args;
+    alert(event_.args.rowindex);
+    accessItemByIdx(event_.args.rowindex);
+  };
+
+  const accessItemByIdx = (rowIdx: number) => {
+    const entry = entries[rowIdx];
     if (entry.type === "dir") {
-      return <li key={entry.path} onClick={() => setDir(entry.path)}>{entry.name}</li>;
-    } else {
-      return <li key={entry.path}>{entry.name}</li>;
+      setDir(entry.path)
     }
   }
+  const accessSelectingItem = () => {
+    const rowIdxAry = myGrid.current?.getselectedrowindexes();
+    if (!rowIdxAry) { return; }
+    if (rowIdxAry.length !== 1) { return; }
+    accessItemByIdx(rowIdxAry[0]);
+  }
 
-  // entry_list 部分の、html の生成、かな。
-  const entry_list = entries ? <ul>
-    {entries.map(entry => { return FileListItem(entry) })}
-  </ul> : null;
+  const handlekeyboardnavigation = (event: Event) => {
+    const keyboard_event = event as KeyboardEvent;
+    if (keyboard_event.type !== 'keydown') { return false; }
+    if (keyboard_event.key === 'Enter') {
+      accessSelectingItem();
+    }
+    return false;
+  };
+
+  const myGrid = React.createRef<JqxGrid>();
 
   return (
     <>
       <br />
       <input type="text" value={dir} onChange={e => setDir(e.target.value)} />
       <br />
-      {entry_list}
+      <JqxGrid
+        width={800}
+        source={src}
+        columns={columns}
+        pageable={false}
+        editable={false}
+        autoheight={true}
+        sortable={true} theme={'material-purple'}
+        altrows={true} enabletooltips={true}
+        selectionmode={'multiplerowsextended'}
+        onRowdoubleclick={onRowdoubleclick}
+        handlekeyboardnavigation={handlekeyboardnavigation}
+        ref={myGrid}
+      />
     </>
   );
 }
