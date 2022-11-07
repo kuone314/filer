@@ -139,6 +139,11 @@ const MainPanel = () => {
     return false;
   };
 
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') { return; }
+    update(addressbatStr)
+  };
+
   const myGrid = React.createRef<JqxGrid>();
 
   return (
@@ -155,6 +160,7 @@ const MainPanel = () => {
         type="text"
         value={addressbatStr}
         onChange={e => setAddressbatStr(e.target.value)}
+        onKeyDown={onKeyDown}
         style={
           {
             width: '96%',
