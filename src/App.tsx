@@ -42,7 +42,7 @@ const App = () => {
           }
         }
       >
-        {<MainPanel/>}
+        {<MainPanel />}
       </Box>
       <Box
         sx={
@@ -57,35 +57,34 @@ const App = () => {
           }
         }
       >
-        {<MainPanel/>}
+        {<MainPanel />}
       </Box>
     </div>
   );
 }
 const MainPanel = () => {
-  const [dir, setDir] = useState<string>("");
+  const [addressbatStr, setAddressbatStr] = useState<string>("");
   const [entries, setEntries] = useState<Entries>([]);
 
   useEffect(() => {
     (async () => {
       const home = await homeDir();
-      setDir(home);
+      update(home);
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      const entries = await invoke<Entries>("get_entries", { path: dir })
-        .catch(err => {
-          console.error(err);
-          return null;
-        });
+  const update = async (path: string) => {
+    const entries = await invoke<Entries>("get_entries", { path: path })
+      .catch(err => {
+        console.error(err);
+        return null;
+      });
 
-      if (!entries) { return; }
+    if (!entries) { return; }
 
-      setEntries(entries);
-    })();
-  }, [dir]);
+    setAddressbatStr(path);
+    setEntries(entries);
+  }
 
   const convert = (entries: Entries) => {
     const data: IGridProps['source'] = {
@@ -121,7 +120,7 @@ const MainPanel = () => {
   const accessItemByIdx = (rowIdx: number) => {
     const entry = entries[rowIdx];
     if (entry.type === "dir") {
-      setDir(entry.path)
+      update(entry.path)
     }
   }
   const accessSelectingItem = () => {
@@ -154,8 +153,8 @@ const MainPanel = () => {
       <br />
       <input
         type="text"
-        value={dir}
-        onChange={e => setDir(e.target.value)}
+        value={addressbatStr}
+        onChange={e => setAddressbatStr(e.target.value)}
         style={
           {
             width: '96%',
