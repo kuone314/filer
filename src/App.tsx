@@ -118,7 +118,6 @@ const MainPanel = () => {
       args: { rowindex: number; }
     }
     const event_ = event as any as Args;
-    alert(event_.args.rowindex);
     accessItemByIdx(event_.args.rowindex);
   };
 
