@@ -84,32 +84,29 @@ const MainPanel = () => {
       if (!entries) { return; }
 
       setEntries(entries);
-      convert(entries);
     })();
   }, [dir]);
 
-  const data: IGridProps['source'] = {
-    localdata: [],
-    datafields:
-      [
-        { name: 'name', type: 'string', map: '0' },
-        { name: 'path', type: 'string', map: '1' },
-      ],
-    datatype: 'array'
-  };
   const convert = (entries: Entries) => {
-    data.localdata = entries.map(
-      (entry: Entry) => { return [entry.name, entry.path]; }
-    );
+    const data: IGridProps['source'] = {
+      localdata: entries.map(
+        (entry: Entry) => { return [entry.name, entry.path]; }
+      ),
+      datafields:
+        [
+          { name: 'name', type: 'string', map: '0' },
+          { name: 'path', type: 'string', map: '1' },
+        ],
+      datatype: 'array'
+    };
+    return data;
   }
-  convert(entries);
 
   const columns: IGridProps['columns'] =
     [
       { text: 'FIleName', datafield: 'name', width: 240 },
       { text: 'FullPath', datafield: 'path', width: 240 },
     ];
-  const src = new jqx.dataAdapter(data)
 
   const onRowdoubleclick = (event?: Event) => {
     if (!event) { return; }
@@ -168,7 +165,7 @@ const MainPanel = () => {
       <br />
       <JqxGrid
         width={'100%'}
-        source={src}
+        source={convert(entries)}
         columns={columns}
         pageable={false}
         editable={false}
