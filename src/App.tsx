@@ -119,31 +119,31 @@ const CommandBar = (props: { path: () => string }) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 const MainPanel = (props: { onPathChanged: ((path: string) => void) }) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
+  const [dir, setDir] = useState<string>("");
   const [entries, setEntries] = useState<Entries>([]);
 
   useEffect(() => {
     (async () => {
       const home = await homeDir();
-      update(home);
+      setDir(home);
     })();
   }, []);
 
   useEffect(() => {
-    props.onPathChanged(addressbatStr);
-  }, [addressbatStr]);
+    (async () => {
+      const entries = await invoke<Entries>("get_entries", { path: dir })
+        .catch(err => {
+          console.error(err);
+          return null;
+        });
 
-  const update = async (path: string) => {
-    const entries = await invoke<Entries>("get_entries", { path: path })
-      .catch(err => {
-        console.error(err);
-        return null;
-      });
+      if (!entries) { return; }
 
-    if (!entries) { return; }
-
-    setAddressbatStr(path);
-    setEntries(entries);
-  }
+      setAddressbatStr(dir);
+      props.onPathChanged(dir);
+      setEntries(entries);
+    })();
+  }, [dir]);
 
   const convert = (entries: Entries) => {
     const data: IGridProps['source'] = {
@@ -179,7 +179,7 @@ const MainPanel = (props: { onPathChanged: ((path: string) => void) }) => {
   const accessItemByIdx = (rowIdx: number) => {
     const entry = entries[rowIdx];
     if (entry.type === "dir") {
-      update(entry.path)
+      setDir(entry.path)
     }
   }
   const accessSelectingItem = () => {
@@ -204,7 +204,7 @@ const MainPanel = (props: { onPathChanged: ((path: string) => void) }) => {
     };
     const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: addressbatStr });
 
-    update(adjusted.dir);
+    setDir(adjusted.dir);
     myGrid.current?.focus();
   }
   const onEscapeDown = () => {
