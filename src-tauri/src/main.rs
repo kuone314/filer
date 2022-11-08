@@ -10,9 +10,41 @@ use std::fs;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_entries])
+        .invoke_handler(tauri::generate_handler![get_entries, adjust_addressbar_str,])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+#[derive(Debug, Serialize, Deserialize)]
+struct AdjustedAddressbarStr {
+    dir: String,
+}
+#[tauri::command]
+fn adjust_addressbar_str(str: &str) -> Result<AdjustedAddressbarStr, String> {
+    let file_info = match fs::metadata(str) {
+        Ok(f) => f,
+        Err(_) => return Err("unfond".to_string()),
+    };
+
+    if file_info.is_file() {
+        use std::path::Path;
+        let parent = match Path::new(str).parent() {
+            Some(p) => p,
+            None => return Err("unfond".to_string()),
+        };
+        return Ok(AdjustedAddressbarStr {
+            dir: parent.as_os_str().to_str().unwrap_or_default().to_string(),
+        });
+    }
+
+    if file_info.is_dir() {
+        return Ok(AdjustedAddressbarStr {
+            dir: str.to_string(),
+        });
+    }
+
+    return Err("unfond".to_string());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

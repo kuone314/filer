@@ -38,7 +38,6 @@ const App = () => {
             m: 1,
             p: 1,
             bgcolor: '#fff201',
-            overflow: 'scroll'
           }
         }
       >
@@ -53,7 +52,6 @@ const App = () => {
             height: '50%',
             width: '100%',
             bgcolor: '#00f201',
-            overflow: 'scroll'
           }
         }
       >
@@ -139,9 +137,21 @@ const MainPanel = () => {
     return false;
   };
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') { return; }
-    update(addressbatStr)
+  const onEnterDown = async () => {
+    type AdjustedAddressbarStr = {
+      dir: string,
+    };
+    const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: addressbatStr });
+
+    update(adjusted.dir);
+    myGrid.current?.focus();
+  }
+  const onEscapeDown = () => {
+    myGrid.current?.focus();
+  }
+  const onKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') { onEnterDown(); return; }
+    if (event.key === 'Escape') { onEscapeDown(); return; }
   };
 
   const myGrid = React.createRef<JqxGrid>();
@@ -152,10 +162,8 @@ const MainPanel = () => {
         color: '#ff0201',
         flex: 1,
         width: '95%',
-        height: '90vh',
       }
     }>
-      <br />
       <input
         type="text"
         value={addressbatStr}
@@ -167,21 +175,34 @@ const MainPanel = () => {
           }
         }
       />
-      <br />
-      <JqxGrid
-        width={'100%'}
-        source={convert(entries)}
-        columns={columns}
-        pageable={false}
-        editable={false}
-        autoheight={true}
-        sortable={true} theme={'material-purple'}
-        altrows={true} enabletooltips={true}
-        selectionmode={'multiplerowsextended'}
-        onRowdoubleclick={onRowdoubleclick}
-        handlekeyboardnavigation={handlekeyboardnavigation}
-        ref={myGrid}
-      />
+      <Box
+        sx={
+          {
+            display: 'flex',
+            height: '90%',
+            width: '100%',
+            m: 1,
+            p: 1,
+            bgcolor: '#ff0201',
+            overflow: 'scroll'
+          }
+        }
+      >
+        <JqxGrid
+          width={'100%'}
+          source={convert(entries)}
+          columns={columns}
+          pageable={false}
+          editable={false}
+          autoheight={true}
+          sortable={true} theme={'material-purple'}
+          altrows={true} enabletooltips={true}
+          selectionmode={'multiplerowsextended'}
+          onRowdoubleclick={onRowdoubleclick}
+          handlekeyboardnavigation={handlekeyboardnavigation}
+          ref={myGrid}
+        />
+      </Box>
     </div>
   );
 }
