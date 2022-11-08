@@ -128,13 +128,8 @@ const MainPanel = (props: { onPathChanged: ((path: string) => void) }) => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   props.path = addressbatStr;
-  // }, [addressbatStr]);
-
   useEffect(() => {
     props.onPathChanged(addressbatStr);
-    // alert(addressbatStr)
   }, [addressbatStr]);
 
   const update = async (path: string) => {
