@@ -10,9 +10,30 @@ use std::fs;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_entries, adjust_addressbar_str,])
+        .invoke_handler(tauri::generate_handler![
+            get_entries,
+            adjust_addressbar_str,
+            execute_shell_command,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+use std::process::Command;
+#[tauri::command]
+fn execute_shell_command(dir: &str, command: &str) -> String {
+    let output = Command::new("Powershell")
+        .args(["-Command", &command])
+        .current_dir(dir)
+        .output()
+        ;
+    let output = match output {
+        Ok(o) => o,
+        Err(_) => return "Err".to_string(),
+    };
+    // String::from_utf8_lossy(&output.stdout).to_string()
+    String::from_utf8_lossy(&output.stdout).to_string()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,9 +68,7 @@ fn adjust_addressbar_str(str: &str) -> Result<AdjustedAddressbarStr, String> {
     return Err("unfond".to_string());
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// tauriコマンドとして扱うには、JSONへ変換が出来る必要があるため、
-// クラスを用意している。
+///////////////////////////////////////////////////////////////////////////////////////////////
 #[derive(Serialize)]
 #[serde(tag = "type")]
 enum Entry {

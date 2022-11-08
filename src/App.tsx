@@ -18,6 +18,11 @@ type Entry = {
 type Entries = Array<Entry>;
 
 const App = () => {
+  let path = 'C:';
+  const onPathChanged = (inPath: string) => {
+    path = inPath;
+  }
+  const getPath = () => { return path; }
 
   return (
     <div style={
@@ -33,7 +38,7 @@ const App = () => {
         sx={
           {
             display: 'flex',
-            height: '50%',
+            height: '47%',
             width: '100%',
             m: 1,
             p: 1,
@@ -41,7 +46,8 @@ const App = () => {
           }
         }
       >
-        {<MainPanel />}
+        {<MainPanel
+          onPathChanged={onPathChanged} />}
       </Box>
       <Box
         sx={
@@ -49,18 +55,69 @@ const App = () => {
             display: 'inline-flex',
             m: 1,
             p: 1,
-            height: '50%',
+            height: '47%',
             width: '100%',
             bgcolor: '#00f201',
           }
         }
       >
-        {<MainPanel />}
+        {<MainPanel
+          onPathChanged={onPathChanged} />}
       </Box>
+      <CommandBar
+        path={getPath}
+      />
     </div>
   );
 }
-const MainPanel = () => {
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+const CommandBar = (props: { path: () => string }) => {
+  const [str, setStr] = useState<string>("");
+
+
+  const onEnterDown = async () => {
+    const result = await invoke<String>(
+      "execute_shell_command", { command: str, dir: props.path() }
+    )
+    alert(result)
+
+    setStr("");
+  }
+  const onEscapeDown = () => {
+  }
+  const onKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') { onEnterDown(); return; }
+    if (event.key === 'Escape') { onEscapeDown(); return; }
+  };
+
+
+
+  return (
+    <div style={
+      {
+        color: '#ff0201',
+        flex: 1,
+        width: '95%',
+      }
+    }>
+      <input
+        type="text"
+        value={str}
+        onChange={e => setStr(e.target.value)}
+        onKeyDown={onKeyDown}
+        style={
+          {
+            width: '96%',
+          }
+        }
+      />
+    </div>
+  );
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+const MainPanel = (props: { onPathChanged: ((path: string) => void) }) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
   const [entries, setEntries] = useState<Entries>([]);
 
@@ -70,6 +127,15 @@ const MainPanel = () => {
       update(home);
     })();
   }, []);
+
+  // useEffect(() => {
+  //   props.path = addressbatStr;
+  // }, [addressbatStr]);
+
+  useEffect(() => {
+    props.onPathChanged(addressbatStr);
+    // alert(addressbatStr)
+  }, [addressbatStr]);
 
   const update = async (path: string) => {
     const entries = await invoke<Entries>("get_entries", { path: path })
