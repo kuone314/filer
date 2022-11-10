@@ -84,7 +84,9 @@ const CommandBar = (props: { path: () => string }) => {
 
   const onEnterDown = async () => {
     const result = await executeShellCommand(str, props.path());
-    alert(result)
+    if (result.length !== 0) {
+      alert(result);
+    }
 
     setStr("");
   }
