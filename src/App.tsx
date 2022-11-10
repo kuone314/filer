@@ -186,6 +186,9 @@ const MainPanel = (props: { onPathChanged: ((path: string) => void) }) => {
     const entry = entries[rowIdx];
     if (entry.type === "dir") {
       setDir(entry.path)
+    } else {
+      const decoretedPath = '&"' + entry.path + '"';
+      executeShellCommand(decoretedPath, dir);
     }
   }
   const accessSelectingItem = () => {
