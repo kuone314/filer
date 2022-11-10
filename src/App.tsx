@@ -17,6 +17,12 @@ type Entry = {
 
 type Entries = Array<Entry>;
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+function executeShellCommand(command: string, dir: string): Promise<String> {
+  return invoke<String>("execute_shell_command", { command: command, dir: dir });
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 const App = () => {
   let path = 'C:';
   const onPathChanged = (inPath: string) => {
@@ -77,9 +83,7 @@ const CommandBar = (props: { path: () => string }) => {
 
 
   const onEnterDown = async () => {
-    const result = await invoke<String>(
-      "execute_shell_command", { command: str, dir: props.path() }
-    )
+    const result = await executeShellCommand(str, props.path());
     alert(result)
 
     setStr("");
