@@ -32,7 +32,6 @@ fn execute_shell_command(dir: &str, command: &str) -> String {
         Ok(o) => o,
         Err(_) => return "Err".to_string(),
     };
-    // String::from_utf8_lossy(&output.stdout).to_string()
     String::from_utf8_lossy(&output.stdout).to_string()
 }
 
