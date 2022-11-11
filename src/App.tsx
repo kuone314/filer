@@ -18,6 +18,11 @@ type Entry = {
 type Entries = Array<Entry>;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+function decoratePath(path: string): string {
+  return '"' + path + '"';
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 function executeShellCommand(command: string, dir: string): Promise<String> {
   return invoke<String>("execute_shell_command", { command: command, dir: dir });
 }
@@ -198,11 +203,70 @@ const MainPanel = (props: { onPathChanged: ((path: string) => void) }) => {
     accessItemByIdx(rowIdxAry[0]);
   }
 
+  const selectingItemPath = () => {
+    const rowIdxAry = myGrid.current?.getselectedrowindexes();
+    if (!rowIdxAry) { return []; }
+
+    return rowIdxAry
+      .map(idx => decoratePath(entries[idx].path))
+      ;
+  }
+
   const handlekeyboardnavigation = (event: Event) => {
     const keyboard_event = event as KeyboardEvent;
     if (keyboard_event.type !== 'keydown') { return false; }
     if (keyboard_event.key === 'Enter') {
       accessSelectingItem();
+      return true;
+    }
+    if (keyboard_event.ctrlKey && keyboard_event.key === 'c') {
+      const cmd = `
+        $target = @(${selectingItemPath().join(',')})
+        Add-Type -AssemblyName System.Windows.Forms
+        $dataObj = New-Object System.Windows.Forms.DataObject
+        $dataObj.SetFileDropList($target)
+        $byteStream = [byte[]](([System.Windows.Forms.DragDropEffects]::Copy -as [byte]), 0, 0, 0)
+        $memoryStream = [System.IO.MemoryStream]::new($byteStream)
+        $dataObj.SetData("Preferred DropEffect", $memoryStream)
+        [System.Windows.Forms.Clipboard]::SetDataObject($dataObj, $true)
+      `;
+      executeShellCommand(cmd, dir);
+      return true;
+    }
+    if (keyboard_event.ctrlKey && keyboard_event.key === 'x') {
+      const cmd = `
+        $target = @(${selectingItemPath().join(',')})
+        Add-Type -AssemblyName System.Windows.Forms
+        $dataObj = New-Object System.Windows.Forms.DataObject
+        $dataObj.SetFileDropList($target)
+        $byteStream = [byte[]](([System.Windows.Forms.DragDropEffects]::Move -as [byte]), 0, 0, 0)
+        $memoryStream = [System.IO.MemoryStream]::new($byteStream)
+        $dataObj.SetData("Preferred DropEffect", $memoryStream)
+        [System.Windows.Forms.Clipboard]::SetDataObject($dataObj, $true)
+      `;
+      executeShellCommand(cmd, dir);
+      return true;
+    }
+    if (keyboard_event.ctrlKey && keyboard_event.key === 'v') {
+      const cmd = `
+      Add-Type -AssemblyName System.Windows.Forms
+
+      $dstDir = "${dir}"
+
+      $files = [Windows.Forms.Clipboard]::GetFileDropList() ;
+      $data = [Windows.Forms.Clipboard]::GetDataObject()
+      $dropEffect = $data.GetData("Preferred DropEffect");
+      $flag = $dropEffect.ReadByte();
+
+      if ($flag -band [Windows.Forms.DragDropEffects]::Copy) {
+          Copy-Item $files $dstDir
+      }
+      if ($flag -band [Windows.Forms.DragDropEffects]::Move) {
+          Move-Item $files $dstDir
+      }
+      `;
+      executeShellCommand(cmd, dir);
+      return true;
     }
     return false;
   };
