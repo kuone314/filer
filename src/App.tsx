@@ -44,6 +44,8 @@ const App = () => {
   }
   const getPath = () => { return path; }
 
+  const tabsPathAry = [[defaultDir, defaultDir], [defaultDir, defaultDir]];
+
   return (
     <div style={
       {
@@ -54,38 +56,27 @@ const App = () => {
         // flexDirection: 'row',
       }
     }>
-      <Box
-        sx={
-          {
-            display: 'flex',
-            height: '47%',
-            width: '100%',
-            m: 1,
-            p: 1,
-            bgcolor: '#fff201',
-          }
-        }
-      >
-        {<PaineTabs
-          pathAry={[defaultDir, defaultDir]}
-          onPathChanged={onPathChanged} />}
+      {
+        tabsPathAry.map((pathAry) => {
+          return <Box
+            sx={
+              {
+                display: 'flex',
+                height: '47%',
+                width: '100%',
+                m: 1,
+                p: 1,
+                bgcolor: '#fff201',
+              }
+            }
+          >
+            {<PaineTabs
+              pathAry={pathAry}
+              onPathChanged={onPathChanged}
+            />}
           </Box>
-      <Box
-        sx={
-          {
-            display: 'inline-flex',
-            m: 1,
-            p: 1,
-            height: '47%',
-            width: '100%',
-            bgcolor: '#00f201',
-          }
+        })
       }
-      >
-        {<PaineTabs
-          pathAry={[defaultDir, defaultDir]}
-          onPathChanged={onPathChanged} />}
-      </Box>
       <CommandBar
         path={getPath}
       />
