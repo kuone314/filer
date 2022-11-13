@@ -86,7 +86,6 @@ const App = () => {
 const CommandBar = (props: { path: () => string }) => {
   const [str, setStr] = useState<string>("");
 
-
   const onEnterDown = async () => {
     const result = await executeShellCommand(str, props.path());
     if (result.length !== 0) {
@@ -101,9 +100,7 @@ const CommandBar = (props: { path: () => string }) => {
     if (event.key === 'Enter') { onEnterDown(); return; }
     if (event.key === 'Escape') { onEscapeDown(); return; }
   };
-
-
-
+  
   return (
     <div style={
       {
@@ -128,7 +125,11 @@ const CommandBar = (props: { path: () => string }) => {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-const MainPanel = (props: { onPathChanged: ((path: string) => void) }) => {
+const MainPanel = (
+  props: {
+    onPathChanged: (path: string) => void
+  }
+) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
   const [dir, setDir] = useState<string>("");
   const [entries, setEntries] = useState<Entries>([]);
