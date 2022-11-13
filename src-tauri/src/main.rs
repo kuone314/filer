@@ -14,9 +14,24 @@ fn main() {
             get_entries,
             adjust_addressbar_str,
             execute_shell_command,
+            read_setting_file,
+            write_setting_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+use std::env;
+use std::io::Write;
+#[tauri::command]
+fn read_setting_file(filename: &str) -> String {
+    fs::read_to_string(filename).unwrap_or_default()
+}
+#[tauri::command]
+fn write_setting_file(filename: &str, content: &str) -> () {
+    let mut file = fs::File::create(filename).unwrap();
+    file.write_all(content.as_bytes()).unwrap();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
