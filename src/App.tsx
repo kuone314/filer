@@ -9,6 +9,10 @@ import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
 import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import path from 'path';
+
 type Entry = {
   type: 'dir' | 'file';
   name: string;
@@ -59,8 +63,8 @@ const App = () => {
           }
         }
       >
-        {<MainPanel
-          initPath={defaultDir}
+        {<PaineTabs
+          pathAry={[defaultDir, defaultDir]}
           onPathChanged={onPathChanged} />}
       </Box>
       <Box
@@ -75,8 +79,8 @@ const App = () => {
           }
         }
       >
-        {<MainPanel
-          initPath={defaultDir}
+        {<PaineTabs
+          pathAry={[defaultDir, defaultDir]}
           onPathChanged={onPathChanged} />}
       </Box>
       <CommandBar
@@ -129,10 +133,66 @@ const CommandBar = (props: { path: () => string }) => {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+const PaineTabs = (
+  props: {
+    pathAry: string[],
+    onPathChanged: (path: string) => void,
+  },
+) => {
+  const [tabAry, setTabAry] = useState<string[]>(props.pathAry);
+
+  const onPathChanged = (newPath: string, tabIdx: number) => {
+    tabAry[tabIdx] = newPath
+    setTabAry(Array.from(tabAry));
+
+    props.onPathChanged(newPath);
+  }
+
+  const pathToTabName = (pathStr: string) => {
+    const splited = pathStr.split('\\').reverse();
+    if (splited[0].length !== 0) { return splited[0]; }
+    return splited[1];
+  }
+
+  return (
+    <div style={
+      {
+        color: '#6f6201',
+        flex: 1,
+        overflow: 'clip'
+      }
+    }>
+      <Tabs>
+        <TabList>
+          {
+            tabAry.map(path => {
+              return <Tab>{pathToTabName(path)}</Tab>
+            })
+          }
+        </TabList>
+
+        {
+          tabAry.map((path, idx) => {
+            return <TabPanel>{
+              <MainPanel
+                initPath={tabAry[idx]}
+                tabIdx={idx}
+                onPathChanged={onPathChanged}
+              />}
+            </TabPanel>
+          })
+        }
+      </Tabs>
+    </div >
+  )
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 const MainPanel = (
   props: {
     initPath: string,
-    onPathChanged: (path: string) => void
+    tabIdx: number,
+    onPathChanged: (newPath: string, tabIdx: number) => void
   }
 ) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
@@ -150,7 +210,7 @@ const MainPanel = (
       if (!entries) { return; }
 
       setAddressbatStr(dir);
-      props.onPathChanged(dir);
+      props.onPathChanged(dir, props.tabIdx);
       setEntries(entries);
     })();
   }, [dir]);
