@@ -47,8 +47,21 @@ const App = () => {
 
 
   const getInitTab = () => {
-    let result = JSON.parse(initTabs.toString()) as string[][];
-    return result;
+    try {
+      let result = JSON.parse(initTabs.toString()) as string[][];
+      if (result[0].length === 0) {
+        result[0].push(defaultDir)
+      }
+      if (result.length === 1) {
+        result.push([defaultDir])
+      }
+      if (result[1].length === 0) {
+        result[1].push(defaultDir)
+      }
+      return result;
+    } catch {
+      return [[defaultDir], [defaultDir]]
+    }
   }
   const [tabsPathAry, setTabsPathAry] = useState<string[][]>(getInitTab());
 
