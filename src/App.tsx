@@ -46,6 +46,10 @@ const App = () => {
 
   const tabsPathAry = [[defaultDir, defaultDir], [defaultDir, defaultDir]];
 
+  const onTabsChanged = (inTabs: string[], painIndex: number) => {
+    tabsPathAry[painIndex] = inTabs;
+  }
+
   return (
     <div style={
       {
@@ -57,7 +61,7 @@ const App = () => {
       }
     }>
       {
-        tabsPathAry.map((pathAry) => {
+        tabsPathAry.map((pathAry, idx) => {
           return <Box
             sx={
               {
@@ -73,6 +77,8 @@ const App = () => {
             {<PaineTabs
               pathAry={pathAry}
               onPathChanged={onPathChanged}
+              onTabsChanged={onTabsChanged}
+              painIndex={idx}
             />}
           </Box>
         })
@@ -131,6 +137,8 @@ const PaineTabs = (
   props: {
     pathAry: string[],
     onPathChanged: (path: string) => void,
+    onTabsChanged: (inTabs: string[], painIndex: number) => void,
+    painIndex: number,
   },
 ) => {
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry);
@@ -150,6 +158,10 @@ const PaineTabs = (
 
     props.onPathChanged(newPath);
   }
+
+  useEffect(() => {
+    props.onTabsChanged(tabAry, props.painIndex);
+  }, [tabAry]);
 
   const pathToTabName = (pathStr: string) => {
     const splited = pathStr.split('\\').reverse();
