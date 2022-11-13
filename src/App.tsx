@@ -13,6 +13,9 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import path from 'path';
 
+import { parse, stringify } from 'json5';
+import { Console } from 'console';
+
 type Entry = {
   type: 'dir' | 'file';
   name: string;
@@ -66,7 +69,7 @@ const App = () => {
         {<PaineTabs
           pathAry={[defaultDir, defaultDir]}
           onPathChanged={onPathChanged} />}
-      </Box>
+          </Box>
       <Box
         sx={
           {
@@ -77,7 +80,7 @@ const App = () => {
             width: '100%',
             bgcolor: '#00f201',
           }
-        }
+      }
       >
         {<PaineTabs
           pathAry={[defaultDir, defaultDir]}
@@ -140,6 +143,15 @@ const PaineTabs = (
   },
 ) => {
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry);
+  const addNewTab = (newTabPath: string, addPosIdx: number) => {
+    const frontPart = tabAry.splice(0, addPosIdx + 1);
+    setTabAry([...frontPart, newTabPath, ...tabAry]);
+  }
+  const removeTab = (idx: number) => {
+    if (tabAry.length === 1) { return; }
+    const frontPart = tabAry.splice(0, idx);
+    setTabAry([...frontPart, ...tabAry.slice(1)]);
+  }
 
   const onPathChanged = (newPath: string, tabIdx: number) => {
     tabAry[tabIdx] = newPath
@@ -178,6 +190,8 @@ const PaineTabs = (
                 initPath={tabAry[idx]}
                 tabIdx={idx}
                 onPathChanged={onPathChanged}
+                addNewTab={addNewTab}
+                removeTab={removeTab}
               />}
             </TabPanel>
           })
@@ -193,6 +207,8 @@ const MainPanel = (
     initPath: string,
     tabIdx: number,
     onPathChanged: (newPath: string, tabIdx: number) => void
+    addNewTab: (newTabPath: string, addPosIdx: number) => void,
+    removeTab: (idx: number) => void,
   }
 ) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
@@ -276,6 +292,14 @@ const MainPanel = (
     if (keyboard_event.type !== 'keydown') { return false; }
     if (keyboard_event.key === 'Enter') {
       accessSelectingItem();
+      return true;
+    }
+    if (keyboard_event.ctrlKey && keyboard_event.key === 't') {
+      props.addNewTab(dir, props.tabIdx);
+      return true;
+    }
+    if (keyboard_event.ctrlKey && keyboard_event.key === 'w') {
+      props.removeTab(props.tabIdx);
       return true;
     }
     if (keyboard_event.ctrlKey && keyboard_event.key === 'c') {
