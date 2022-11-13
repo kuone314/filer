@@ -35,6 +35,7 @@ function executeShellCommand(command: string, dir: string): Promise<String> {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+const initTabs = await invoke<String>("read_setting_file", { filename: "tabs.json5" });
 const defaultDir = await homeDir();
 
 const App = () => {
@@ -44,10 +45,20 @@ const App = () => {
   }
   const getPath = () => { return path; }
 
-  const tabsPathAry = [[defaultDir, defaultDir], [defaultDir, defaultDir]];
+
+  const getInitTab = () => {
+    let result = JSON.parse(initTabs.toString()) as string[][];
+    return result;
+  }
+  const [tabsPathAry, setTabsPathAry] = useState<string[][]>(getInitTab());
 
   const onTabsChanged = (inTabs: string[], painIndex: number) => {
     tabsPathAry[painIndex] = inTabs;
+
+    const data = JSON.stringify(tabsPathAry, null, 2);
+    (async () => {
+      await invoke<void>("write_setting_file", { filename: "tabs.json5", content: data })
+    })()
   }
 
   return (
