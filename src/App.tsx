@@ -28,6 +28,8 @@ function executeShellCommand(command: string, dir: string): Promise<String> {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+const defaultDir = await homeDir();
+
 const App = () => {
   let path = 'C:';
   const onPathChanged = (inPath: string) => {
@@ -58,6 +60,7 @@ const App = () => {
         }
       >
         {<MainPanel
+          initPath={defaultDir}
           onPathChanged={onPathChanged} />}
       </Box>
       <Box
@@ -73,6 +76,7 @@ const App = () => {
         }
       >
         {<MainPanel
+          initPath={defaultDir}
           onPathChanged={onPathChanged} />}
       </Box>
       <CommandBar
@@ -100,7 +104,7 @@ const CommandBar = (props: { path: () => string }) => {
     if (event.key === 'Enter') { onEnterDown(); return; }
     if (event.key === 'Escape') { onEscapeDown(); return; }
   };
-  
+
   return (
     <div style={
       {
@@ -127,19 +131,13 @@ const CommandBar = (props: { path: () => string }) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 const MainPanel = (
   props: {
+    initPath: string,
     onPathChanged: (path: string) => void
   }
 ) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
-  const [dir, setDir] = useState<string>("");
+  const [dir, setDir] = useState<string>(props.initPath);
   const [entries, setEntries] = useState<Entries>([]);
-
-  useEffect(() => {
-    (async () => {
-      const home = await homeDir();
-      setDir(home);
-    })();
-  }, []);
 
   useEffect(() => {
     (async () => {
