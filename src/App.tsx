@@ -16,7 +16,25 @@ import { PaineTabs } from './MainPain';
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 const initTabs = await invoke<String>("read_setting_file", { filename: "tabs.json5" });
 const defaultDir = await homeDir();
+const getInitTab = () => {
+  try {
+    let result = JSON.parse(initTabs.toString()) as string[][];
+    if (result[0].length === 0) {
+      result[0].push(defaultDir)
+    }
+    if (result.length === 1) {
+      result.push([defaultDir])
+    }
+    if (result[1].length === 0) {
+      result[1].push(defaultDir)
+    }
+    return result;
+  } catch {
+    return [[defaultDir], [defaultDir]]
+  }
+}
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 const App = () => {
   let path = 'C:';
   const onPathChanged = (inPath: string) => {
@@ -24,24 +42,6 @@ const App = () => {
   }
   const getPath = () => { return path; }
 
-
-  const getInitTab = () => {
-    try {
-      let result = JSON.parse(initTabs.toString()) as string[][];
-      if (result[0].length === 0) {
-        result[0].push(defaultDir)
-      }
-      if (result.length === 1) {
-        result.push([defaultDir])
-      }
-      if (result[1].length === 0) {
-        result[1].push(defaultDir)
-      }
-      return result;
-    } catch {
-      return [[defaultDir], [defaultDir]]
-    }
-  }
   const [tabsPathAry, setTabsPathAry] = useState<string[][]>(getInitTab());
 
   const onTabsChanged = (inTabs: string[], painIndex: number) => {
