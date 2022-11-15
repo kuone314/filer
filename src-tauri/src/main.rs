@@ -41,8 +41,7 @@ fn execute_shell_command(dir: &str, command: &str) -> String {
     let output = Command::new("Powershell")
         .args(["-Command", &command])
         .current_dir(dir)
-        .output()
-        ;
+        .output();
     let output = match output {
         Ok(o) => o,
         Err(_) => return "Err".to_string(),
@@ -57,14 +56,18 @@ struct AdjustedAddressbarStr {
 }
 #[tauri::command]
 fn adjust_addressbar_str(str: &str) -> Result<AdjustedAddressbarStr, String> {
-    let file_info = match fs::metadata(str) {
+    let path = match dunce::canonicalize(&str) {
+        Ok(p) => p,
+        Err(_) => return Err("unfond".to_string()),
+    };
+
+    let file_info = match fs::metadata(&path) {
         Ok(f) => f,
         Err(_) => return Err("unfond".to_string()),
     };
 
     if file_info.is_file() {
-        use std::path::Path;
-        let parent = match Path::new(str).parent() {
+        let parent = match path.parent() {
             Some(p) => p,
             None => return Err("unfond".to_string()),
         };
@@ -75,7 +78,7 @@ fn adjust_addressbar_str(str: &str) -> Result<AdjustedAddressbarStr, String> {
 
     if file_info.is_dir() {
         return Ok(AdjustedAddressbarStr {
-            dir: str.to_string(),
+            dir: path.as_os_str().to_str().unwrap_or_default().to_string(),
         });
     }
 
