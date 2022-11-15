@@ -251,10 +251,16 @@ const MainPanel = (
     return false;
   };
 
+  type AdjustedAddressbarStr = {
+    dir: string,
+  };
+  
+  const accessParentDir = async () => {
+    const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: addressbatStr + '/..' });
+    setDir(adjusted.dir);
+  };
+
   const onEnterDown = async () => {
-    type AdjustedAddressbarStr = {
-      dir: string,
-    };
     const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: addressbatStr });
 
     setDir(adjusted.dir);
@@ -267,6 +273,10 @@ const MainPanel = (
     if (event.key === 'Enter') { onEnterDown(); return; }
     if (event.key === 'Escape') { onEscapeDown(); return; }
   };
+
+  const onDoubleClick = () => {
+    accessParentDir();
+  }
 
   const myGrid = React.createRef<JqxGrid>();
 
@@ -301,6 +311,7 @@ const MainPanel = (
             overflow: 'scroll'
           }
         }
+        onDoubleClick={onDoubleClick}
       >
         <JqxGrid
           width={'100%'}
