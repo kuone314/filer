@@ -134,6 +134,13 @@ const MainPanel = (
     props.onPathChanged(dir, props.tabIdx);
   }, [dir]);
 
+  useEffect(() => {
+    setInterval(
+      UpdateList,
+      1500
+    );
+  }, []);
+
   const convert = (entries: Entries) => {
     const data: IGridProps['source'] = {
       localdata: entries.map(
