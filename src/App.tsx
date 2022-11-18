@@ -12,6 +12,7 @@ import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-sc
 import CommandBar from './CommandBar';
 import { PaineTabs } from './MainPain';
 
+import styles from './App.module.css'
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 const initTabs = await invoke<String>("read_setting_file", { filename: "tabs.json5" });
@@ -54,36 +55,15 @@ const App = () => {
   }
 
   return (
-    <div style={
-      {
-        color: '#ff0201',
-        flex: 1,
-        width: '95%',
-        height: '90vh',
-        // flexDirection: 'row',
-      }
-    }>
+    <div className={styles.AppMain}>
       {
         tabsPathAry.map((pathAry, idx) => {
-          return <Box
-            sx={
-              {
-                display: 'flex',
-                height: '47%',
-                width: '100%',
-                m: 1,
-                p: 1,
-                bgcolor: '#fff201',
-              }
-            }
-          >
-            {<PaineTabs
-              pathAry={pathAry}
-              onPathChanged={onPathChanged}
-              onTabsChanged={onTabsChanged}
-              painIndex={idx}
-            />}
-          </Box>
+          return <PaineTabs
+            pathAry={tabsPathAry[idx]}
+            onPathChanged={onPathChanged}
+            onTabsChanged={onTabsChanged}
+            painIndex={idx}
+          />
         })
       }
       <CommandBar

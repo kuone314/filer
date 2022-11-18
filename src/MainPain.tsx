@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api';
 import React from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
 import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-
 import { executeShellCommand } from './RustFuncs';
 
+import styles from './App.module.css'
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 type Entry = {
   type: 'dir' | 'file';
   name: string;
@@ -36,6 +37,7 @@ export const PaineTabs = (
   },
 ) => {
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry);
+  const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
   const addNewTab = (newTabPath: string, addPosIdx: number) => {
     const frontPart = tabAry.splice(0, addPosIdx + 1);
     setTabAry([...frontPart, newTabPath, ...tabAry]);
@@ -64,37 +66,39 @@ export const PaineTabs = (
   }
 
   return (
-    <div style={
-      {
-        color: '#6f6201',
-        flex: 1,
-        overflow: 'clip'
-      }
-    }>
-      <Tabs>
-        <TabList>
+    <>
+      <div className={styles.PaineTabs}>
+        <div
+          className={styles.TabButton}
+        >
           {
-            tabAry.map(path => {
-              return <Tab>{pathToTabName(path)}</Tab>
+            tabAry.map((path, idx) => {
+              return <Button
+                style={
+                  {
+                    textTransform: 'none',
+                    background: '#00ff00',
+                    border: (idx === activeTabIdx) ?  '5px solid #0000ff':'5px solid #00ff00' ,
+                  }
+                }
+                onClick={() => { setActiveTabIdx(idx) }}
+                defaultValue={pathToTabName(path)}
+              >
+                {pathToTabName(path)}
+              </Button>
             })
           }
-        </TabList>
-
-        {
-          tabAry.map((path, idx) => {
-            return <TabPanel>{
-              <MainPanel
-                initPath={tabAry[idx]}
-                tabIdx={idx}
-                onPathChanged={onPathChanged}
-                addNewTab={addNewTab}
-                removeTab={removeTab}
-              />}
-            </TabPanel>
-          })
-        }
-      </Tabs>
-    </div >
+        </div >
+        <MainPanel
+          initPath={tabAry[activeTabIdx]}
+          tabIdx={activeTabIdx}
+          onPathChanged={onPathChanged}
+          addNewTab={addNewTab}
+          removeTab={removeTab}
+          key={tabAry[activeTabIdx]}
+        />
+      </div>
+    </>
   )
 }
 
@@ -254,7 +258,7 @@ const MainPanel = (
   type AdjustedAddressbarStr = {
     dir: string,
   };
-  
+
   const accessParentDir = async () => {
     const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: addressbatStr + '/..' });
     setDir(adjusted.dir);
@@ -281,54 +285,35 @@ const MainPanel = (
   const myGrid = React.createRef<JqxGrid>();
 
   return (
-    <div style={
-      {
-        color: '#ff0201',
-        flex: 1,
-        width: '95%',
-      }
-    }>
-      <input
-        type="text"
-        value={addressbatStr}
-        onChange={e => setAddressbatStr(e.target.value)}
-        onKeyDown={onKeyDown}
-        style={
-          {
-            width: '96%',
-          }
-        }
-      />
-      <Box
-        sx={
-          {
-            display: 'flex',
-            height: '90%',
-            width: '100%',
-            m: 1,
-            p: 1,
-            bgcolor: '#ff0201',
-            overflow: 'scroll'
-          }
-        }
-        onDoubleClick={onDoubleClick}
-      >
-        <JqxGrid
-          width={'100%'}
-          source={convert(entries)}
-          columns={columns}
-          pageable={false}
-          editable={false}
-          autoheight={true}
-          sortable={true} theme={'material-purple'}
-          altrows={true} enabletooltips={true}
-          selectionmode={'multiplerowsextended'}
-          onRowdoubleclick={onRowdoubleclick}
-          handlekeyboardnavigation={handlekeyboardnavigation}
-          ref={myGrid}
+    <>
+      <div className={styles.MainPain}>
+        <input
+          type="text"
+          value={addressbatStr}
+          onChange={e => setAddressbatStr(e.target.value)}
+          onKeyDown={onKeyDown}
         />
-      </Box>
-    </div>
+        <div
+          className={styles.FileList}
+          onDoubleClick={onDoubleClick}
+        >
+          <JqxGrid
+            width={'100%'}
+            source={convert(entries)}
+            columns={columns}
+            pageable={false}
+            editable={false}
+            autoheight={true}
+            sortable={true} theme={'material-purple'}
+            altrows={true} enabletooltips={true}
+            selectionmode={'multiplerowsextended'}
+            onRowdoubleclick={onRowdoubleclick}
+            handlekeyboardnavigation={handlekeyboardnavigation}
+            ref={myGrid}
+          />
+        </div>
+      </div>
+    </>
   );
 }
 
