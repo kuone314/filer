@@ -79,6 +79,11 @@ export const PaineTabs = (
     return splited[1];
   }
 
+  const tabColor = (path: string) => {
+    if (path.startsWith('C')) return '#ffff00'
+    return '#00ff00'
+  }
+
   return (
     <>
       <div className={styles.PaineTabs}>
@@ -91,6 +96,7 @@ export const PaineTabs = (
                 style={
                   {
                     textTransform: 'none',
+                    background: tabColor(path),
                     border: (idx === activeTabIdx) ? '5px solid #ff0000' : '',
                   }
                 }
