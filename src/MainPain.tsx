@@ -117,15 +117,15 @@ const MainPanel = (
   const [entries, setEntries] = useState<Entries>([]);
 
   const UpdateList = async () => {
-    const entries = await invoke<Entries>("get_entries", { path: dir })
+    const newEntries = await invoke<Entries>("get_entries", { path: dir })
       .catch(err => {
         console.error(err);
         return null;
       });
 
-    if (!entries) { return; }
+    if (!newEntries) { return; }
 
-    setEntries(entries);
+    setEntries(newEntries);
   }
 
   useEffect(() => {
