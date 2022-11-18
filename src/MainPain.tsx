@@ -78,7 +78,7 @@ export const PaineTabs = (
                   {
                     textTransform: 'none',
                     background: '#00ff00',
-                    border: (idx === activeTabIdx) ?  '5px solid #0000ff':'5px solid #00ff00' ,
+                    border: (idx === activeTabIdx) ? '5px solid #0000ff' : '5px solid #00ff00',
                   }
                 }
                 onClick={() => { setActiveTabIdx(idx) }}
@@ -116,20 +116,22 @@ const MainPanel = (
   const [dir, setDir] = useState<string>(props.initPath);
   const [entries, setEntries] = useState<Entries>([]);
 
+  const UpdateList = async () => {
+    const entries = await invoke<Entries>("get_entries", { path: dir })
+      .catch(err => {
+        console.error(err);
+        return null;
+      });
+
+    if (!entries) { return; }
+
+    setEntries(entries);
+  }
+
   useEffect(() => {
-    (async () => {
-      const entries = await invoke<Entries>("get_entries", { path: dir })
-        .catch(err => {
-          console.error(err);
-          return null;
-        });
-
-      if (!entries) { return; }
-
-      setAddressbatStr(dir);
-      props.onPathChanged(dir, props.tabIdx);
-      setEntries(entries);
-    })();
+    UpdateList();
+    setAddressbatStr(dir);
+    props.onPathChanged(dir, props.tabIdx);
   }, [dir]);
 
   const convert = (entries: Entries) => {
