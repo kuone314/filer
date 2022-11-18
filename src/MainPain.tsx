@@ -77,8 +77,7 @@ export const PaineTabs = (
                 style={
                   {
                     textTransform: 'none',
-                    background: '#00ff00',
-                    border: (idx === activeTabIdx) ? '5px solid #0000ff' : '5px solid #00ff00',
+                    border: (idx === activeTabIdx) ? '5px solid #ff0000' : '',
                   }
                 }
                 onClick={() => { setActiveTabIdx(idx) }}
