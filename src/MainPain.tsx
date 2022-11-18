@@ -124,7 +124,9 @@ const MainPanel = (
       });
 
     if (!newEntries) { return; }
-
+    if (JSON.stringify(newEntries) === JSON.stringify(entries)) {
+      return;
+    }
     setEntries(newEntries);
   }
 
