@@ -32,7 +32,7 @@ export const PaineTabs = (
   props: {
     pathAry: string[],
     onPathChanged: (path: string) => void,
-    onTabsChanged: (inTabs: string[], painIndex: number) => void,
+    onTabsChanged: (newTabs: string[], painIndex: number) => void,
     painIndex: number,
   },
 ) => {

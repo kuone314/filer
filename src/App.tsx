@@ -45,8 +45,8 @@ const App = () => {
 
   const [tabsPathAry, setTabsPathAry] = useState<string[][]>(getInitTab());
 
-  const onTabsChanged = (inTabs: string[], painIndex: number) => {
-    tabsPathAry[painIndex] = inTabs;
+  const onTabsChanged = (newTabs: string[], painIndex: number) => {
+    tabsPathAry[painIndex] = newTabs;
 
     const data = JSON.stringify(tabsPathAry, null, 2);
     (async () => {
