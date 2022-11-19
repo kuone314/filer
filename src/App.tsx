@@ -10,7 +10,7 @@ import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
 import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import CommandBar from './CommandBar';
-import { PaineTabs } from './MainPain';
+import { PaineTabs, TabInfo } from './MainPain';
 
 import styles from './App.module.css'
 
@@ -18,15 +18,22 @@ import styles from './App.module.css'
 const initTabs = await invoke<String>("read_setting_file", { filename: "tabs.json5" });
 const defaultDir = await homeDir();
 const getInitTab = () => {
+  const defaultTabInfo = { pathAry: [defaultDir], activeTabIndex: 0 }
+
   try {
-    let result = JSON.parse(initTabs.toString()) as string[][];
+    let result = JSON.parse(initTabs.toString()) as TabInfo[];
     if (result.length === 1) {
-      result.push([defaultDir])
+      result.push(defaultTabInfo)
     }
 
-    const fixError = (tabInfo: string[]) => {
-      if (tabInfo.length === 0) {
-        tabInfo.push(defaultDir)
+    const fixError = (tabInfo: TabInfo) => {
+      tabInfo.pathAry = tabInfo.pathAry.filter(s => s);
+      if (tabInfo.pathAry.length === 0) {
+        tabInfo.pathAry.push(defaultDir)
+      }
+
+      if (tabInfo.activeTabIndex < 0 || tabInfo.pathAry.length <= tabInfo.activeTabIndex) {
+        tabInfo.activeTabIndex = 0
       }
 
       return tabInfo;
@@ -34,7 +41,7 @@ const getInitTab = () => {
 
     return result.map(fixError);
   } catch {
-    return [[defaultDir], [defaultDir]]
+    return [defaultTabInfo, defaultTabInfo]
   }
 }
 
@@ -46,10 +53,11 @@ const App = () => {
   }
   const getPath = () => { return path; }
 
-  const [tabsPathAry, setTabsPathAry] = useState<string[][]>(getInitTab());
+  const [tabsPathAry, setTabsPathAry] = useState<TabInfo[]>(getInitTab());
 
-  const onTabsChanged = (newTabs: string[], painIndex: number) => {
-    tabsPathAry[painIndex] = newTabs;
+  const onTabsChanged = (newTabs: string[], newTabIdx: number, painIndex: number) => {
+    tabsPathAry[painIndex].pathAry = newTabs;
+    tabsPathAry[painIndex].activeTabIndex = newTabIdx;
 
     const data = JSON.stringify(tabsPathAry, null, 2);
     (async () => {

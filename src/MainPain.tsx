@@ -23,6 +23,12 @@ type Entry = {
 type Entries = Array<Entry>;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+export interface TabInfo {
+  pathAry: string[],
+  activeTabIndex: number,
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 function decoratePath(path: string): string {
   return '"' + path + '"';
 }
@@ -30,14 +36,14 @@ function decoratePath(path: string): string {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 export const PaineTabs = (
   props: {
-    pathAry: string[],
+    pathAry: TabInfo,
     onPathChanged: (path: string) => void,
-    onTabsChanged: (newTabs: string[], painIndex: number) => void,
+    onTabsChanged: (newTabs: string[], newTabIdx: number, painIndex: number) => void,
     painIndex: number,
   },
 ) => {
-  const [tabAry, setTabAry] = useState<string[]>(props.pathAry);
-  const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
+  const [tabAry, setTabAry] = useState<string[]>(props.pathAry.pathAry);
+  const [activeTabIdx, setActiveTabIdx] = useState<number>(props.pathAry.activeTabIndex);
   const addNewTab = (newTabPath: string, addPosIdx: number) => {
     const frontPart = tabAry.splice(0, addPosIdx + 1);
     setTabAry([...frontPart, newTabPath, ...tabAry]);
@@ -56,8 +62,8 @@ export const PaineTabs = (
   }
 
   useEffect(() => {
-    props.onTabsChanged(tabAry, props.painIndex);
-  }, [tabAry]);
+    props.onTabsChanged(tabAry, activeTabIdx, props.painIndex);
+  }, [tabAry, activeTabIdx]);
 
   const pathToTabName = (pathStr: string) => {
     const splited = pathStr.split('\\').reverse();
