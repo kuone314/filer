@@ -24,13 +24,15 @@ const getInitTab = () => {
       result.push([defaultDir])
     }
 
-    if (result[0].length === 0) {
-      result[0].push(defaultDir)
+    const fixError = (tabInfo: string[]) => {
+      if (tabInfo.length === 0) {
+        tabInfo.push(defaultDir)
+      }
+
+      return tabInfo;
     }
-    if (result[1].length === 0) {
-      result[1].push(defaultDir)
-    }
-    return result;
+
+    return result.map(fixError);
   } catch {
     return [[defaultDir], [defaultDir]]
   }
