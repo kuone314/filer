@@ -45,13 +45,21 @@ export const PaineTabs = (
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry.pathAry);
   const [activeTabIdx, setActiveTabIdx] = useState<number>(props.pathAry.activeTabIndex);
   const addNewTab = (newTabPath: string, addPosIdx: number) => {
-    const frontPart = tabAry.splice(0, addPosIdx + 1);
-    setTabAry([...frontPart, newTabPath, ...tabAry]);
+    let newTabAry = Array.from(tabAry);
+    newTabAry.splice(addPosIdx + 1, 0, newTabPath);
+    setTabAry(newTabAry);
   }
   const removeTab = (idx: number) => {
     if (tabAry.length === 1) { return; }
-    const frontPart = tabAry.splice(0, idx);
-    setTabAry([...frontPart, ...tabAry.slice(1)]);
+    if (idx >= tabAry.length) { return; }
+
+    let newTabAry = Array.from(tabAry);
+    newTabAry.splice(idx, 1);
+    setTabAry(newTabAry);
+
+    if (activeTabIdx >= newTabAry.length) {
+      setActiveTabIdx(newTabAry.length - 1);
+    }
   }
 
   const onPathChanged = (newPath: string, tabIdx: number) => {
