@@ -56,20 +56,17 @@ struct AdjustedAddressbarStr {
 }
 #[tauri::command]
 fn adjust_addressbar_str(str: &str) -> Result<AdjustedAddressbarStr, String> {
-    let path = match dunce::canonicalize(&str) {
-        Ok(p) => p,
-        Err(_) => return Err("unfond".to_string()),
+    let Ok(path) = dunce::canonicalize(&str) else {
+        return Err("unfond".to_string());
     };
 
-    let file_info = match fs::metadata(&path) {
-        Ok(f) => f,
-        Err(_) => return Err("unfond".to_string()),
+    let Ok(file_info) = fs::metadata(&path) else {
+        return Err("unfond".to_string());
     };
 
     if file_info.is_file() {
-        let parent = match path.parent() {
-            Some(p) => p,
-            None => return Err("unfond".to_string()),
+        let Some(parent) = path.parent() else {
+            return Err("unfond".to_string());
         };
         return Ok(AdjustedAddressbarStr {
             dir: parent.as_os_str().to_str().unwrap_or_default().to_string(),
