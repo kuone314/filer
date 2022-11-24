@@ -15,9 +15,11 @@ import styles from './App.module.css'
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 type Entry = {
-  type: 'dir' | 'file';
-  name: string;
-  path: string;
+  name: string,
+  is_dir: boolean,
+  extension: string,
+  size: number,
+  date: string,
 };
 
 type Entries = Array<Entry>;
@@ -29,7 +31,7 @@ export interface TabInfo {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-function decoratePath(path: string): string {
+function decoratePath(path: String): string {
   return '"' + path + '"';
 }
 
@@ -165,12 +167,21 @@ const MainPanel = (
   const convert = (entries: Entries) => {
     const data: IGridProps['source'] = {
       localdata: entries.map(
-        (entry: Entry) => { return [entry.name, entry.path]; }
+        (entry: Entry) => {
+          return [
+            entry.name,
+            entry.is_dir ? 'folder' : entry.extension,
+            entry.is_dir ? '' : entry.size,
+            entry.date
+          ];
+        }
       ),
       datafields:
         [
           { name: 'name', type: 'string', map: '0' },
-          { name: 'path', type: 'string', map: '1' },
+          { name: 'extension', type: 'string', map: '1' },
+          { name: 'size', type: 'number', map: '2' },
+          { name: 'date', type: 'string', map: '3' },
         ],
       datatype: 'array'
     };
@@ -180,7 +191,9 @@ const MainPanel = (
   const columns: IGridProps['columns'] =
     [
       { text: 'FIleName', datafield: 'name', width: 240 },
-      { text: 'FullPath', datafield: 'path', width: 240 },
+      { text: 'type', datafield: 'extension', width: 80 },
+      { text: 'size', datafield: 'size', width: 40 },
+      { text: 'date', datafield: 'date', width: 150 },
     ];
 
   const onRowdoubleclick = (event?: Event) => {
@@ -195,10 +208,10 @@ const MainPanel = (
 
   const accessItemByIdx = (rowIdx: number) => {
     const entry = entries[rowIdx];
-    if (entry.type === "dir") {
-      setDir(entry.path)
+    if (entry.is_dir) {
+      setDir(dir + '/' + entry.name)
     } else {
-      const decoretedPath = '&"' + entry.path + '"';
+      const decoretedPath = '&"' + entry.name + '"';
       executeShellCommand(decoretedPath, dir);
     }
   }
@@ -214,7 +227,7 @@ const MainPanel = (
     if (!rowIdxAry) { return []; }
 
     return rowIdxAry
-      .map(idx => decoratePath(entries[idx].path))
+      .map(idx => decoratePath(entries[idx].name))
       ;
   }
 
