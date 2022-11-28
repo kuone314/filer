@@ -14,6 +14,9 @@ import { PaineTabs, TabInfo } from './MainPain';
 
 import styles from './App.module.css'
 
+import JSON5 from 'json5'
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 const initTabs = await invoke<String>("read_setting_file", { filename: "tabs.json5" });
 const defaultDir = await homeDir();
@@ -21,7 +24,7 @@ const getInitTab = () => {
   const defaultTabInfo = { pathAry: [defaultDir], activeTabIndex: 0 }
 
   try {
-    let result = JSON.parse(initTabs.toString()) as TabInfo[];
+    let result = JSON5.parse(initTabs.toString()) as TabInfo[];
     if (result.length === 1) {
       result.push(defaultTabInfo)
     }
@@ -59,7 +62,7 @@ const App = () => {
     tabsPathAry[painIndex].pathAry = newTabs;
     tabsPathAry[painIndex].activeTabIndex = newTabIdx;
 
-    const data = JSON.stringify(tabsPathAry, null, 2);
+    const data = JSON5.stringify(tabsPathAry, null, 2);
     (async () => {
       await invoke<void>("write_setting_file", { filename: "tabs.json5", content: data })
     })()
