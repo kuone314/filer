@@ -220,6 +220,7 @@ const MainPanel = (
     if (newIndex >= entries.length) { return; }
 
     setCurrentIndex(newIndex)
+    setincremantalSearchingStr('')
 
     if (!select) { return }
 
@@ -238,6 +239,18 @@ const MainPanel = (
     }
   }
 
+  const [incremantalSearchingStr, setincremantalSearchingStr] = useState('');
+  const incremantalSearch = (key: string) => {
+    const nextSearchStr = incremantalSearchingStr + key;
+    const idx = entries.findIndex((entry) => {
+      return entry.name.toLowerCase().startsWith(nextSearchStr)
+    })
+    if (idx === -1) { return }
+
+    setCurrentIndex(idx)
+    setincremantalSearchingStr(nextSearchStr)
+  }
+
   const onRowclick = (event?: Event) => {
     if (!event) { return; }
 
@@ -246,6 +259,7 @@ const MainPanel = (
     }
     const event_ = event as any as Args;
     setCurrentIndex(event_.args.rowindex);
+    setincremantalSearchingStr('')
   };
 
   const onRowdoubleclick = (event?: Event) => {
@@ -373,6 +387,12 @@ const MainPanel = (
       executeShellCommand(cmd, dir);
       return true;
     }
+
+    if (keyboard_event.key.length === 1) {
+      incremantalSearch(keyboard_event.key)
+      return true;
+    }
+
     return false;
   };
 
