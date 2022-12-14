@@ -230,6 +230,14 @@ const MainPanel = (
     }
   }
 
+  const toggleSelection = (index: number) => {
+    if (myGrid.current?.getselectedrowindexes().includes(index)) {
+      myGrid.current?.unselectrow(index);
+    } else {
+      myGrid.current?.selectrow(index);
+    }
+  }
+
   const onRowclick = (event?: Event) => {
     if (!event) { return; }
 
@@ -301,6 +309,10 @@ const MainPanel = (
     if (keyboard_event.key === 'End') {
       const select = keyboard_event.shiftKey;
       setupCurrentIndex(entries.length - 1, select)
+      return true;
+    }
+    if (keyboard_event.key === ' ') {
+      toggleSelection(currentIndex);
       return true;
     }
 
