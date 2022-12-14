@@ -172,8 +172,8 @@ const MainPanel = (
         (entry: Entry, index: number) => {
           return [
             entry.name,
-            entry.is_dir ? 'folder' : entry.extension,
-            entry.is_dir ? '' : entry.size,
+            entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension,
+            entry.is_dir ? '-' : entry.size,
             entry.date,
             index === currentIndex,
           ];
