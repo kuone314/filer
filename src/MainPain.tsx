@@ -286,8 +286,10 @@ const MainPanel = (
   }
 
   const selectingItemPath = () => {
-    const rowIdxAry = myGrid.current?.getselectedrowindexes();
-    if (!rowIdxAry) { return []; }
+    if (entries.length === 0) { return [''] }
+
+    let rowIdxAry = myGrid.current?.getselectedrowindexes();
+    if (!rowIdxAry) { rowIdxAry = [currentIndex]; }
 
     return rowIdxAry
       .map(idx => decoratePath(entries[idx].name))
@@ -325,7 +327,7 @@ const MainPanel = (
     if (keyboard_event.key === ' ') {
       toggleSelection(currentIndex);
       return true;
-    }
+  }
 
     if (keyboard_event.ctrlKey && keyboard_event.key === 't') {
       props.addNewTab(dir, props.tabIdx);
@@ -376,19 +378,19 @@ const MainPanel = (
 
       if ($flag -band [Windows.Forms.DragDropEffects]::Copy) {
           Copy-Item $files $dstDir
-      }
+    }
       if ($flag -band [Windows.Forms.DragDropEffects]::Move) {
           Move-Item $files $dstDir
-      }
+  }
       `;
       executeShellCommand(cmd, dir);
       return true;
-    }
+      }
 
-    if (keyboard_event.key.length === 1) {
-      incremantalSearch(keyboard_event.key)
+      if (keyboard_event.key.length === 1) {
+        incremantalSearch(keyboard_event.key)
       return true;
-    }
+      }
 
     return false;
   };
