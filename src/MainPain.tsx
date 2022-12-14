@@ -214,6 +214,16 @@ const MainPanel = (
       { text: 'date', datafield: 'date', width: 150, cellsrenderer: cellsrenderer, },
     ];
 
+  const onRowclick = (event?: Event) => {
+    if (!event) { return; }
+
+    interface Args {
+      args: { rowindex: number; }
+    }
+    const event_ = event as any as Args;
+    setCurrentIndex(event_.args.rowindex);
+  };
+
   const onRowdoubleclick = (event?: Event) => {
     if (!event) { return; }
 
@@ -368,6 +378,7 @@ const MainPanel = (
             sortable={true} theme={'material-purple'}
             altrows={true} enabletooltips={true}
             selectionmode={'multiplerowsextended'}
+            onRowclick={onRowclick}
             onRowdoubleclick={onRowdoubleclick}
             handlekeyboardnavigation={handlekeyboardnavigation}
             ref={myGrid}
