@@ -136,6 +136,8 @@ const MainPanel = (
   const [addressbatStr, setAddressbatStr] = useState<string>("");
   const [dir, setDir] = useState<string>(props.initPath);
   const [entries, setEntries] = useState<Entries>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
 
   const UpdateList = async () => {
     const newEntries = await invoke<Entries>("get_entries", { path: dir })
@@ -167,12 +169,13 @@ const MainPanel = (
   const convert = (entries: Entries) => {
     const data: IGridProps['source'] = {
       localdata: entries.map(
-        (entry: Entry) => {
+        (entry: Entry, index: number) => {
           return [
             entry.name,
             entry.is_dir ? 'folder' : entry.extension,
             entry.is_dir ? '' : entry.size,
             entry.date,
+            index === currentIndex,
           ];
         }
       ),
@@ -182,18 +185,33 @@ const MainPanel = (
           { name: 'extension', type: 'string', map: '1' },
           { name: 'size', type: 'number', map: '2' },
           { name: 'date', type: 'string', map: '3' },
+          { name: 'isCurrent', type: 'bool', map: '4' },
         ],
       datatype: 'array'
     };
     return data;
   }
 
+  const cellsrenderer = (
+    row?: number,
+    columnfield?: string,
+    value?: any,
+    defaulthtml?: string,
+    columnproperties?: any,
+    rowdata?: any
+  ) => {
+    if (rowdata.isCurrent) {
+      return '<div style="border-style : double none;">' + value + '</div>';;
+    }
+    return '<div>' + value + '</div>';
+  };
+
   const columns: IGridProps['columns'] =
     [
-      { text: 'FIleName', datafield: 'name', width: 240 },
-      { text: 'type', datafield: 'extension', width: 80 },
-      { text: 'size', datafield: 'size', width: 40 },
-      { text: 'date', datafield: 'date', width: 150 },
+      { text: 'FIleName', datafield: 'name', width: 240, cellsrenderer: cellsrenderer, },
+      { text: 'type', datafield: 'extension', width: 80, cellsrenderer: cellsrenderer, },
+      { text: 'size', datafield: 'size', width: 40, cellsrenderer: cellsrenderer, },
+      { text: 'date', datafield: 'date', width: 150, cellsrenderer: cellsrenderer, },
     ];
 
   const onRowdoubleclick = (event?: Event) => {
