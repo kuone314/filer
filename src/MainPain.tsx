@@ -281,11 +281,8 @@ const MainPanel = (
       executeShellCommand(decoretedPath, dir);
     }
   }
-  const accessSelectingItem = () => {
-    const rowIdxAry = myGrid.current?.getselectedrowindexes();
-    if (!rowIdxAry) { return; }
-    if (rowIdxAry.length !== 1) { return; }
-    accessItemByIdx(rowIdxAry[0]);
+  const accessCurrentItem = () => {
+    accessItemByIdx(currentIndex);
   }
 
   const selectingItemPath = () => {
@@ -301,7 +298,7 @@ const MainPanel = (
     const keyboard_event = event as KeyboardEvent;
     if (keyboard_event.type !== 'keydown') { return false; }
     if (keyboard_event.key === 'Enter') {
-      accessSelectingItem();
+      accessCurrentItem();
       return true;
     }
 
