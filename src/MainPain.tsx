@@ -172,7 +172,7 @@ const MainPanel = (
             entry.name,
             entry.is_dir ? 'folder' : entry.extension,
             entry.is_dir ? '' : entry.size,
-            entry.date
+            entry.date,
           ];
         }
       ),
