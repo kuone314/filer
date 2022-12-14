@@ -214,6 +214,22 @@ const MainPanel = (
       { text: 'date', datafield: 'date', width: 150, cellsrenderer: cellsrenderer, },
     ];
 
+  const setupCurrentIndex = (newIndex: number, select: boolean) => {
+    if (currentIndex === newIndex) { return; }
+    if (newIndex < 0) { return; }
+    if (newIndex >= entries.length) { return; }
+
+    setCurrentIndex(newIndex)
+
+    if (!select) { return }
+
+    const sttIdx = Math.min(currentIndex, newIndex);
+    const endIdx = Math.max(currentIndex, newIndex);
+    for (let idx = sttIdx; idx <= endIdx; idx++) {
+      myGrid.current?.selectrow(idx);
+    }
+  }
+
   const onRowclick = (event?: Event) => {
     if (!event) { return; }
 
@@ -266,6 +282,28 @@ const MainPanel = (
       accessSelectingItem();
       return true;
     }
+
+    if (keyboard_event.key === 'ArrowUp') {
+      const select = keyboard_event.shiftKey;
+      setupCurrentIndex(currentIndex - 1, select)
+      return true;
+    }
+    if (keyboard_event.key === 'ArrowDown') {
+      const select = keyboard_event.shiftKey;
+      setupCurrentIndex(currentIndex + 1, select)
+      return true;
+    }
+    if (keyboard_event.key === 'Home') {
+      const select = keyboard_event.shiftKey;
+      setupCurrentIndex(0, select)
+      return true;
+    }
+    if (keyboard_event.key === 'End') {
+      const select = keyboard_event.shiftKey;
+      setupCurrentIndex(entries.length - 1, select)
+      return true;
+    }
+
     if (keyboard_event.ctrlKey && keyboard_event.key === 't') {
       props.addNewTab(dir, props.tabIdx);
       return true;
