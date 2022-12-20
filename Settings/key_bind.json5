@@ -1,0 +1,178 @@
+[
+  {
+    command_name: 'Copy to clopboard',
+    key: 'ctrl+c',
+    action: {
+      type: 'power_shell',
+      command: '\
+$target = @(selectingItemPath);\
+Add-Type -AssemblyName System.Windows.Forms;\
+$dataObj = New-Object System.Windows.Forms.DataObject;\
+$dataObj.SetFileDropList($target);\
+$byteStream = [byte[]](([System.Windows.Forms.DragDropEffects]::Copy -as [byte]), 0, 0, 0);\
+$memoryStream = [System.IO.MemoryStream]::new($byteStream);\
+$dataObj.SetData("Preferred DropEffect", $memoryStream);\
+[System.Windows.Forms.Clipboard]::SetDataObject($dataObj, $true);\
+      ',
+    },
+  },
+  {
+    command_name: 'Cut to clopboard',
+    key: 'ctrl+x',
+    action: {
+      type: 'power_shell',
+      command: '\
+$target = @(selectingItemPath);\
+Add-Type -AssemblyName System.Windows.Forms;\
+$dataObj = New-Object System.Windows.Forms.DataObject;\
+$dataObj.SetFileDropList($target);\
+$byteStream = [byte[]](([System.Windows.Forms.DragDropEffects]::Move -as [byte]), 0, 0, 0);\
+$memoryStream = [System.IO.MemoryStream]::new($byteStream);\
+$dataObj.SetData("Preferred DropEffect", $memoryStream);\
+[System.Windows.Forms.Clipboard]::SetDataObject($dataObj, $true);\
+      ',
+    },
+  },
+  {
+    command_name: 'Past from clopboard',
+    key: 'ctrl+v',
+    action: {
+      type: 'power_shell',
+      command: '\
+Add-Type -AssemblyName System.Windows.Forms;\
+\
+$dstDir = "current_dir";\
+\
+$files = [Windows.Forms.Clipboard]::GetFileDropList() ;\
+$data = [Windows.Forms.Clipboard]::GetDataObject();\
+$dropEffect = $data.GetData("Preferred DropEffect");\
+$flag = $dropEffect.ReadByte();\
+\
+if ($flag -band [Windows.Forms.DragDropEffects]::Copy) {\
+    Copy-Item $files $dstDir;\
+}\
+if ($flag -band [Windows.Forms.DragDropEffects]::Move) {\
+    Move-Item $files $dstDir;\
+}\
+      '
+    },
+  },
+  {
+    command_name: 'Delete file',
+    key: 'ctrl+d',
+    action: {
+      type: 'power_shell',
+      command: '\
+$target = @(selectingItemPath);\
+Remove-Item $target -Recurse;\
+      '
+    },
+  },
+  {
+    command_name: 'Copy file path',
+    key: 'ctrl+alt+c',
+    action: {
+      type: 'power_shell',
+      command: '\
+$target = @(selectingItemPath);\n\
+Set-Clipboard $target;\n\
+      '
+    },
+  },
+  {
+    command_name: 'moveDown',
+    key: 'ArrowDown',
+    action: {
+      type: 'build_in',
+      command: 'moveDown',
+    },
+  },
+  {
+    command_name: 'moveDownSelect',
+    key: 'shift+ArrowDown',
+    action: {
+      type: 'build_in',
+      command: 'moveDownSelect',
+    },
+  },
+  {
+    command_name: 'moveUp',
+    key: 'ArrowUp',
+    action: {
+      type: 'build_in',
+      command: 'moveUp',
+    },
+  },
+  {
+    command_name: 'moveUpSelect',
+    key: 'shift+ArrowUp',
+    action: {
+      type: 'build_in',
+      command: 'moveUpSelect',
+    },
+  },
+  {
+    command_name: 'moveTop',
+    key: 'Home',
+    action: {
+      type: 'build_in',
+      command: 'moveTop',
+    },
+  },
+  {
+    command_name: 'moveTopSelect',
+    key: 'shift+Home',
+    action: {
+      type: 'build_in',
+      command: 'moveTopSelect',
+    },
+  },
+  {
+    command_name: 'moveBottom',
+    key: 'End',
+    action: {
+      type: 'build_in',
+      command: 'moveBottom',
+    },
+  },
+  {
+    command_name: 'moveBottomSelect',
+    key: 'shift+End',
+    action: {
+      type: 'build_in',
+      command: 'moveBottomSelect',
+    },
+  },
+  {
+    command_name: 'toggleSelection',
+    key: 'Space',
+    action: {
+      type: 'build_in',
+      command: 'toggleSelection',
+    },
+  },
+  {
+    command_name: 'addNewTab',
+    key: 'ctrl+t',
+    action: {
+      type: 'build_in',
+      command: 'addNewTab',
+    },
+  },
+  {
+    command_name: 'removeTab',
+    key: 'ctrl+w',
+    action: {
+      type: 'build_in',
+      command: 'removeTab',
+    },
+  },
+  {
+    command_name: 'accessCurrentItem',
+    key: 'Enter',
+    action: {
+      type: 'build_in',
+      command: 'accessCurrentItem',
+    },
+  },
+]
