@@ -231,14 +231,6 @@ const MainPanel = (
     }
   }
 
-  const toggleSelection = () => {
-    if (myGrid.current?.getselectedrowindexes().includes(currentIndex)) {
-      myGrid.current?.unselectrow(currentIndex);
-    } else {
-      myGrid.current?.selectrow(currentIndex);
-    }
-  }
-
   const [incremantalSearchingStr, setincremantalSearchingStr] = useState('');
   const incremantalSearch = (key: string) => {
     const nextSearchStr = incremantalSearchingStr + key;
@@ -296,6 +288,14 @@ const MainPanel = (
       ;
   }
 
+  const toggleSelection = () => {
+    if (myGrid.current?.getselectedrowindexes().includes(currentIndex)) {
+      myGrid.current?.unselectrow(currentIndex);
+    } else {
+      myGrid.current?.selectrow(currentIndex);
+    }
+  }
+
   const handlekeyboardnavigation = (event: Event) => {
     const keyboard_event = event as KeyboardEvent;
     if (keyboard_event.type !== 'keydown') { return false; }
@@ -327,7 +327,7 @@ const MainPanel = (
     if (keyboard_event.key === ' ') {
       toggleSelection();
       return true;
-  }
+    }
 
     if (keyboard_event.ctrlKey && keyboard_event.key === 't') {
       props.addNewTab(dir, props.tabIdx);
@@ -385,12 +385,12 @@ const MainPanel = (
       `;
       executeShellCommand(cmd, dir);
       return true;
-      }
+    }
 
-      if (keyboard_event.key.length === 1) {
-        incremantalSearch(keyboard_event.key)
+    if (keyboard_event.key.length === 1) {
+      incremantalSearch(keyboard_event.key)
       return true;
-      }
+    }
 
     return false;
   };
