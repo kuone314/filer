@@ -9,6 +9,7 @@ import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
 import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import { executeShellCommand } from './RustFuncs';
+import { CommandInfo, COMMAND_TYPE, matchingKeyEvent } from './CommandInfo';
 
 import styles from './App.module.css'
 
@@ -323,49 +324,72 @@ const MainPanel = (
     }
   }
 
+  const execCommand = (command: CommandInfo) => {
+    if (command.action.type === COMMAND_TYPE.build_in) {
+      execBuildInCommand(command.action.command);
+      return
+    }
+
+    if (command.action.type === COMMAND_TYPE.power_shell) {
+      const replaced_command = command.action.command
+        .replace('selectingItemPath', selectingItemPath().join(','))
+        .replace('current_dir', dir);
+      executeShellCommand(replaced_command, dir);
+      return
+    }
+  }
+
   const handlekeyboardnavigation = (event: Event) => {
     const keyboard_event = event as KeyboardEvent;
     if (keyboard_event.type !== 'keydown') { return false; }
-    if (keyboard_event.key === 'Enter') {
-      accessCurrentItem();
-      return true;
-    }
 
-    if (keyboard_event.key === 'ArrowUp') {
-      const select = keyboard_event.shiftKey;
-      setupCurrentIndex(currentIndex - 1, select)
-      return true;
-    }
-    if (keyboard_event.key === 'ArrowDown') {
-      const select = keyboard_event.shiftKey;
-      setupCurrentIndex(currentIndex + 1, select)
-      return true;
-    }
-    if (keyboard_event.key === 'Home') {
-      const select = keyboard_event.shiftKey;
-      setupCurrentIndex(0, select)
-      return true;
-    }
-    if (keyboard_event.key === 'End') {
-      const select = keyboard_event.shiftKey;
-      setupCurrentIndex(entries.length - 1, select)
-      return true;
-    }
-    if (keyboard_event.key === ' ') {
-      toggleSelection();
-      return true;
-  }
+    (async () => {
+      const command_ary = await matchingKeyEvent(keyboard_event);
+      if (command_ary.length !== 0) {
+        execCommand(command_ary[0])
+        return;
+      }
 
-    if (keyboard_event.ctrlKey && keyboard_event.key === 't') {
-      props.addNewTab(dir, props.tabIdx);
-      return true;
-    }
-    if (keyboard_event.ctrlKey && keyboard_event.key === 'w') {
-      props.removeTab(props.tabIdx);
-      return true;
-    }
-    if (keyboard_event.ctrlKey && keyboard_event.key === 'c') {
-      const cmd = `
+      if (keyboard_event.key === 'Enter') {
+        accessCurrentItem();
+        return true;
+      }
+
+      if (keyboard_event.key === 'ArrowUp') {
+        const select = keyboard_event.shiftKey;
+        setupCurrentIndex(currentIndex - 1, select)
+        return true;
+      }
+      if (keyboard_event.key === 'ArrowDown') {
+        const select = keyboard_event.shiftKey;
+        setupCurrentIndex(currentIndex + 1, select)
+        return true;
+      }
+      if (keyboard_event.key === 'Home') {
+        const select = keyboard_event.shiftKey;
+        setupCurrentIndex(0, select)
+        return true;
+      }
+      if (keyboard_event.key === 'End') {
+        const select = keyboard_event.shiftKey;
+        setupCurrentIndex(entries.length - 1, select)
+        return true;
+      }
+      if (keyboard_event.key === ' ') {
+        toggleSelection();
+        return true;
+      }
+
+      if (keyboard_event.ctrlKey && keyboard_event.key === 't') {
+        props.addNewTab(dir, props.tabIdx);
+        return true;
+      }
+      if (keyboard_event.ctrlKey && keyboard_event.key === 'w') {
+        props.removeTab(props.tabIdx);
+        return true;
+      }
+      if (keyboard_event.ctrlKey && keyboard_event.key === 'c') {
+        const cmd = `
         $target = @(${selectingItemPath().join(',')})
         Add-Type -AssemblyName System.Windows.Forms
         $dataObj = New-Object System.Windows.Forms.DataObject
@@ -375,11 +399,11 @@ const MainPanel = (
         $dataObj.SetData("Preferred DropEffect", $memoryStream)
         [System.Windows.Forms.Clipboard]::SetDataObject($dataObj, $true)
       `;
-      executeShellCommand(cmd, dir);
-      return true;
-    }
-    if (keyboard_event.ctrlKey && keyboard_event.key === 'x') {
-      const cmd = `
+        executeShellCommand(cmd, dir);
+        return true;
+      }
+      if (keyboard_event.ctrlKey && keyboard_event.key === 'x') {
+        const cmd = `
         $target = @(${selectingItemPath().join(',')})
         Add-Type -AssemblyName System.Windows.Forms
         $dataObj = New-Object System.Windows.Forms.DataObject
@@ -389,11 +413,11 @@ const MainPanel = (
         $dataObj.SetData("Preferred DropEffect", $memoryStream)
         [System.Windows.Forms.Clipboard]::SetDataObject($dataObj, $true)
       `;
-      executeShellCommand(cmd, dir);
-      return true;
-    }
-    if (keyboard_event.ctrlKey && keyboard_event.key === 'v') {
-      const cmd = `
+        executeShellCommand(cmd, dir);
+        return true;
+      }
+      if (keyboard_event.ctrlKey && keyboard_event.key === 'v') {
+        const cmd = `
       Add-Type -AssemblyName System.Windows.Forms
 
       $dstDir = "${dir}"
@@ -410,16 +434,17 @@ const MainPanel = (
           Move-Item $files $dstDir
   }
       `;
-      executeShellCommand(cmd, dir);
-      return true;
+        executeShellCommand(cmd, dir);
+        return true;
       }
 
       if (keyboard_event.key.length === 1) {
         incremantalSearch(keyboard_event.key)
-      return true;
+        return;
       }
+    })();
 
-    return false;
+    return true;
   };
 
   type AdjustedAddressbarStr = {
