@@ -288,11 +288,38 @@ const MainPanel = (
       ;
   }
 
+  const moveUp = () => { setupCurrentIndex(currentIndex - 1, false) }
+  const moveUpSelect = () => { setupCurrentIndex(currentIndex - 1, true) }
+  const moveDown = () => { setupCurrentIndex(currentIndex + 1, false) }
+  const moveDownSelect = () => { setupCurrentIndex(currentIndex + 1, true) }
+  const moveTop = () => { setupCurrentIndex(0, false) }
+  const moveTopSelect = () => { setupCurrentIndex(0, true) }
+  const moveBottom = () => { setupCurrentIndex(entries.length - 1, false) }
+  const moveBottomSelect = () => { setupCurrentIndex(entries.length - 1, true) }
   const toggleSelection = () => {
     if (myGrid.current?.getselectedrowindexes().includes(currentIndex)) {
       myGrid.current?.unselectrow(currentIndex);
     } else {
       myGrid.current?.selectrow(currentIndex);
+    }
+  }
+  const addNewTab = () => { props.addNewTab(dir, props.tabIdx); }
+  const removeTab = () => { props.removeTab(props.tabIdx); }
+
+  const execBuildInCommand = (commandName: string) => {
+    switch (commandName) {
+      case 'accessCurrentItem': accessCurrentItem(); return;
+      case 'moveUp': moveUp(); return;
+      case 'moveUpSelect': moveUpSelect(); return;
+      case 'moveDown': moveDown(); return;
+      case 'moveDownSelect': moveDownSelect(); return;
+      case 'moveTop': moveTop(); return;
+      case 'moveTopSelect': moveTopSelect(); return;
+      case 'moveBottom': moveBottom(); return;
+      case 'moveBottomSelect': moveBottomSelect(); return;
+      case 'toggleSelection': toggleSelection(); return;
+      case 'addNewTab': addNewTab(); return;
+      case 'removeTab': removeTab(); return;
     }
   }
 
@@ -327,7 +354,7 @@ const MainPanel = (
     if (keyboard_event.key === ' ') {
       toggleSelection();
       return true;
-    }
+  }
 
     if (keyboard_event.ctrlKey && keyboard_event.key === 't') {
       props.addNewTab(dir, props.tabIdx);
@@ -385,12 +412,12 @@ const MainPanel = (
       `;
       executeShellCommand(cmd, dir);
       return true;
-    }
+      }
 
-    if (keyboard_event.key.length === 1) {
-      incremantalSearch(keyboard_event.key)
+      if (keyboard_event.key.length === 1) {
+        incremantalSearch(keyboard_event.key)
       return true;
-    }
+      }
 
     return false;
   };
