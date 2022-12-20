@@ -231,11 +231,11 @@ const MainPanel = (
     }
   }
 
-  const toggleSelection = (index: number) => {
-    if (myGrid.current?.getselectedrowindexes().includes(index)) {
-      myGrid.current?.unselectrow(index);
+  const toggleSelection = () => {
+    if (myGrid.current?.getselectedrowindexes().includes(currentIndex)) {
+      myGrid.current?.unselectrow(currentIndex);
     } else {
-      myGrid.current?.selectrow(index);
+      myGrid.current?.selectrow(currentIndex);
     }
   }
 
@@ -325,7 +325,7 @@ const MainPanel = (
       return true;
     }
     if (keyboard_event.key === ' ') {
-      toggleSelection(currentIndex);
+      toggleSelection();
       return true;
   }
 
