@@ -282,10 +282,10 @@ const MainPanel = (
     if (entries.length === 0) { return [''] }
 
     let rowIdxAry = myGrid.current?.getselectedrowindexes();
-    if (!rowIdxAry) { rowIdxAry = [currentIndex]; }
+    if (!rowIdxAry || rowIdxAry.length === 0) { rowIdxAry = [currentIndex]; }
 
     return rowIdxAry
-      .map(idx => decoratePath(entries[idx].name))
+      .map(idx => decoratePath(dir +  '\\' + entries[idx].name))
       ;
   }
 
