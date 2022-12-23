@@ -9,9 +9,18 @@ export const COMMAND_TYPE = {
 } as const;
 type CommandType = typeof COMMAND_TYPE[keyof typeof COMMAND_TYPE];
 
+export const DIALOG_TYPE = {
+  none: "none",
+  multi_line: "multi_line",
+  reference_selection: "reference_selection",
+} as const;
+export type DialogType = typeof DIALOG_TYPE[keyof typeof DIALOG_TYPE];
+
+
 export type CommandInfo = {
   command_name: string,
   key: string,
+  dialog_type: DialogType,
   action: {
     type: CommandType,
     command: string,
