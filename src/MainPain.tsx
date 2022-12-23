@@ -278,15 +278,17 @@ const MainPanel = (
     accessItemByIdx(currentIndex);
   }
 
-  const selectingItemPath = () => {
+  const selectingItemName = () => {
     if (entries.length === 0) { return [''] }
 
     let rowIdxAry = myGrid.current?.getselectedrowindexes();
     if (!rowIdxAry || rowIdxAry.length === 0) { rowIdxAry = [currentIndex]; }
 
-    return rowIdxAry
-      .map(idx => decoratePath(dir +  '\\' + entries[idx].name))
-      ;
+    return rowIdxAry.map(idx => entries[idx].name);
+  }
+
+  const selectingItemPath = () => {
+    return selectingItemName().map(name => dir + '\\' + name);
   }
 
   const moveUp = () => { setupCurrentIndex(currentIndex - 1, false) }
