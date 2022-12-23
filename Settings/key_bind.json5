@@ -71,6 +71,29 @@ Remove-Item $selecting_item_path_ary -Recurse;\n\
       command: '\
 Set-Clipboard $selecting_item_path_ary;\n\
       '
+    },
+  },
+  {
+    command_name: 'New File',
+    key: 'ctrl+n',
+    dialog_type: 'multi_line',
+    action: {
+      type: 'power_shell',
+      command: '\
+$dialog_input_str_ary | % { New-Item $_ -type file };\n\
+      '
+    },
+  },
+  {
+    command_name: 'Rename',
+    key: 'ctrl+shift+n',
+    dialog_type: 'reference_selection',
+    action: {
+      type: 'power_shell',
+      command: '\
+for ($index=0; $index -lt $selecting_item_path_ary.count; $index++){\n\
+  Rename-Item $selecting_item_path_ary[$index] $dialog_input_str_ary[$index]\n\
+}\n\
       '
     },
   },
