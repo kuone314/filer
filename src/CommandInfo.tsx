@@ -184,7 +184,7 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
     ref={dlg}
   >
     <div className={styles.DlgLayout}>
-      <text className={styles.DlgTitle}>{title}</text>
+      <div className={styles.DlgTitle}>{title}</div>
       {(refString.length === 0) ? textArea() : textAreaWhithRef()}
       {button()}
     </div>
