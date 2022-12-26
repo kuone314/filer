@@ -349,7 +349,7 @@ const MainPanel = (
       }
     })();
 
-    return true;
+    return false;
   };
 
   type AdjustedAddressbarStr = {
