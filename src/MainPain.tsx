@@ -263,10 +263,11 @@ const MainPanel = (
     accessItemByIdx(event_.args.rowindex);
   };
 
-  const accessItemByIdx = (rowIdx: number) => {
+  const accessItemByIdx = async (rowIdx: number) => {
     const entry = entries[rowIdx];
     if (entry.is_dir) {
-      setDir(dir + '/' + entry.name)
+      const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: dir + '/' + entry.name });
+      setDir(adjusted.dir)
     } else {
       const decoretedPath = '&"' + entry.name + '"';
       executeShellCommand(decoretedPath, dir);
