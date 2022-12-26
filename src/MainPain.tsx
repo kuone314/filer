@@ -9,7 +9,7 @@ import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
 import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import { executeShellCommand } from './RustFuncs';
-import { CommandInfo, COMMAND_TYPE, DIALOG_TYPE, DialogType, matchingKeyEvent } from './CommandInfo';
+import { CommandInfo, COMMAND_TYPE, DIALOG_TYPE, DialogType, matchingKeyEvent, commandExecuter } from './CommandInfo';
 
 import styles from './App.module.css'
 
@@ -29,11 +29,6 @@ type Entries = Array<Entry>;
 export interface TabInfo {
   pathAry: string[],
   activeTabIndex: number,
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-function decoratePath(path: String): string {
-  return '"' + path + '"';
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -422,136 +417,3 @@ const MainPanel = (
     </>
   );
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-type ExecShellCommand = (
-  command: CommandInfo,
-  current_dir: string,
-  selecting_item_name_ary: string[],
-) => void;
-
-function commandExecuter(): [JSX.Element, ExecShellCommand,] {
-  const dlg: React.MutableRefObject<HTMLDialogElement | null> = useRef(null);
-  const [title, setTitle] = useState<string>('');
-  const [dlgString, setDlgString] = useState<string>('');
-  const [refString, setRefString] = useState<string>('');
-  const dlgOnOk = useRef<(dlgInput: string) => void>(() => { });
-
-  const execShellCommandImpl = (
-    command_line: string,
-    current_dir: string,
-    selecting_item_name_ary: string[],
-    dialog_input_string: string,
-  ) => {
-    const path_ary = selecting_item_name_ary
-      .map(path => decoratePath(current_dir + '\\' + path))
-      .join(',');
-    const name_ary = selecting_item_name_ary
-      .map(decoratePath)
-      .join(',');
-    const dialog_input_string_ary = dialog_input_string
-      .split(/\n/)
-      .map(decoratePath)
-      .join(',');
-    const current_dir_def = `$current_dir = "${current_dir}";`;
-    const path_ary_def = `$selecting_item_path_ary = @(${path_ary});`;
-    const name_ary_def = `$selecting_item_name_ary = @(${name_ary});`;
-    const dialog_input_def = `$dialog_input_str_ary = @(${dialog_input_string_ary});`;
-
-    const command_strs = [path_ary_def, name_ary_def, current_dir_def, dialog_input_def, command_line,];
-    const replaced_command_line = command_strs.join('\n');
-    console.log(replaced_command_line)
-    executeShellCommand(replaced_command_line, current_dir);
-  }
-  const execShellCommand = (
-    command: CommandInfo,
-    current_dir: string,
-    selecting_item_name_ary: string[],
-  ) => {
-    const fn = (dialog_input_string: string) => {
-      execShellCommandImpl(
-        command.action.command,
-        current_dir,
-        selecting_item_name_ary,
-        dialog_input_string,
-      );
-    }
-
-    const type = command.dialog_type;
-    if (!type || type === DIALOG_TYPE.none) {
-      fn('');
-      return;
-    }
-    if (type === DIALOG_TYPE.reference_selection || type === DIALOG_TYPE.multi_line) {
-      setTitle(command.command_name);
-      const str = (type === DIALOG_TYPE.reference_selection)
-        ? selecting_item_name_ary.join('\n')
-        : '';
-      setDlgString(str);
-      setRefString(str);
-      dlg.current?.showModal();
-      dlgOnOk.current = fn;
-      return;
-    }
-  }
-
-  const countTextRows = (str: string) => {
-    return str.split('\n').length;
-  }
-
-  const textAreaWhithRef = () => {
-    return <div
-      className={styles.DlgTextAreas}
-    >
-      <textarea
-        value={refString}
-        disabled={true}
-        rows={countTextRows(refString)}
-      />
-      <textarea
-        value={dlgString}
-        onChange={e => setDlgString(e.target.value)}
-        rows={countTextRows(refString)}
-      />
-    </div>
-  }
-  const textArea = () => {
-    return <div
-      className={styles.DlgSingleTextArea}
-    >
-      <textarea
-        className={styles.DlgTextArea}
-        value={dlgString}
-        onChange={e => setDlgString(e.target.value)}
-      />
-    </div>
-  }
-  const button = () => {
-    return <div className={styles.DlgButton}>
-      <button
-        onClick={() => { dlgOnOk.current(dlgString); dlg.current?.close() }}
-      >
-        Ok
-      </button>
-      <button
-        onClick={() => { setDlgString(''); dlg.current?.close() }}
-      >
-        Cancle
-      </button>
-    </div>
-  }
-
-  const element = <dialog
-    className={styles.Dlg}
-    ref={dlg}
-  >
-    <div className={styles.DlgLayout}>
-      <text className={styles.DlgTitle}>{title}</text>
-      {(refString.length === 0) ? textArea() : textAreaWhithRef()}
-      {button()}
-    </div>
-  </dialog>
-
-  return [element, execShellCommand];
-}
-
