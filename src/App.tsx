@@ -49,16 +49,22 @@ const getInitTab = () => {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-const App = () => {
-  let path = 'C:';
-  const onPathChanged = (inPath: string) => {
-    path = inPath;
-  }
-  const getPath = () => { return path; }
+function GetActive(tab_info: TabInfo) {
+  return tab_info.pathAry[tab_info.activeTabIndex];
+}
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+const App = () => {
+  const getPath = () => {
+    return GetActive(tabsPathAry[currentPainIndex]);
+  }
+
+  const [currentPainIndex, setCurrentPainIndex] = useState(0);
   const [tabsPathAry, setTabsPathAry] = useState<TabInfo[]>(getInitTab());
 
   const onTabsChanged = (newTabs: string[], newTabIdx: number, painIndex: number) => {
+    setCurrentPainIndex(painIndex);
+
     tabsPathAry[painIndex].pathAry = newTabs;
     tabsPathAry[painIndex].activeTabIndex = newTabIdx;
 
@@ -74,7 +80,6 @@ const App = () => {
         tabsPathAry.map((pathAry, idx) => {
           return <PaineTabs
             pathAry={tabsPathAry[idx]}
-            onPathChanged={onPathChanged}
             onTabsChanged={onTabsChanged}
             painIndex={idx}
           />

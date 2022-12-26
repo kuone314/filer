@@ -38,7 +38,6 @@ export interface TabInfo {
 export const PaineTabs = (
   props: {
     pathAry: TabInfo,
-    onPathChanged: (path: string) => void,
     onTabsChanged: (newTabs: string[], newTabIdx: number, painIndex: number) => void,
     painIndex: number,
   },
@@ -66,8 +65,6 @@ export const PaineTabs = (
   const onPathChanged = (newPath: string, tabIdx: number) => {
     tabAry[tabIdx] = newPath
     setTabAry(Array.from(tabAry));
-
-    props.onPathChanged(newPath);
   }
 
   useEffect(() => {
