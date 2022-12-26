@@ -137,6 +137,11 @@ const MainPanel = (
   const [entries, setEntries] = useState<Entries>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const accessDirectry = async (path: string) => {
+    const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: path });
+    setDir(adjusted.dir);
+  }
+
 
   const UpdateList = async () => {
     const newEntries = await invoke<Entries>("get_entries", { path: dir })
@@ -266,8 +271,7 @@ const MainPanel = (
   const accessItemByIdx = async (rowIdx: number) => {
     const entry = entries[rowIdx];
     if (entry.is_dir) {
-      const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: dir + '/' + entry.name });
-      setDir(adjusted.dir)
+      accessDirectry(dir + '/' + entry.name);
     } else {
       const decoretedPath = '&"' + entry.name + '"';
       executeShellCommand(decoretedPath, dir);
@@ -367,14 +371,11 @@ const MainPanel = (
   };
 
   const accessParentDir = async () => {
-    const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: addressbatStr + '/..' });
-    setDir(adjusted.dir);
+    accessDirectry(addressbatStr + '/..')
   };
 
   const onEnterDown = async () => {
-    const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: addressbatStr });
-
-    setDir(adjusted.dir);
+    accessDirectry(addressbatStr)
     myGrid.current?.focus();
   }
   const onEscapeDown = () => {
