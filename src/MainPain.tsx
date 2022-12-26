@@ -13,6 +13,9 @@ import { CommandInfo, COMMAND_TYPE, DIALOG_TYPE, DialogType, matchingKeyEvent, c
 
 import styles from './App.module.css'
 
+import { Menu, MenuItem, MenuButton, SubMenu, ControlledMenu } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 type Entry = {
@@ -338,8 +341,14 @@ const MainPanel = (
 
     (async () => {
       const command_ary = await matchingKeyEvent(keyboard_event);
-      if (command_ary.length !== 0) {
+      if (command_ary.length === 1) {
         execCommand(command_ary[0])
+        return;
+      }
+
+      if (command_ary.length >= 2) {
+        menuItemAry.current = command_ary;
+        setMenuOpen(true);
         return;
       }
 
@@ -383,6 +392,26 @@ const MainPanel = (
 
   const [dialog, execShellCommand] = commandExecuter();
 
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const menuItemAry = useRef<CommandInfo[]>([]);
+  const commandSelectMenu = () => {
+    return <ControlledMenu
+      state={isMenuOpen ? 'open' : 'closed'}
+      onClose={() => setMenuOpen(false)}
+      anchorPoint={{ x: 400, y: 1000 }} // 適当…。
+    >
+      {
+        menuItemAry.current.map(command => {
+          return <MenuItem
+            onClick={e => execCommand(command)}
+          >
+            {command.command_name}
+          </MenuItem>
+        })
+      }
+    </ControlledMenu>
+  }
+
   return (
     <>
       <div className={styles.MainPain}>
@@ -414,6 +443,7 @@ const MainPanel = (
         </div>
       </div>
       {dialog}
+      {commandSelectMenu()}
     </>
   );
 }
