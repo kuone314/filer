@@ -69,6 +69,17 @@ for ($index=0; $index -lt $selecting_item_path_ary.count; $index++){\n\
     },
   },
   {
+    command_name: 'Copy to opposite dirctory',
+    key: 'ctrl+shift+c',
+    dialog_type: 'none',
+    action: {
+      type: 'power_shell',
+      command: '\
+Copy-Item -Recurse -Path $selecting_item_path_ary -Destination $opposite_dir\n\
+      ',
+    },
+  },
+  {
     command_name: 'Delete file',
     key: 'ctrl+d',
     action: {
