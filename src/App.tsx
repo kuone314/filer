@@ -56,19 +56,19 @@ function GetActive(tab_info: TabInfo) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 const App = () => {
   const getPath = () => {
-    return GetActive(tabsPathAry[currentPainIndex]);
+    return GetActive(tabsPathAry.current[currentPainIndex]);
   }
 
   const [currentPainIndex, setCurrentPainIndex] = useState(0);
-  const [tabsPathAry, setTabsPathAry] = useState<TabInfo[]>(getInitTab());
+  const tabsPathAry = useRef<TabInfo[]>(getInitTab());
 
   const onTabsChanged = (newTabs: string[], newTabIdx: number, painIndex: number) => {
     setCurrentPainIndex(painIndex);
 
-    tabsPathAry[painIndex].pathAry = newTabs;
-    tabsPathAry[painIndex].activeTabIndex = newTabIdx;
+    tabsPathAry.current[painIndex].pathAry = newTabs;
+    tabsPathAry.current[painIndex].activeTabIndex = newTabIdx;
 
-    const data = JSON5.stringify(tabsPathAry, null, 2);
+    const data = JSON5.stringify(tabsPathAry.current, null, 2);
     (async () => {
       await invoke<void>("write_setting_file", { filename: "tabs.json5", content: data })
     })()
@@ -77,7 +77,7 @@ const App = () => {
   return (
     <div className={styles.AppMain}>
       {
-        tabsPathAry.map((pathAry, idx) => {
+        tabsPathAry.current.map((pathAry, idx) => {
           return <PaineTabs
             pathAry={pathAry}
             onTabsChanged={onTabsChanged}
