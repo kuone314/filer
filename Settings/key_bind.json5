@@ -112,7 +112,7 @@ $dialog_input_str_ary | % { New-Item $_ -type Directory };\n\
   },
   {
     command_name: 'Rename',
-    key: 'ctrl+shift+n',
+    key: 'ctrl+n',
     dialog_type: 'reference_selection',
     action: {
       type: 'power_shell',
