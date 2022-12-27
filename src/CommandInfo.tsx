@@ -66,6 +66,7 @@ type ExecShellCommand = (
   command: CommandInfo,
   current_dir: string,
   selecting_item_name_ary: string[],
+  opposite_path: string,
 ) => void;
 
 export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
@@ -80,6 +81,7 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
     current_dir: string,
     selecting_item_name_ary: string[],
     dialog_input_string: string,
+    opposite_dir: string,
   ) => {
     const path_ary = selecting_item_name_ary
       .map(path => decoratePath(current_dir + '\\' + path))
@@ -92,11 +94,12 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
       .map(decoratePath)
       .join(',');
     const current_dir_def = `$current_dir = "${current_dir}";`;
+    const opposite_dir_def = `$opposite_dir = "${opposite_dir}";`;
     const path_ary_def = `$selecting_item_path_ary = @(${path_ary});`;
     const name_ary_def = `$selecting_item_name_ary = @(${name_ary});`;
     const dialog_input_def = `$dialog_input_str_ary = @(${dialog_input_string_ary});`;
 
-    const command_strs = [path_ary_def, name_ary_def, current_dir_def, dialog_input_def, command_line,];
+    const command_strs = [path_ary_def, name_ary_def, current_dir_def, opposite_dir_def, dialog_input_def, command_line,];
     const replaced_command_line = command_strs.join('\n');
     console.log(replaced_command_line)
     executeShellCommand(replaced_command_line, current_dir);
@@ -105,6 +108,7 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
     command: CommandInfo,
     current_dir: string,
     selecting_item_name_ary: string[],
+    opposite_dir: string,
   ) => {
     const fn = (dialog_input_string: string) => {
       execShellCommandImpl(
@@ -112,6 +116,7 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
         current_dir,
         selecting_item_name_ary,
         dialog_input_string,
+        opposite_dir,
       );
     }
 

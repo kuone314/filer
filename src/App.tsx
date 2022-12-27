@@ -74,6 +74,11 @@ const App = () => {
     })()
   }
 
+  const getOppositePath = () => {
+    const oppositeIndex = (currentPainIndex + 1) % 2;
+    return GetActive(tabsPathAry.current[oppositeIndex]);
+  }
+
   return (
     <div className={styles.AppMain}>
       {
@@ -82,6 +87,7 @@ const App = () => {
             pathAry={pathAry}
             onTabsChanged={onTabsChanged}
             painIndex={idx}
+            getOppositePath={getOppositePath}
           />
         })
       }

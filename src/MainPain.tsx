@@ -40,6 +40,7 @@ export const PaineTabs = (
     pathAry: TabInfo,
     onTabsChanged: (newTabs: string[], newTabIdx: number, painIndex: number) => void,
     painIndex: number,
+    getOppositePath: () => string,
   },
 ) => {
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry.pathAry);
@@ -112,6 +113,7 @@ export const PaineTabs = (
           onPathChanged={onPathChanged}
           addNewTab={addNewTab}
           removeTab={removeTab}
+          getOppositePath={props.getOppositePath}
           key={tabAry[activeTabIdx]}
         />
       </div>
@@ -127,6 +129,7 @@ const MainPanel = (
     onPathChanged: (newPath: string, tabIdx: number) => void
     addNewTab: (newTabPath: string, addPosIdx: number) => void,
     removeTab: (idx: number) => void,
+    getOppositePath: () => string,
   }
 ) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
@@ -328,7 +331,7 @@ const MainPanel = (
     }
 
     if (command.action.type === COMMAND_TYPE.power_shell) {
-      execShellCommand(command, dir, selectingItemName());
+      execShellCommand(command, dir, selectingItemName(), props.getOppositePath());
       return
     }
   }
@@ -393,20 +396,20 @@ const MainPanel = (
   const menuItemAry = useRef<CommandInfo[]>([]);
   const commandSelectMenu = () => {
     return <ControlledMenu
-      state={isMenuOpen ? 'open' : 'closed'}
-      onClose={() => setMenuOpen(false)}
-      anchorPoint={{ x: 400, y: 1000 }} // é©å½“â€¦ã€‚
-    >
-      {
-        menuItemAry.current.map(command => {
-          return <MenuItem
-            onClick={e => execCommand(command)}
+            state={isMenuOpen ? 'open' : 'closed'}
+            onClose={() => setMenuOpen(false)}
+      anchorPoint={{ x: 400, y: 1000 }} // “K“–cB
           >
-            {command.command_name}
-          </MenuItem>
-        })
-      }
-    </ControlledMenu>
+            {
+              menuItemAry.current.map(command => {
+                return <MenuItem
+                  onClick={e => execCommand(command)}
+                >
+                  {command.command_name}
+                </MenuItem>
+              })
+            }
+          </ControlledMenu>
   }
 
   return (
