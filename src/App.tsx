@@ -79,7 +79,7 @@ const App = () => {
       {
         tabsPathAry.map((pathAry, idx) => {
           return <PaineTabs
-            pathAry={tabsPathAry[idx]}
+            pathAry={pathAry}
             onTabsChanged={onTabsChanged}
             painIndex={idx}
           />
