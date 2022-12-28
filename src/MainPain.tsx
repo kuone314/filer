@@ -75,7 +75,7 @@ export const PaineTabs = (
   }, [tabAry, activeTabIdx]);
 
   const pathToTabName = (pathStr: string) => {
-    const splited = pathStr.split('\\').reverse();
+    const splited = ApplySeparator(pathStr,'/').split('/').reverse();
     if (splited[0].length !== 0) { return splited[0]; }
     return splited[1];
   }
