@@ -162,6 +162,10 @@ const MainPanel = (
   }
 
   useEffect(() => {
+    setAddressbatStr(ApplySeparator(addressbatStr, props.separator));
+  }, [props.separator]);
+
+  useEffect(() => {
     UpdateList();
     setAddressbatStr(ApplySeparator(dir, props.separator));
     props.onPathChanged(dir, props.tabIdx);
