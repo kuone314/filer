@@ -9,6 +9,7 @@ import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
 import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import { executeShellCommand } from './RustFuncs';
+import { separator, ApplySeparator } from './FilePathSeparator';
 import { CommandInfo, COMMAND_TYPE, DIALOG_TYPE, DialogType, matchingKeyEvent, commandExecuter } from './CommandInfo';
 
 import styles from './App.module.css'
@@ -41,6 +42,7 @@ export const PaineTabs = (
     onTabsChanged: (newTabs: string[], newTabIdx: number, painIndex: number) => void,
     painIndex: number,
     getOppositePath: () => string,
+    separator: separator,
   },
 ) => {
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry.pathAry);
@@ -114,6 +116,7 @@ export const PaineTabs = (
           addNewTab={addNewTab}
           removeTab={removeTab}
           getOppositePath={props.getOppositePath}
+          separator={props.separator}
           key={tabAry[activeTabIdx]}
         />
       </div>
@@ -130,6 +133,7 @@ const MainPanel = (
     addNewTab: (newTabPath: string, addPosIdx: number) => void,
     removeTab: (idx: number) => void,
     getOppositePath: () => string,
+    separator: separator,
   }
 ) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
@@ -336,7 +340,7 @@ const MainPanel = (
     }
 
     if (command.action.type === COMMAND_TYPE.power_shell) {
-      execShellCommand(command, dir, selectingItemName(), props.getOppositePath());
+      execShellCommand(command, dir, selectingItemName(), props.getOppositePath(), props.separator);
       return
     }
   }
@@ -398,20 +402,20 @@ const MainPanel = (
   const menuItemAry = useRef<CommandInfo[]>([]);
   const commandSelectMenu = () => {
     return <ControlledMenu
-            state={isMenuOpen ? 'open' : 'closed'}
-            onClose={() => setMenuOpen(false)}
-      anchorPoint={{ x: 400, y: 1000 }} // “K“–cB
+      state={isMenuOpen ? 'open' : 'closed'}
+      onClose={() => setMenuOpen(false)}
+      anchorPoint={{ x: 400, y: 1000 }} // é©å½“â€¦ã€‚
+    >
+      {
+        menuItemAry.current.map(command => {
+          return <MenuItem
+            onClick={e => execCommand(command)}
           >
-            {
-              menuItemAry.current.map(command => {
-                return <MenuItem
-                  onClick={e => execCommand(command)}
-                >
-                  {command.command_name}
-                </MenuItem>
-              })
-            }
-          </ControlledMenu>
+            {command.command_name}
+          </MenuItem>
+        })
+      }
+    </ControlledMenu>
   }
 
   return (

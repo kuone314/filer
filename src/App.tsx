@@ -95,6 +95,7 @@ const App = () => {
             onTabsChanged={onTabsChanged}
             painIndex={idx}
             getOppositePath={getOppositePath}
+            separator={separator}
           />
         })
       }

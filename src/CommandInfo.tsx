@@ -2,6 +2,7 @@ import { invoke } from '@tauri-apps/api';
 import JSON5 from 'json5'
 
 import { executeShellCommand } from './RustFuncs';
+import { separator, ApplySeparator } from './FilePathSeparator';
 
 import styles from './App.module.css'
 import { useRef, useState } from 'react';
@@ -67,6 +68,7 @@ type ExecShellCommand = (
   current_dir: string,
   selecting_item_name_ary: string[],
   opposite_path: string,
+  separator: separator,
 ) => void;
 
 export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
@@ -82,6 +84,7 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
     selecting_item_name_ary: string[],
     dialog_input_string: string,
     opposite_dir: string,
+    separator: separator,
   ) => {
     const path_ary = selecting_item_name_ary
       .map(path => decoratePath(current_dir + '\\' + path))
@@ -109,6 +112,7 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
     current_dir: string,
     selecting_item_name_ary: string[],
     opposite_dir: string,
+    separator: separator,
   ) => {
     const fn = (dialog_input_string: string) => {
       execShellCommandImpl(
@@ -117,6 +121,7 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
         selecting_item_name_ary,
         dialog_input_string,
         opposite_dir,
+        separator
       );
     }
 
