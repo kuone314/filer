@@ -163,7 +163,7 @@ const MainPanel = (
 
   useEffect(() => {
     UpdateList();
-    setAddressbatStr(dir);
+    setAddressbatStr(ApplySeparator(dir, props.separator));
     props.onPathChanged(dir, props.tabIdx);
   }, [dir]);
 
@@ -275,7 +275,7 @@ const MainPanel = (
   const accessItemByIdx = async (rowIdx: number) => {
     const entry = entries[rowIdx];
     if (entry.is_dir) {
-      accessDirectry(dir + '/' + entry.name);
+      accessDirectry(dir + props.separator + entry.name);
     } else {
       const decoretedPath = '&"' + entry.name + '"';
       executeShellCommand(decoretedPath, dir);
@@ -375,7 +375,7 @@ const MainPanel = (
   };
 
   const accessParentDir = async () => {
-    accessDirectry(addressbatStr + '/..')
+    accessDirectry(addressbatStr + props.separator + '..')
   };
 
   const onEnterDown = async () => {

@@ -87,7 +87,7 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
     separator: separator,
   ) => {
     const path_ary = selecting_item_name_ary
-      .map(path => decoratePath(current_dir + '\\' + path))
+      .map(path => decoratePath(current_dir + separator + path))
       .join(',');
     const name_ary = selecting_item_name_ary
       .map(decoratePath)
@@ -117,10 +117,10 @@ export function commandExecuter(): [JSX.Element, ExecShellCommand,] {
     const fn = (dialog_input_string: string) => {
       execShellCommandImpl(
         command.action.command,
-        current_dir,
+        ApplySeparator(current_dir, separator),
         selecting_item_name_ary,
         dialog_input_string,
-        opposite_dir,
+        ApplySeparator(opposite_dir, separator),
         separator
       );
     }
