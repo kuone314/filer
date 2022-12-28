@@ -44,7 +44,7 @@ const getInitTab = () => {
 
     return result.map(fixError);
   } catch {
-    return [defaultTabInfo, defaultTabInfo]
+    return [{ ...defaultTabInfo }, { ...defaultTabInfo }];
   }
 }
 
