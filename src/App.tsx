@@ -25,8 +25,8 @@ const getInitTab = () => {
 
   try {
     let result = JSON5.parse(initTabs.toString()) as TabInfo[];
-    if (result.length === 1) {
-      result.push(defaultTabInfo)
+    if (result.length !== 2) {
+      return [{ ...defaultTabInfo }, { ...defaultTabInfo }];
     }
 
     const fixError = (tabInfo: TabInfo) => {
