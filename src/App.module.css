@@ -1,8 +1,13 @@
 .AppMain {
   display: grid;
-  grid-template-rows: 0.5fr 0.5fr auto;
+  grid-template-rows: auto 0.5fr 0.5fr auto;
   width: 95%;
   height: 95vh;
+}
+
+.SeparatorButton {
+  width: 85pt;
+  padding: 10px;
 }
 
 .PaineTabs {

@@ -10,6 +10,7 @@ import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
 import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import CommandBar from './CommandBar';
+import { separator } from './FilePathSeparator';
 import { PaineTabs, TabInfo } from './MainPain';
 
 import styles from './App.module.css'
@@ -79,8 +80,14 @@ const App = () => {
     return GetActive(tabsPathAry.current[oppositeIndex]);
   }
 
+  const [separator, setSeparator] = useState<separator>('\\');
   return (
     <div className={styles.AppMain}>
+      <button 
+        className={styles.SeparatorButton}
+        onClick={() => { setSeparator(separator === '/' ? '\\' : '/') }}>
+        separator:{separator}
+      </button>
       {
         tabsPathAry.current.map((pathAry, idx) => {
           return <PaineTabs
@@ -94,7 +101,7 @@ const App = () => {
       <CommandBar
         path={getPath}
       />
-    </div>
+    </div >
   );
 }
 
