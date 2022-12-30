@@ -122,6 +122,7 @@ export const PaineTabs = (
           changeTab={changeTab}
           getOppositePath={props.getOppositePath}
           separator={props.separator}
+          key={activeTabIdx}
         />
       </div>
     </>
@@ -174,6 +175,10 @@ const MainPanel = (
     setAddressbatStr(ApplySeparator(dir, props.separator));
     props.onPathChanged(dir);
   }, [dir]);
+
+  useEffect(() => {
+    myGrid.current?.focus();
+  }, []);
 
   useInterval(
     UpdateList,
