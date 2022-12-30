@@ -39,8 +39,7 @@ export interface TabInfo {
 export const PaineTabs = (
   props: {
     pathAry: TabInfo,
-    onTabsChanged: (newTabs: string[], newTabIdx: number, painIndex: number) => void,
-    painIndex: number,
+    onTabsChanged: (newTabs: string[], newTabIdx: number,) => void,
     getOppositePath: () => string,
     separator: separator,
   },
@@ -71,11 +70,11 @@ export const PaineTabs = (
   }
 
   useEffect(() => {
-    props.onTabsChanged(tabAry, activeTabIdx, props.painIndex);
+    props.onTabsChanged(tabAry, activeTabIdx);
   }, [tabAry, activeTabIdx]);
 
   const pathToTabName = (pathStr: string) => {
-    const splited = ApplySeparator(pathStr,'/').split('/').reverse();
+    const splited = ApplySeparator(pathStr, '/').split('/').reverse();
     if (splited[0].length !== 0) { return splited[0]; }
     return splited[1];
   }

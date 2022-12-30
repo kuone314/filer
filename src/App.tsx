@@ -83,7 +83,7 @@ const App = () => {
   const [separator, setSeparator] = useState<separator>('\\');
   return (
     <div className={styles.AppMain}>
-      <button 
+      <button
         className={styles.SeparatorButton}
         onClick={() => { setSeparator(separator === '/' ? '\\' : '/') }}>
         separator:{separator}
@@ -92,8 +92,7 @@ const App = () => {
         tabsPathAry.current.map((pathAry, idx) => {
           return <PaineTabs
             pathAry={pathAry}
-            onTabsChanged={onTabsChanged}
-            painIndex={idx}
+            onTabsChanged={(newTabs: string[], newTabIdx: number,) => onTabsChanged(newTabs, newTabIdx, idx)}
             getOppositePath={getOppositePath}
             separator={separator}
           />
