@@ -63,6 +63,10 @@ export const PaineTabs = (
       setActiveTabIdx(newTabAry.length - 1);
     }
   }
+  const changeTab = (offset: number) => {
+    const new_val = (activeTabIdx + offset + tabAry.length) % tabAry.length;
+    setActiveTabIdx(new_val);
+  }
 
   const onPathChanged = (newPath: string) => {
     tabAry[activeTabIdx] = newPath
@@ -113,6 +117,7 @@ export const PaineTabs = (
           onPathChanged={onPathChanged}
           addNewTab={addNewTab}
           removeTab={removeTab}
+          changeTab={changeTab}
           getOppositePath={props.getOppositePath}
           separator={props.separator}
           key={tabAry[activeTabIdx]}
@@ -129,6 +134,7 @@ const MainPanel = (
     onPathChanged: (newPath: string) => void
     addNewTab: (newTabPath: string) => void,
     removeTab: () => void,
+    changeTab: (offset: number) => void,
     getOppositePath: () => string,
     separator: separator,
   }
@@ -316,6 +322,8 @@ const MainPanel = (
   }
   const addNewTab = () => { props.addNewTab(dir); }
   const removeTab = () => { props.removeTab(); }
+  const toPrevTab = () => { props.changeTab(-1); }
+  const toNextTab = () => { props.changeTab(+1); }
 
   const execBuildInCommand = (commandName: string) => {
     switch (commandName) {
@@ -331,6 +339,8 @@ const MainPanel = (
       case 'toggleSelection': toggleSelection(); return;
       case 'addNewTab': addNewTab(); return;
       case 'removeTab': removeTab(); return;
+      case 'toPrevTab': toPrevTab(); return;
+      case 'toNextTab': toNextTab(); return;
     }
   }
 

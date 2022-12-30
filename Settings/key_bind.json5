@@ -223,6 +223,22 @@ for ($index=0; $index -lt $selecting_item_path_ary.count; $index++){\n\
     },
   },
   {
+    command_name: 'toPrevTab',
+    key: 'ctrl+shift+tab',
+    action: {
+      type: 'build_in',
+      command: 'toPrevTab',
+    },
+  },
+  {
+    command_name: 'toNextTab',
+    key: 'ctrl+tab',
+    action: {
+      type: 'build_in',
+      command: 'toNextTab',
+    },
+  },
+  {
     command_name: 'accessCurrentItem',
     key: 'Enter',
     action: {
