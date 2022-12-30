@@ -6,6 +6,7 @@ import { separator, ApplySeparator } from './FilePathSeparator';
 
 import styles from './App.module.css'
 import { useRef, useState } from 'react';
+import React from 'react';
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 export const COMMAND_TYPE = {
@@ -149,6 +150,9 @@ export function commandExecuter(
     return str.split('\n').length;
   }
 
+  const textarea = React.createRef<HTMLTextAreaElement>();
+
+
   const textAreaWhithRef = () => {
     return <div
       className={styles.DlgTextAreas}
@@ -162,6 +166,7 @@ export function commandExecuter(
         value={dlgString}
         onChange={e => setDlgString(e.target.value)}
         rows={countTextRows(refString)}
+        ref={textarea}
       />
     </div>
   }
@@ -173,6 +178,7 @@ export function commandExecuter(
         className={styles.DlgTextArea}
         value={dlgString}
         onChange={e => setDlgString(e.target.value)}
+        ref={textarea}
       />
     </div>
   }
