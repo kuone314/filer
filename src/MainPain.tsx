@@ -46,17 +46,17 @@ export const PaineTabs = (
 ) => {
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry.pathAry);
   const [activeTabIdx, setActiveTabIdx] = useState<number>(props.pathAry.activeTabIndex);
-  const addNewTab = (newTabPath: string, addPosIdx: number) => {
+  const addNewTab = (newTabPath: string) => {
     let newTabAry = Array.from(tabAry);
-    newTabAry.splice(addPosIdx + 1, 0, newTabPath);
+    newTabAry.splice(activeTabIdx + 1, 0, newTabPath);
     setTabAry(newTabAry);
   }
-  const removeTab = (idx: number) => {
+  const removeTab = () => {
     if (tabAry.length === 1) { return; }
-    if (idx >= tabAry.length) { return; }
+    if (activeTabIdx >= tabAry.length) { return; }
 
     let newTabAry = Array.from(tabAry);
-    newTabAry.splice(idx, 1);
+    newTabAry.splice(activeTabIdx, 1);
     setTabAry(newTabAry);
 
     if (activeTabIdx >= newTabAry.length) {
@@ -64,8 +64,8 @@ export const PaineTabs = (
     }
   }
 
-  const onPathChanged = (newPath: string, tabIdx: number) => {
-    tabAry[tabIdx] = newPath
+  const onPathChanged = (newPath: string) => {
+    tabAry[activeTabIdx] = newPath
     setTabAry(Array.from(tabAry));
   }
 
@@ -110,7 +110,6 @@ export const PaineTabs = (
         </div >
         <MainPanel
           initPath={tabAry[activeTabIdx]}
-          tabIdx={activeTabIdx}
           onPathChanged={onPathChanged}
           addNewTab={addNewTab}
           removeTab={removeTab}
@@ -127,10 +126,9 @@ export const PaineTabs = (
 const MainPanel = (
   props: {
     initPath: string,
-    tabIdx: number,
-    onPathChanged: (newPath: string, tabIdx: number) => void
-    addNewTab: (newTabPath: string, addPosIdx: number) => void,
-    removeTab: (idx: number) => void,
+    onPathChanged: (newPath: string) => void
+    addNewTab: (newTabPath: string) => void,
+    removeTab: () => void,
     getOppositePath: () => string,
     separator: separator,
   }
@@ -167,7 +165,7 @@ const MainPanel = (
   useEffect(() => {
     UpdateList();
     setAddressbatStr(ApplySeparator(dir, props.separator));
-    props.onPathChanged(dir, props.tabIdx);
+    props.onPathChanged(dir);
   }, [dir]);
 
   useEffect(() => {
@@ -316,8 +314,8 @@ const MainPanel = (
       myGrid.current?.selectrow(currentIndex);
     }
   }
-  const addNewTab = () => { props.addNewTab(dir, props.tabIdx); }
-  const removeTab = () => { props.removeTab(props.tabIdx); }
+  const addNewTab = () => { props.addNewTab(dir); }
+  const removeTab = () => { props.removeTab(); }
 
   const execBuildInCommand = (commandName: string) => {
     switch (commandName) {
