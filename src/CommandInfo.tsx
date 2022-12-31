@@ -71,7 +71,9 @@ type ExecShellCommand = (
   separator: separator,
 ) => void;
 
-export function commandExecuter(onDialogClose: () => void): [JSX.Element, ExecShellCommand,] {
+export function commandExecuter(
+  onDialogClose: () => void,
+): [JSX.Element, ExecShellCommand,] {
   const dlg: React.MutableRefObject<HTMLDialogElement | null> = useRef(null);
   const [title, setTitle] = useState<string>('');
   const [dlgString, setDlgString] = useState<string>('');
