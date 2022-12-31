@@ -5,7 +5,7 @@ import { executeShellCommand } from './RustFuncs';
 import { separator, ApplySeparator } from './FilePathSeparator';
 
 import styles from './App.module.css'
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,6 +146,11 @@ export function commandExecuter(
     }
   }
 
+  const [textareaInitFlag, setTextareaInitFlag] = useState<boolean>(false);
+  useEffect(() => {
+    textarea.current?.focus()
+  }, [dlg.current?.open]);
+
   const countTextRows = (str: string) => {
     return str.split('\n').length;
   }
@@ -164,7 +169,10 @@ export function commandExecuter(
       />
       <textarea
         value={dlgString}
-        onChange={e => setDlgString(e.target.value)}
+        onChange={e => {
+          if (!textareaInitFlag) { setTextareaInitFlag(true); return; } // この処理が無いと、何故か、ダイアログの文字列に、空行が入る…。
+          setDlgString(e.target.value);
+        }}
         rows={countTextRows(refString)}
         ref={textarea}
       />
@@ -177,7 +185,10 @@ export function commandExecuter(
       <textarea
         className={styles.DlgTextArea}
         value={dlgString}
-        onChange={e => setDlgString(e.target.value)}
+        onChange={e => {
+          if (!textareaInitFlag) { setTextareaInitFlag(true); return; } // この処理が無いと、何故か、ダイアログの文字列に、空行が入る…。
+          setDlgString(e.target.value);
+        }}
         ref={textarea}
       />
     </div>
@@ -200,7 +211,7 @@ export function commandExecuter(
   const element = <dialog
     className={styles.Dlg}
     ref={dlg}
-    onClose={onDialogClose}
+    onClose={() => { onDialogClose(); setTextareaInitFlag(false); }}
   >
     <div className={styles.DlgLayout}>
       <div className={styles.DlgTitle}>{title}</div>
