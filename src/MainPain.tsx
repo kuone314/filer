@@ -411,7 +411,7 @@ const MainPanel = (
 
   const myGrid = React.createRef<JqxGrid>();
 
-  const [dialog, execShellCommand] = commandExecuter();
+  const [dialog, execShellCommand] = commandExecuter(() => { myGrid.current?.focus() },);
 
   const [isMenuOpen, setMenuOpen] = useState(false);
   const menuItemAry = useRef<CommandInfo[]>([]);
