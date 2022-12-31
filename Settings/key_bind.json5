@@ -246,4 +246,12 @@ for ($index=0; $index -lt $selecting_item_path_ary.count; $index++){\n\
       command: 'accessCurrentItem',
     },
   },
+  {
+    command_name: 'focusAddoressBar',
+    key: 'ctrl+l',
+    action: {
+      type: 'build_in',
+      command: 'focusAddoressBar',
+    },
+  },
 ]

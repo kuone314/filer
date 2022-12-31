@@ -328,6 +328,7 @@ const MainPanel = (
   const removeTab = () => { props.removeTab(); }
   const toPrevTab = () => { props.changeTab(-1); }
   const toNextTab = () => { props.changeTab(+1); }
+  const focusAddoressBar = () => { addressBar.current?.focus(); }
 
   const execBuildInCommand = (commandName: string) => {
     switch (commandName) {
@@ -345,6 +346,7 @@ const MainPanel = (
       case 'removeTab': removeTab(); return;
       case 'toPrevTab': toPrevTab(); return;
       case 'toNextTab': toNextTab(); return;
+      case 'focusAddoressBar': focusAddoressBar(); return;
     }
   }
 
@@ -384,6 +386,8 @@ const MainPanel = (
 
     return false;
   };
+
+  const addressBar = React.createRef<HTMLInputElement>();
 
   type AdjustedAddressbarStr = {
     dir: string,
@@ -443,6 +447,7 @@ const MainPanel = (
           value={addressbatStr}
           onChange={e => setAddressbatStr(e.target.value)}
           onKeyDown={onKeyDown}
+          ref={addressBar}
         />
         <div
           className={styles.FileList}
