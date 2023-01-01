@@ -254,4 +254,12 @@ for ($index=0; $index -lt $selecting_item_path_ary.count; $index++){\n\
       command: 'focusAddoressBar',
     },
   },
+  {
+    command_name: 'focusOppositePain',
+    key: 'tab',
+    action: {
+      type: 'build_in',
+      command: 'focusOppositePain',
+    },
+  },
 ]

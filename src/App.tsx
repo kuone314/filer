@@ -108,6 +108,7 @@ const App = () => {
                 getOppositePath={getOppositePath}
                 separator={separator}
                 gridRef={grid[idx]}
+                focusOppositePain={() => { grid[(idx + 1) % 2].current?.focus(); }}
               />
             </div>
           </>

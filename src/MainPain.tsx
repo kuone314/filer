@@ -44,6 +44,7 @@ export const PaineTabs = (
     onTabsChanged: (newTabs: string[], newTabIdx: number,) => void,
     getOppositePath: () => string,
     separator: separator,
+    focusOppositePain: () => void,
     gridRef?: React.RefObject<JqxGrid>,
   },
 ) => {
@@ -123,6 +124,7 @@ export const PaineTabs = (
           changeTab={changeTab}
           getOppositePath={props.getOppositePath}
           separator={props.separator}
+          focusOppositePain={props.focusOppositePain}
           gridRef={props.gridRef}
           key={activeTabIdx}
         />
@@ -141,6 +143,7 @@ const MainPanel = (
     changeTab: (offset: number) => void,
     getOppositePath: () => string,
     separator: separator,
+    focusOppositePain: () => void,
     gridRef?: React.RefObject<JqxGrid>,
   }
 ) => {
@@ -351,6 +354,7 @@ const MainPanel = (
       case 'toPrevTab': toPrevTab(); return;
       case 'toNextTab': toNextTab(); return;
       case 'focusAddoressBar': focusAddoressBar(); return;
+      case 'focusOppositePain': props.focusOppositePain(); return;
     }
   }
 
