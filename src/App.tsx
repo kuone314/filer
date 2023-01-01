@@ -90,12 +90,23 @@ const App = () => {
       </button>
       {
         tabsPathAry.current.map((pathAry, idx) => {
-          return <PaineTabs
-            pathAry={pathAry}
-            onTabsChanged={(newTabs: string[], newTabIdx: number,) => onTabsChanged(newTabs, newTabIdx, idx)}
-            getOppositePath={getOppositePath}
-            separator={separator}
-          />
+          return <>
+            <div
+              style={
+                {
+                  border: (idx === currentPainIndex) ? '2px solid #ff0000' : '',
+                  overflow: 'auto',
+                }
+              }
+            >
+              <PaineTabs
+                pathAry={pathAry}
+                onTabsChanged={(newTabs: string[], newTabIdx: number,) => onTabsChanged(newTabs, newTabIdx, idx)}
+                getOppositePath={getOppositePath}
+                separator={separator}
+              />
+            </div>
+          </>
         })
       }
       <CommandBar
