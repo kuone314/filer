@@ -80,6 +80,8 @@ const App = () => {
     return GetActive(tabsPathAry.current[oppositeIndex]);
   }
 
+  const grid = [React.createRef<JqxGrid>(), React.createRef<JqxGrid>()];
+
   const [separator, setSeparator] = useState<separator>('\\');
   return (
     <div className={styles.AppMain}>
@@ -105,6 +107,7 @@ const App = () => {
                 onTabsChanged={(newTabs: string[], newTabIdx: number,) => onTabsChanged(newTabs, newTabIdx, idx)}
                 getOppositePath={getOppositePath}
                 separator={separator}
+                gridRef={grid[idx]}
               />
             </div>
           </>
