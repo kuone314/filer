@@ -271,6 +271,7 @@ const MainPanel = (
     const event_ = event as any as Args;
     setCurrentIndex(event_.args.rowindex);
     setincremantalSearchingStr('')
+    myGrid.current?.focus()
   };
 
   const onRowdoubleclick = (event?: Event) => {

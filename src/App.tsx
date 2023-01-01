@@ -98,6 +98,7 @@ const App = () => {
                   overflow: 'auto',
                 }
               }
+              onFocus={() => { setCurrentPainIndex(idx); }}
             >
               <PaineTabs
                 pathAry={pathAry}
