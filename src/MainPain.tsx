@@ -18,6 +18,8 @@ import { Menu, MenuItem, MenuButton, SubMenu, ControlledMenu } from '@szhsin/rea
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 
+import useInterval from 'use-interval';
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 type Entry = {
   name: string,
@@ -120,7 +122,6 @@ export const PaineTabs = (
           changeTab={changeTab}
           getOppositePath={props.getOppositePath}
           separator={props.separator}
-          key={tabAry[activeTabIdx]}
         />
       </div>
     </>
@@ -174,12 +175,10 @@ const MainPanel = (
     props.onPathChanged(dir);
   }, [dir]);
 
-  useEffect(() => {
-    setInterval(
-      UpdateList,
-      1500
-    );
-  }, []);
+  useInterval(
+    UpdateList,
+    1500
+  );
 
   const convert = (entries: Entries) => {
     const data: IGridProps['source'] = {
