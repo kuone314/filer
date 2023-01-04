@@ -12,13 +12,15 @@ import { executeShellCommand } from './RustFuncs';
 import { separator, ApplySeparator } from './FilePathSeparator';
 import { CommandInfo, COMMAND_TYPE, DIALOG_TYPE, DialogType, matchingKeyEvent, commandExecuter } from './CommandInfo';
 
-import styles from './App.module.css'
+/** @jsxImportSource @emotion/react */
+import { jsx, css, Global, ClassNames } from '@emotion/react'
 
 import { Menu, MenuItem, MenuButton, SubMenu, ControlledMenu } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 
 import useInterval from 'use-interval';
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 type Entry = {
@@ -94,10 +96,16 @@ export const PaineTabs = (
 
   return (
     <>
-      <div className={styles.PaineTabs} >
-        <div
-          className={styles.TabButton}
-        >
+      <div
+        css={css({
+          display: 'grid',
+          gridTemplateRows: 'auto 1fr',
+          overflow: 'auto',
+          width: '100%',
+          height: '100%',
+        })}
+      >
+        <div css={css({ textTransform: 'none' })}>
           {
             tabAry.map((path, idx) => {
               return <Button
@@ -449,7 +457,15 @@ const MainPanel = (
 
   return (
     <>
-      <div className={styles.MainPain}>
+      <div
+        css={css({
+          display: 'grid',
+          gridTemplateRows: 'auto 1fr',
+          overflow: 'auto',
+          width: '100%',
+          height: '100%',
+        })}
+      >
         <input
           type="text"
           value={addressbatStr}
@@ -458,7 +474,12 @@ const MainPanel = (
           ref={addressBar}
         />
         <div
-          className={styles.FileList}
+          css={css({
+            display: 'grid',
+            overflow: 'scroll',
+            width: '100%',
+            height: '100%',
+          })}
           onDoubleClick={onDoubleClick}
         >
           <JqxGrid

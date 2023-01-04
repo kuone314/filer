@@ -13,7 +13,8 @@ import CommandBar from './CommandBar';
 import { separator } from './FilePathSeparator';
 import { PaineTabs, TabInfo } from './MainPain';
 
-import styles from './App.module.css'
+/** @jsxImportSource @emotion/react */
+import { jsx, css, Global, ClassNames } from '@emotion/react'
 
 import JSON5 from 'json5'
 
@@ -84,9 +85,19 @@ const App = () => {
 
   const [separator, setSeparator] = useState<separator>('\\');
   return (
-    <div className={styles.AppMain}>
+    <div
+      css={css({
+        display: 'grid',
+        gridTemplateRows: 'auto 0.5fr 0.5fr auto',
+        width: '95%',
+        height: '95vh',
+      })}
+    >
       <button
-        className={styles.SeparatorButton}
+        css={css({
+          width: '85pt',
+          padding: '10px',
+        })}
         onClick={() => { setSeparator(separator === '/' ? '\\' : '/') }}>
         separator:{separator}
       </button>

@@ -4,7 +4,9 @@ import JSON5 from 'json5'
 import { executeShellCommand } from './RustFuncs';
 import { separator, ApplySeparator } from './FilePathSeparator';
 
-import styles from './App.module.css'
+/** @jsxImportSource @emotion/react */
+import { jsx, css, Global, ClassNames } from '@emotion/react'
+
 import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 
@@ -160,7 +162,10 @@ export function commandExecuter(
 
   const textAreaWhithRef = () => {
     return <div
-      className={styles.DlgTextAreas}
+      css={css({
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      })}
     >
       <textarea
         value={refString}
@@ -180,10 +185,16 @@ export function commandExecuter(
   }
   const textArea = () => {
     return <div
-      className={styles.DlgSingleTextArea}
+      css={css({
+        display: 'grid',
+        gridTemplateRows: '1fr',
+      })}
     >
       <textarea
-        className={styles.DlgTextArea}
+        css={css({
+          display: 'grid',
+          gridTemplateRows: '1fr',
+        })}
         value={dlgString}
         onChange={e => {
           if (!textareaInitFlag) { setTextareaInitFlag(true); return; } // この処理が無いと、何故か、ダイアログの文字列に、空行が入る…。
@@ -194,7 +205,12 @@ export function commandExecuter(
     </div>
   }
   const button = () => {
-    return <div className={styles.DlgButton}>
+    return <div
+      css={css({
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      })}
+    >
       <button
         onClick={() => { dlgOnOk.current(dlgString); dlg.current?.close() }}
       >
@@ -209,12 +225,30 @@ export function commandExecuter(
   }
 
   const element = <dialog
-    className={styles.Dlg}
+    css={css({
+      width: '80%',
+      height: '80%',
+    })}
     ref={dlg}
     onClose={() => { onDialogClose(); setTextareaInitFlag(false); }}
   >
-    <div className={styles.DlgLayout}>
-      <div className={styles.DlgTitle}>{title}</div>
+    <div
+      css={css({
+        display: 'grid',
+        gridTemplateRows: 'auto 1fr auto',
+        margin: '0 auto',
+        width: '90%',
+        height: '100%',
+      })}
+    >
+      <div
+        css={css({
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        })}
+      >
+        {title}
+      </div>
       {(refString.length === 0) ? textArea() : textAreaWhithRef()}
       {button()}
     </div>
