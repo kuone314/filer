@@ -473,31 +473,28 @@ const MainPanel = (
           onKeyDown={onKeyDown}
           ref={addressBar}
         />
-        <div
-          css={css({
-            display: 'grid',
-            overflow: 'scroll',
-            width: '100%',
-            height: '100%',
-          })}
-          onDoubleClick={onDoubleClick}
-        >
-          <JqxGrid
-            width={'100%'}
-            source={convert(entries)}
-            columns={columns}
-            pageable={false}
-            editable={false}
-            autoheight={true}
-            sortable={true} theme={'material-purple'}
-            altrows={true} enabletooltips={true}
-            selectionmode={'multiplerowsextended'}
-            onRowclick={onRowclick}
-            onRowdoubleclick={onRowdoubleclick}
-            handlekeyboardnavigation={handlekeyboardnavigation}
-            ref={myGrid}
-          />
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>FIleName</th>
+              <th>type</th>
+              <th>size</th>
+              <th>date</th>
+            </tr>
+          </thead>
+          {
+            entries.map((entry, idx) => {
+              return <>
+                <tr>
+                  <td>{entry.name}</td>
+                  <td>{entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension}</td>
+                  <td>{entry.is_dir ? '-' : entry.size}</td>
+                  <td>{entry.date}</td>
+                </tr>
+              </>
+            })
+          }
+        </table>
       </div>
       {dialog}
       {commandSelectMenu()}
