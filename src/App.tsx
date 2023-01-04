@@ -1,20 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api';
 import { homeDir } from '@tauri-apps/api/path';
 import React from 'react';
 
-import { Box } from '@mui/material';
 
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
-import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
+import JqxGrid, {  } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import CommandBar from './CommandBar';
 import { separator } from './FilePathSeparator';
 import { PaineTabs, TabInfo } from './MainPain';
 
 /** @jsxImportSource @emotion/react */
-import { jsx, css, Global, ClassNames } from '@emotion/react'
+import { css } from '@emotion/react'
 
 import JSON5 from 'json5'
 

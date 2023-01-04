@@ -2,20 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import { invoke } from '@tauri-apps/api';
 import React from 'react';
 
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
 
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
 import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
-import JqxGrid, { IGridProps, jqx, IGridColumn, IGridSource } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
+import JqxGrid, { IGridProps } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import { executeShellCommand } from './RustFuncs';
 import { separator, ApplySeparator } from './FilePathSeparator';
-import { CommandInfo, COMMAND_TYPE, DIALOG_TYPE, DialogType, matchingKeyEvent, commandExecuter } from './CommandInfo';
+import { CommandInfo, COMMAND_TYPE, matchingKeyEvent, commandExecuter } from './CommandInfo';
 
 /** @jsxImportSource @emotion/react */
-import { jsx, css, Global, ClassNames } from '@emotion/react'
+import { css } from '@emotion/react'
 
-import { Menu, MenuItem, MenuButton, SubMenu, ControlledMenu } from '@szhsin/react-menu';
+import { MenuItem, ControlledMenu } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 

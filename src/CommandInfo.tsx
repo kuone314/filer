@@ -5,7 +5,7 @@ import { executeShellCommand } from './RustFuncs';
 import { separator, ApplySeparator } from './FilePathSeparator';
 
 /** @jsxImportSource @emotion/react */
-import { jsx, css, Global, ClassNames } from '@emotion/react'
+import { css } from '@emotion/react'
 
 import { useEffect, useRef, useState } from 'react';
 import React from 'react';
