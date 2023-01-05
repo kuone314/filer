@@ -4,9 +4,6 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
-import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
-import JqxGrid, { IGridProps } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import { executeShellCommand } from './RustFuncs';
 import { separator, ApplySeparator } from './FilePathSeparator';
@@ -212,54 +209,6 @@ const MainPanel = (
     1500
   );
 
-  const convert = (entries: Entries) => {
-    const data: IGridProps['source'] = {
-      localdata: entries.map(
-        (entry: Entry, index: number) => {
-          return [
-            entry.name,
-            entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension,
-            entry.is_dir ? '-' : entry.size,
-            entry.date,
-            index === currentIndex,
-          ];
-        }
-      ),
-      datafields:
-        [
-          { name: 'name', type: 'string', map: '0' },
-          { name: 'extension', type: 'string', map: '1' },
-          { name: 'size', type: 'number', map: '2' },
-          { name: 'date', type: 'string', map: '3' },
-          { name: 'isCurrent', type: 'bool', map: '4' },
-        ],
-      datatype: 'array'
-    };
-    return data;
-  }
-
-  const cellsrenderer = (
-    row?: number,
-    columnfield?: string,
-    value?: any,
-    defaulthtml?: string,
-    columnproperties?: any,
-    rowdata?: any
-  ) => {
-    if (rowdata.isCurrent) {
-      return '<div style="border-style : double none;">' + value + '</div>';;
-    }
-    return '<div>' + value + '</div>';
-  };
-
-  const columns: IGridProps['columns'] =
-    [
-      { text: 'FIleName', datafield: 'name', width: 240, cellsrenderer: cellsrenderer, },
-      { text: 'type', datafield: 'extension', width: 80, cellsrenderer: cellsrenderer, },
-      { text: 'size', datafield: 'size', width: 40, cellsrenderer: cellsrenderer, },
-      { text: 'date', datafield: 'date', width: 150, cellsrenderer: cellsrenderer, },
-    ];
-
   const setupCurrentIndex = (newIndex: number, select: boolean) => {
     if (currentIndex === newIndex) { return; }
     if (newIndex < 0) { return; }
@@ -356,10 +305,6 @@ const MainPanel = (
     if (rowIdxAry.length === 0) { rowIdxAry = [currentIndex]; }
 
     return rowIdxAry.map(idx => entries[idx].name);
-  }
-
-  const selectingItemPath = () => {
-    return selectingItemName().map(name => dir + '\\' + name);
   }
 
   const moveUp = () => { setupCurrentIndex(currentIndex - 1, false) }
