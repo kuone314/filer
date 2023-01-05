@@ -455,6 +455,15 @@ const MainPanel = (
     </ControlledMenu>
   }
 
+  const table_border = css({
+    border: '1pt solid #000000',
+  });
+
+  const table_resizable = css({
+    resize: 'horizontal',
+    overflow: 'hidden',
+  });
+
   return (
     <>
       <div
@@ -473,23 +482,32 @@ const MainPanel = (
           onKeyDown={onKeyDown}
           ref={addressBar}
         />
-        <table>
-          <thead>
+        <table
+          css={
+            {
+              borderCollapse: 'collapse',
+              resize: 'horizontal',
+              height: 10, // table全体の最小サイズを指定。これが無いと、行数が少ない時に縦長になってしまう…。
+              userSelect: 'none',
+            }
+          }
+        >
+          <thead css={table_resizable}>
             <tr>
-              <th>FIleName</th>
-              <th>type</th>
-              <th>size</th>
-              <th>date</th>
+              <th css={table_resizable}>FIleName</th>
+              <th css={table_resizable}>type</th>
+              <th css={table_resizable}>size</th>
+              <th css={table_resizable}>date</th>
             </tr>
           </thead>
           {
             entries.map((entry, idx) => {
               return <>
                 <tr>
-                  <td>{entry.name}</td>
-                  <td>{entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension}</td>
-                  <td>{entry.is_dir ? '-' : entry.size}</td>
-                  <td>{entry.date}</td>
+                  <td css={table_border}>{entry.name}</td>
+                  <td css={table_border}>{entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension}</td>
+                  <td css={table_border}>{entry.is_dir ? '-' : entry.size}</td>
+                  <td css={table_border}>{entry.date}</td>
                 </tr>
               </>
             })
