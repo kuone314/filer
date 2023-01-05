@@ -499,6 +499,7 @@ const MainPanel = (
         />
         <div
           css={css([{ display: 'grid', overflow: 'auto' }])}
+          onDoubleClick={onDoubleClick}
           onKeyDown={handlekeyboardnavigation}
           tabIndex={0}
           ref={myGrid}
