@@ -479,6 +479,10 @@ const MainPanel = (
     border: '1pt solid #000000',
   });
 
+  const merginForDoubleClick = () => {
+    return <div style={{ height: 50, }}>. </div>
+  }
+
   return (
     <>
       <div
@@ -510,6 +514,7 @@ const MainPanel = (
                 borderCollapse: 'collapse',
                 resize: 'horizontal',
                 height: 10, // table全体の最小サイズを指定。これが無いと、行数が少ない時に縦長になってしまう…。
+                width: '95%',
                 userSelect: 'none',
               }
             }
@@ -539,6 +544,7 @@ const MainPanel = (
               })
             }
           </table>
+          {merginForDoubleClick()}
         </div>
       </div>
       {dialog}
