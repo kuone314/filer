@@ -80,7 +80,7 @@ const App = () => {
     return GetActive(tabsPathAry.current[oppositeIndex]);
   }
 
-  const grid = [React.createRef<JqxGrid>(), React.createRef<JqxGrid>()];
+  const grid = [React.createRef<HTMLDivElement>(), React.createRef<HTMLDivElement>()];
 
   const [separator, setSeparator] = useState<separator>('\\');
   return (

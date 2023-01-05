@@ -47,7 +47,7 @@ export const PaineTabs = (
     getOppositePath: () => string,
     separator: separator,
     focusOppositePain: () => void,
-    gridRef?: React.RefObject<JqxGrid>,
+    gridRef?: React.RefObject<HTMLDivElement>,
   },
 ) => {
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry.pathAry);
@@ -152,7 +152,7 @@ const MainPanel = (
     getOppositePath: () => string,
     separator: separator,
     focusOppositePain: () => void,
-    gridRef?: React.RefObject<JqxGrid>,
+    gridRef?: React.RefObject<HTMLDivElement>,
   }
 ) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
@@ -429,7 +429,7 @@ const MainPanel = (
     accessParentDir();
   }
 
-  const myGrid = props.gridRef ?? React.createRef<JqxGrid>();
+  const myGrid = props.gridRef ?? React.createRef<HTMLDivElement>();
 
   const [dialog, execShellCommand] = commandExecuter(
     () => { myGrid.current?.focus() },
