@@ -455,6 +455,9 @@ const MainPanel = (
     </ControlledMenu>
   }
 
+  const table_selection_attribute = (row_idx: number) => css({
+    border: (row_idx === currentIndex) ? '3pt solid #880000' : '1pt solid #000000',
+  });
   const table_border = css({
     border: '1pt solid #000000',
   });
@@ -515,7 +518,9 @@ const MainPanel = (
             {
               entries.map((entry, idx) => {
                 return <>
-                  <tr>
+                  <tr
+                    css={table_selection_attribute(idx)}
+                  >
                     <td css={table_border}>{entry.name}</td>
                     <td css={table_border}>{entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension}</td>
                     <td css={table_border}>{entry.is_dir ? '-' : entry.size}</td>
