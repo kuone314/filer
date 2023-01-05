@@ -463,6 +463,15 @@ const MainPanel = (
     resize: 'horizontal',
     overflow: 'hidden',
   });
+  const fix_table_header = css({
+    position: 'sticky',
+    top: '0',
+    left: '0',
+  });
+  const table_header_color = css({
+    background: '#f2f2f2',
+    border: '1pt solid #000000',
+  });
 
   return (
     <>
@@ -482,37 +491,41 @@ const MainPanel = (
           onKeyDown={onKeyDown}
           ref={addressBar}
         />
-        <table
-          css={
-            {
-              borderCollapse: 'collapse',
-              resize: 'horizontal',
-              height: 10, // table全体の最小サイズを指定。これが無いと、行数が少ない時に縦長になってしまう…。
-              userSelect: 'none',
-            }
-          }
+        <div
+          css={css([{ display: 'grid', overflow: 'auto' }])}
         >
-          <thead css={table_resizable}>
-            <tr>
-              <th css={table_resizable}>FIleName</th>
-              <th css={table_resizable}>type</th>
-              <th css={table_resizable}>size</th>
-              <th css={table_resizable}>date</th>
-            </tr>
-          </thead>
-          {
-            entries.map((entry, idx) => {
-              return <>
-                <tr>
-                  <td css={table_border}>{entry.name}</td>
-                  <td css={table_border}>{entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension}</td>
-                  <td css={table_border}>{entry.is_dir ? '-' : entry.size}</td>
-                  <td css={table_border}>{entry.date}</td>
-                </tr>
-              </>
-            })
-          }
-        </table>
+          <table
+            css={
+              {
+                borderCollapse: 'collapse',
+                resize: 'horizontal',
+                height: 10, // table全体の最小サイズを指定。これが無いと、行数が少ない時に縦長になってしまう…。
+                userSelect: 'none',
+              }
+            }
+          >
+            <thead css={[table_resizable, fix_table_header]}>
+              <tr>
+                <th css={[table_resizable, table_header_color]}>FIleName</th>
+                <th css={[table_resizable, table_header_color]}>type</th>
+                <th css={[table_resizable, table_header_color]}>size</th>
+                <th css={[table_resizable, table_header_color]}>date</th>
+              </tr>
+            </thead>
+            {
+              entries.map((entry, idx) => {
+                return <>
+                  <tr>
+                    <td css={table_border}>{entry.name}</td>
+                    <td css={table_border}>{entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension}</td>
+                    <td css={table_border}>{entry.is_dir ? '-' : entry.size}</td>
+                    <td css={table_border}>{entry.date}</td>
+                  </tr>
+                </>
+              })
+            }
+          </table>
+        </div>
       </div>
       {dialog}
       {commandSelectMenu()}
