@@ -284,26 +284,22 @@ const MainPanel = (
     setincremantalSearchingStr(nextSearchStr)
   }
 
-  const onRowclick = (event?: Event) => {
-    if (!event) { return; }
-
-    interface Args {
-      args: { rowindex: number; }
+  const onRowclick = (row_idx: number, event: React.MouseEvent<Element>) => {
+    if (event.shiftKey) {
+      addSelectingIndexRange(currentIndex, row_idx);
+    } else if (event.ctrlKey) {
+      addSelectingIndexRange(row_idx, row_idx);
+    } else {
+      setSelectingIndexArray(new Set([row_idx]));
     }
-    const event_ = event as any as Args;
-    setCurrentIndex(event_.args.rowindex);
+    setCurrentIndex(row_idx);
     setincremantalSearchingStr('')
     myGrid.current?.focus()
   };
 
-  const onRowdoubleclick = (event?: Event) => {
-    if (!event) { return; }
-
-    interface Args {
-      args: { rowindex: number; }
-    }
-    const event_ = event as any as Args;
-    accessItemByIdx(event_.args.rowindex);
+  const onRowdoubleclick = (row_idx: number, event: React.MouseEvent<Element>) => {
+    accessItemByIdx(row_idx);
+    event.stopPropagation();
   };
 
   const accessItemByIdx = async (rowIdx: number) => {
@@ -529,6 +525,8 @@ const MainPanel = (
               entries.map((entry, idx) => {
                 return <>
                   <tr
+                    onClick={(event) => onRowclick(idx, event)}
+                    onDoubleClick={(event) => onRowdoubleclick(idx, event)}
                     css={table_selection_attribute(idx)}
                   >
                     <td css={table_border}>{entry.name}</td>
