@@ -273,6 +273,39 @@ const MainPanel = (
     addSelectingIndexRange(currentIndex, newIndex);
   }
 
+  const adjustScroll = () => {
+    const scroll_pos = myGrid.current?.scrollTop;
+    const scroll_area_height = myGrid.current?.clientHeight;
+    const header_height = table_header.current?.clientHeight;
+    const current_row_rect = current_row.current?.getBoundingClientRect();
+    const table_full_size = current_row.current?.parentElement?.getBoundingClientRect();
+
+    if (scroll_pos == undefined) { return; }
+    if (scroll_area_height == undefined) { return; }
+    if (header_height == undefined) { return; }
+    if (current_row_rect == undefined) { return; }
+    if (table_full_size == undefined) { return; }
+
+    const diff = current_row_rect.y - table_full_size.y;
+
+    const upside_just_pos = (diff - header_height);
+    const outof_upside = (scroll_pos > upside_just_pos);
+    if (outof_upside) {
+      myGrid.current?.scrollTo({ top: upside_just_pos });
+      return;
+    }
+
+    const downside_just_pos = (diff - scroll_area_height + current_row_rect.height);
+    const outof_downside = (downside_just_pos > scroll_pos);
+    if (outof_downside) {
+      myGrid.current?.scrollTo({ top: downside_just_pos });
+      return;
+    }
+  }
+  useEffect(() => {
+    adjustScroll();
+  }, [currentIndex]);
+
   const [incremantalSearchingStr, setincremantalSearchingStr] = useState('');
   const incremantalSearch = (key: string) => {
     const nextSearchStr = incremantalSearchingStr + key;
@@ -433,6 +466,8 @@ const MainPanel = (
   }
 
   const myGrid = props.gridRef ?? React.createRef<HTMLDivElement>();
+  const table_header = React.createRef<HTMLTableSectionElement>();
+  const current_row = React.createRef<HTMLTableRowElement>();
 
   const [dialog, execShellCommand] = commandExecuter(
     () => { myGrid.current?.focus() },
@@ -520,7 +555,7 @@ const MainPanel = (
               }
             }
           >
-            <thead css={[table_resizable, fix_table_header]}>
+            <thead css={[table_resizable, fix_table_header]} ref={table_header}>
               <tr>
                 <th css={[table_resizable, table_header_color]}>FIleName</th>
                 <th css={[table_resizable, table_header_color]}>type</th>
@@ -532,6 +567,7 @@ const MainPanel = (
               entries.map((entry, idx) => {
                 return <>
                   <tr
+                    ref={(idx === currentIndex) ? current_row : null}
                     onClick={(event) => onRowclick(idx, event)}
                     onDoubleClick={(event) => onRowdoubleclick(idx, event)}
                     css={table_selection_attribute(idx)}
