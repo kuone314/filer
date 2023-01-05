@@ -496,6 +496,7 @@ const MainPanel = (
         />
         <div
           css={css([{ display: 'grid', overflow: 'auto' }])}
+          ref={myGrid}
         >
           <table
             css={
