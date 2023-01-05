@@ -160,6 +160,18 @@ const MainPanel = (
   const [entries, setEntries] = useState<Entries>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const [selectingIndexArray, setSelectingIndexArray] = useState<Set<number>>(new Set([]));
+  const addSelectingIndexRange = (rangeTerm1: number, rangeTerm2: number) => {
+    const sttIdx = Math.min(rangeTerm1, rangeTerm2);
+    const endIdx = Math.max(rangeTerm1, rangeTerm2);
+
+    let new_ary = new Set([...selectingIndexArray]);
+    for (let idx = sttIdx; idx <= endIdx; idx++) {
+      new_ary.add(idx);
+    }
+    setSelectingIndexArray(new_ary);
+  }
+
   const accessDirectry = async (path: string) => {
     const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: path });
     setDir(adjusted.dir);
@@ -257,11 +269,7 @@ const MainPanel = (
 
     if (!select) { return }
 
-    const sttIdx = Math.min(currentIndex, newIndex);
-    const endIdx = Math.max(currentIndex, newIndex);
-    for (let idx = sttIdx; idx <= endIdx; idx++) {
-      myGrid.current?.selectrow(idx);
-    }
+    addSelectingIndexRange(currentIndex, newIndex);
   }
 
   const [incremantalSearchingStr, setincremantalSearchingStr] = useState('');
@@ -314,8 +322,8 @@ const MainPanel = (
   const selectingItemName = () => {
     if (entries.length === 0) { return [''] }
 
-    let rowIdxAry = myGrid.current?.getselectedrowindexes();
-    if (!rowIdxAry || rowIdxAry.length === 0) { rowIdxAry = [currentIndex]; }
+    let rowIdxAry = [...selectingIndexArray]
+    if (rowIdxAry.length === 0) { rowIdxAry = [currentIndex]; }
 
     return rowIdxAry.map(idx => entries[idx].name);
   }
@@ -333,11 +341,13 @@ const MainPanel = (
   const moveBottom = () => { setupCurrentIndex(entries.length - 1, false) }
   const moveBottomSelect = () => { setupCurrentIndex(entries.length - 1, true) }
   const toggleSelection = () => {
-    if (myGrid.current?.getselectedrowindexes().includes(currentIndex)) {
-      myGrid.current?.unselectrow(currentIndex);
+    let new_ary = new Set([...selectingIndexArray]);
+    if (selectingIndexArray.has(currentIndex)) {
+      new_ary.delete(currentIndex);
     } else {
-      myGrid.current?.selectrow(currentIndex);
+      new_ary.add(currentIndex);
     }
+    setSelectingIndexArray(new_ary)
   }
   const addNewTab = () => { props.addNewTab(dir); }
   const removeTab = () => { props.removeTab(); }
