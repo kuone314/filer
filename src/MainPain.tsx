@@ -462,6 +462,7 @@ const MainPanel = (
   }
 
   const table_selection_attribute = (row_idx: number) => css({
+    background: (selectingIndexArray.has(row_idx)) ? '#0090ff' : '',
     border: (row_idx === currentIndex) ? '3pt solid #880000' : '1pt solid #000000',
   });
   const table_border = css({
