@@ -377,10 +377,8 @@ const MainPanel = (
       return
     }
   }
-  const handlekeyboardnavigation = (event: Event) => {
-    const keyboard_event = event as KeyboardEvent;
-    if (keyboard_event.type !== 'keydown') { return false; }
-
+  const handlekeyboardnavigation = (keyboard_event: React.KeyboardEvent<HTMLDivElement>) => {
+    keyboard_event.preventDefault();
     (async () => {
       const command_ary = await matchingKeyEvent(keyboard_event);
       if (command_ary.length === 1) {
@@ -399,8 +397,6 @@ const MainPanel = (
         return;
       }
     })();
-
-    return false;
   };
 
   const addressBar = React.createRef<HTMLInputElement>();
@@ -496,6 +492,8 @@ const MainPanel = (
         />
         <div
           css={css([{ display: 'grid', overflow: 'auto' }])}
+          onKeyDown={handlekeyboardnavigation}
+          tabIndex={0}
           ref={myGrid}
         >
           <table
