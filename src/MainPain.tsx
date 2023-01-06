@@ -4,9 +4,6 @@ import React from 'react';
 
 import { Button } from '@mui/material';
 
-import 'jqwidgets-scripts/jqwidgets/styles/jqx.base.css';
-import 'jqwidgets-scripts/jqwidgets/styles/jqx.material-purple.css';
-import JqxGrid, { IGridProps } from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxgrid';
 
 import { executeShellCommand } from './RustFuncs';
 import { separator, ApplySeparator } from './FilePathSeparator';
@@ -47,7 +44,7 @@ export const PaineTabs = (
     getOppositePath: () => string,
     separator: separator,
     focusOppositePain: () => void,
-    gridRef?: React.RefObject<JqxGrid>,
+    gridRef?: React.RefObject<HTMLDivElement>,
   },
 ) => {
   const [tabAry, setTabAry] = useState<string[]>(props.pathAry.pathAry);
@@ -152,13 +149,25 @@ const MainPanel = (
     getOppositePath: () => string,
     separator: separator,
     focusOppositePain: () => void,
-    gridRef?: React.RefObject<JqxGrid>,
+    gridRef?: React.RefObject<HTMLDivElement>,
   }
 ) => {
   const [addressbatStr, setAddressbatStr] = useState<string>("");
   const [dir, setDir] = useState<string>(props.initPath);
   const [entries, setEntries] = useState<Entries>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [selectingIndexArray, setSelectingIndexArray] = useState<Set<number>>(new Set([]));
+  const addSelectingIndexRange = (rangeTerm1: number, rangeTerm2: number) => {
+    const sttIdx = Math.min(rangeTerm1, rangeTerm2);
+    const endIdx = Math.max(rangeTerm1, rangeTerm2);
+
+    let new_ary = new Set([...selectingIndexArray]);
+    for (let idx = sttIdx; idx <= endIdx; idx++) {
+      new_ary.add(idx);
+    }
+    setSelectingIndexArray(new_ary);
+  }
 
   const accessDirectry = async (path: string) => {
     const adjusted = await invoke<AdjustedAddressbarStr>("adjust_addressbar_str", { str: path });
@@ -186,6 +195,7 @@ const MainPanel = (
 
   useEffect(() => {
     UpdateList();
+    setSelectingIndexArray(new Set([]));
     setAddressbatStr(ApplySeparator(dir, props.separator));
     props.onPathChanged(dir);
   }, [dir]);
@@ -199,54 +209,6 @@ const MainPanel = (
     1500
   );
 
-  const convert = (entries: Entries) => {
-    const data: IGridProps['source'] = {
-      localdata: entries.map(
-        (entry: Entry, index: number) => {
-          return [
-            entry.name,
-            entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension,
-            entry.is_dir ? '-' : entry.size,
-            entry.date,
-            index === currentIndex,
-          ];
-        }
-      ),
-      datafields:
-        [
-          { name: 'name', type: 'string', map: '0' },
-          { name: 'extension', type: 'string', map: '1' },
-          { name: 'size', type: 'number', map: '2' },
-          { name: 'date', type: 'string', map: '3' },
-          { name: 'isCurrent', type: 'bool', map: '4' },
-        ],
-      datatype: 'array'
-    };
-    return data;
-  }
-
-  const cellsrenderer = (
-    row?: number,
-    columnfield?: string,
-    value?: any,
-    defaulthtml?: string,
-    columnproperties?: any,
-    rowdata?: any
-  ) => {
-    if (rowdata.isCurrent) {
-      return '<div style="border-style : double none;">' + value + '</div>';;
-    }
-    return '<div>' + value + '</div>';
-  };
-
-  const columns: IGridProps['columns'] =
-    [
-      { text: 'FIleName', datafield: 'name', width: 240, cellsrenderer: cellsrenderer, },
-      { text: 'type', datafield: 'extension', width: 80, cellsrenderer: cellsrenderer, },
-      { text: 'size', datafield: 'size', width: 40, cellsrenderer: cellsrenderer, },
-      { text: 'date', datafield: 'date', width: 150, cellsrenderer: cellsrenderer, },
-    ];
-
   const setupCurrentIndex = (newIndex: number, select: boolean) => {
     if (currentIndex === newIndex) { return; }
     if (newIndex < 0) { return; }
@@ -257,12 +219,41 @@ const MainPanel = (
 
     if (!select) { return }
 
-    const sttIdx = Math.min(currentIndex, newIndex);
-    const endIdx = Math.max(currentIndex, newIndex);
-    for (let idx = sttIdx; idx <= endIdx; idx++) {
-      myGrid.current?.selectrow(idx);
+    addSelectingIndexRange(currentIndex, newIndex);
+  }
+
+  const adjustScroll = () => {
+    const scroll_pos = myGrid.current?.scrollTop;
+    const scroll_area_height = myGrid.current?.clientHeight;
+    const header_height = table_header.current?.clientHeight;
+    const current_row_rect = current_row.current?.getBoundingClientRect();
+    const table_full_size = current_row.current?.parentElement?.getBoundingClientRect();
+
+    if (scroll_pos == undefined) { return; }
+    if (scroll_area_height == undefined) { return; }
+    if (header_height == undefined) { return; }
+    if (current_row_rect == undefined) { return; }
+    if (table_full_size == undefined) { return; }
+
+    const diff = current_row_rect.y - table_full_size.y;
+
+    const upside_just_pos = (diff - header_height);
+    const outof_upside = (scroll_pos > upside_just_pos);
+    if (outof_upside) {
+      myGrid.current?.scrollTo({ top: upside_just_pos });
+      return;
+    }
+
+    const downside_just_pos = (diff - scroll_area_height + current_row_rect.height);
+    const outof_downside = (downside_just_pos > scroll_pos);
+    if (outof_downside) {
+      myGrid.current?.scrollTo({ top: downside_just_pos });
+      return;
     }
   }
+  useEffect(() => {
+    adjustScroll();
+  }, [currentIndex]);
 
   const [incremantalSearchingStr, setincremantalSearchingStr] = useState('');
   const incremantalSearch = (key: string) => {
@@ -276,26 +267,22 @@ const MainPanel = (
     setincremantalSearchingStr(nextSearchStr)
   }
 
-  const onRowclick = (event?: Event) => {
-    if (!event) { return; }
-
-    interface Args {
-      args: { rowindex: number; }
+  const onRowclick = (row_idx: number, event: React.MouseEvent<Element>) => {
+    if (event.shiftKey) {
+      addSelectingIndexRange(currentIndex, row_idx);
+    } else if (event.ctrlKey) {
+      addSelectingIndexRange(row_idx, row_idx);
+    } else {
+      setSelectingIndexArray(new Set([row_idx]));
     }
-    const event_ = event as any as Args;
-    setCurrentIndex(event_.args.rowindex);
+    setCurrentIndex(row_idx);
     setincremantalSearchingStr('')
     myGrid.current?.focus()
   };
 
-  const onRowdoubleclick = (event?: Event) => {
-    if (!event) { return; }
-
-    interface Args {
-      args: { rowindex: number; }
-    }
-    const event_ = event as any as Args;
-    accessItemByIdx(event_.args.rowindex);
+  const onRowdoubleclick = (row_idx: number, event: React.MouseEvent<Element>) => {
+    accessItemByIdx(row_idx);
+    event.stopPropagation();
   };
 
   const accessItemByIdx = async (rowIdx: number) => {
@@ -314,14 +301,10 @@ const MainPanel = (
   const selectingItemName = () => {
     if (entries.length === 0) { return [''] }
 
-    let rowIdxAry = myGrid.current?.getselectedrowindexes();
-    if (!rowIdxAry || rowIdxAry.length === 0) { rowIdxAry = [currentIndex]; }
+    let rowIdxAry = [...selectingIndexArray]
+    if (rowIdxAry.length === 0) { rowIdxAry = [currentIndex]; }
 
     return rowIdxAry.map(idx => entries[idx].name);
-  }
-
-  const selectingItemPath = () => {
-    return selectingItemName().map(name => dir + '\\' + name);
   }
 
   const moveUp = () => { setupCurrentIndex(currentIndex - 1, false) }
@@ -333,11 +316,13 @@ const MainPanel = (
   const moveBottom = () => { setupCurrentIndex(entries.length - 1, false) }
   const moveBottomSelect = () => { setupCurrentIndex(entries.length - 1, true) }
   const toggleSelection = () => {
-    if (myGrid.current?.getselectedrowindexes().includes(currentIndex)) {
-      myGrid.current?.unselectrow(currentIndex);
+    let new_ary = new Set([...selectingIndexArray]);
+    if (selectingIndexArray.has(currentIndex)) {
+      new_ary.delete(currentIndex);
     } else {
-      myGrid.current?.selectrow(currentIndex);
+      new_ary.add(currentIndex);
     }
+    setSelectingIndexArray(new_ary)
   }
   const addNewTab = () => { props.addNewTab(dir); }
   const removeTab = () => { props.removeTab(); }
@@ -377,10 +362,8 @@ const MainPanel = (
       return
     }
   }
-  const handlekeyboardnavigation = (event: Event) => {
-    const keyboard_event = event as KeyboardEvent;
-    if (keyboard_event.type !== 'keydown') { return false; }
-
+  const handlekeyboardnavigation = (keyboard_event: React.KeyboardEvent<HTMLDivElement>) => {
+    keyboard_event.preventDefault();
     (async () => {
       const command_ary = await matchingKeyEvent(keyboard_event);
       if (command_ary.length === 1) {
@@ -399,8 +382,6 @@ const MainPanel = (
         return;
       }
     })();
-
-    return false;
   };
 
   const addressBar = React.createRef<HTMLInputElement>();
@@ -429,7 +410,9 @@ const MainPanel = (
     accessParentDir();
   }
 
-  const myGrid = props.gridRef ?? React.createRef<JqxGrid>();
+  const myGrid = props.gridRef ?? React.createRef<HTMLDivElement>();
+  const table_header = React.createRef<HTMLTableSectionElement>();
+  const current_row = React.createRef<HTMLTableRowElement>();
 
   const [dialog, execShellCommand] = commandExecuter(
     () => { myGrid.current?.focus() },
@@ -455,6 +438,32 @@ const MainPanel = (
     </ControlledMenu>
   }
 
+  const table_selection_attribute = (row_idx: number) => css({
+    background: (selectingIndexArray.has(row_idx)) ? '#0090ff' : '',
+    border: (row_idx === currentIndex) ? '3pt solid #880000' : '1pt solid #000000',
+  });
+  const table_border = css({
+    border: '1pt solid #000000',
+  });
+
+  const table_resizable = css({
+    resize: 'horizontal',
+    overflow: 'hidden',
+  });
+  const fix_table_header = css({
+    position: 'sticky',
+    top: '0',
+    left: '0',
+  });
+  const table_header_color = css({
+    background: '#f2f2f2',
+    border: '1pt solid #000000',
+  });
+
+  const merginForDoubleClick = () => {
+    return <div style={{ height: 50, }}>. </div>
+  }
+
   return (
     <>
       <div
@@ -474,29 +483,50 @@ const MainPanel = (
           ref={addressBar}
         />
         <div
-          css={css({
-            display: 'grid',
-            overflow: 'scroll',
-            width: '100%',
-            height: '100%',
-          })}
+          css={css([{ display: 'grid', overflow: 'auto' }])}
           onDoubleClick={onDoubleClick}
+          onKeyDown={handlekeyboardnavigation}
+          tabIndex={0}
+          ref={myGrid}
         >
-          <JqxGrid
-            width={'100%'}
-            source={convert(entries)}
-            columns={columns}
-            pageable={false}
-            editable={false}
-            autoheight={true}
-            sortable={true} theme={'material-purple'}
-            altrows={true} enabletooltips={true}
-            selectionmode={'multiplerowsextended'}
-            onRowclick={onRowclick}
-            onRowdoubleclick={onRowdoubleclick}
-            handlekeyboardnavigation={handlekeyboardnavigation}
-            ref={myGrid}
-          />
+          <table
+            css={
+              {
+                borderCollapse: 'collapse',
+                resize: 'horizontal',
+                height: 10, // table全体の最小サイズを指定。これが無いと、行数が少ない時に縦長になってしまう…。
+                width: '95%',
+                userSelect: 'none',
+              }
+            }
+          >
+            <thead css={[table_resizable, fix_table_header]} ref={table_header}>
+              <tr>
+                <th css={[table_resizable, table_header_color]}>FIleName</th>
+                <th css={[table_resizable, table_header_color]}>type</th>
+                <th css={[table_resizable, table_header_color]}>size</th>
+                <th css={[table_resizable, table_header_color]}>date</th>
+              </tr>
+            </thead>
+            {
+              entries.map((entry, idx) => {
+                return <>
+                  <tr
+                    ref={(idx === currentIndex) ? current_row : null}
+                    onClick={(event) => onRowclick(idx, event)}
+                    onDoubleClick={(event) => onRowdoubleclick(idx, event)}
+                    css={table_selection_attribute(idx)}
+                  >
+                    <td css={table_border}>{entry.name}</td>
+                    <td css={table_border}>{entry.is_dir ? 'folder' : entry.extension.length === 0 ? '-' : entry.extension}</td>
+                    <td css={table_border}>{entry.is_dir ? '-' : entry.size}</td>
+                    <td css={table_border}>{entry.date}</td>
+                  </tr>
+                </>
+              })
+            }
+          </table>
+          {merginForDoubleClick()}
         </div>
       </div>
       {dialog}

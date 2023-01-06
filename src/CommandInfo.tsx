@@ -36,7 +36,7 @@ export type CommandInfo = {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-function match(keyboard_event: KeyboardEvent, command_key: string): boolean {
+function match(keyboard_event: React.KeyboardEvent<HTMLDivElement>, command_key: string): boolean {
   const key_ary = command_key.split('+').map(key => key.toLocaleLowerCase());
   if (key_ary.includes('ctrl') !== keyboard_event.ctrlKey) { return false; }
   if (key_ary.includes('alt') !== keyboard_event.altKey) { return false; }
@@ -55,7 +55,7 @@ async function readCommandsSetting(): Promise<CommandInfo[]> {
   return setting_ary;
 }
 
-export async function matchingKeyEvent(keyboard_event: KeyboardEvent) {
+export async function matchingKeyEvent(keyboard_event: React.KeyboardEvent<HTMLDivElement>) {
   const commands = await readCommandsSetting();
   return commands.filter(cmd => match(keyboard_event, cmd.key));
 }
